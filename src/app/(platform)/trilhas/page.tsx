@@ -1,5 +1,4 @@
-import { Trail } from "../ui/components/ContentList";
-import FilterSection from "../ui/components/FilterSection";
+import { Trail } from "../../ui/components/ContentList";
 
 export default function Trilhas() {
   return (

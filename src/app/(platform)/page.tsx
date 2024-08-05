@@ -1,5 +1,5 @@
-import FilterSection from "./ui/components/FilterSection";
-import ContentList from "./ui/components/ContentList";
+import FilterSection from "../ui/components/FilterSection";
+import ContentList from "../ui/components/ContentList";
 
 export default function Home() {
   return (
