@@ -9,7 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        blueLoging: '#1865F2'
+        mainBlue: "#1865F2",
+        secondaryWhite: "#F9F9F9",
+        whiteBorder: "#F4F4F4",
+        whiteText: "#21242C",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
