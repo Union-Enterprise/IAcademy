@@ -3,10 +3,10 @@ import ContentList from "../ui/components/ContentList";
 
 export default function Home() {
   return (
-    <div className="px-[200px] pt-[40px] pb-[140px]">
+    <>
       <div>
         <h1 className="text-3xl font-bold">Página Inicial</h1>
-        <p className="text-base mb-5">
+        <p className="text-base">
           Navegue por nosso catálogo de conteúdos e se prepare para os mais
           diversos Vestibulares.
         </p>
@@ -36,6 +36,6 @@ export default function Home() {
         </div>
         <FilterSection />
       </div>
-    </div>
+    </>
   );
 }

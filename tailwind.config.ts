@@ -13,6 +13,7 @@ const config: Config = {
         secondaryWhite: "#F9F9F9",
         whiteBorder: "#F4F4F4",
         whiteText: "#21242C",
+        loginFundo:"#D7D7D7",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
