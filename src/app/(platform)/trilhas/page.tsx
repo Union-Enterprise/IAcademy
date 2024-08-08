@@ -2,7 +2,7 @@ import { Trail } from "../../ui/components/ContentList";
 
 export default function Trilhas() {
   return (
-    <>
+    <div className="px-[200px] pt-[40px] pb-[140px]">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold">Trilhas de Aprendizado</h1>
         <p className="max-w-3xl">
@@ -16,7 +16,7 @@ export default function Trilhas() {
         <h2 className="text-2xl font-semibold">Matemática</h2>
         <div className="grid grid-cols-2 gap-5 grid-rows">
           <Trail
-            href="/trilhas/trilha"
+            href="/trilhas/general"
             description="Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel  "
           />
           <Trail description="Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel  " />
@@ -24,6 +24,6 @@ export default function Trilhas() {
           <Trail description="Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel Lorel lorel  " />
         </div>
       </section>
-    </>
+    </div>
   );
 }

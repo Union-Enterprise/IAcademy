@@ -3,7 +3,6 @@
 import { Tag } from "@/app/ui/components/ContentList";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -13,7 +12,6 @@ export default function TrilhaLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const [selectedItem, setSelectedItem] = useState(pathname);
 
   return (
     <div className="h-full *:px-[250px]">
@@ -30,10 +28,10 @@ export default function TrilhaLayout({
           <p className="text-gray-500 text-lg">
             Aprenda tudo sobre o universo da geometria.
           </p>
-          <div className="flex gap-5">
-            <Tag />
-            <Tag />
-            <Tag />
+          <div className="flex gap-3">
+            <Tag name="Sólidos Geométricos" />
+            <Tag name="3° Ano" />
+            <Tag name="Intermediário" />
           </div>
         </div>
         <div className="flex gap-4">
@@ -60,9 +58,34 @@ export default function TrilhaLayout({
         </div>
       </div>
       <div className="h-full mt-20 grid grid-cols-3 gap-10">
-        <div className="w-full bg-blue-300 col-span-2">{children}</div>
-        <div className="col-span-1">
-          <p>Menu lateral</p>
+        <div className="w-full col-span-2">{children}</div>
+        <div className="col-span-1 gap-5 flex flex-col relative">
+          <div
+            className="p-6 rounded-md shadow-md sticky top-5
+           bg-mainBlue"
+          >
+            <h2 className="text-xl font-bold mb-4 text-white">Premium</h2>
+            <p className="mb-4 text-white">
+              Estude sem preocupações ou distrações a qualquer momento.
+            </p>
+            <button className="w-full bg-white text-mainBlue py-2 rounded-md hover:bg-mainBlue border-2 hover:border-white border-transparent duration-100 hover:text-white">
+              Assinar
+            </button>
+          </div>
+          <div className="bg-white p-6 rounded-md shadow-md sticky top-[235px]">
+            <h2 className="text-xl font-bold mb-4">Pergunte à IA</h2>
+            <p className="mb-4">
+              Ficou com dúvida em alguma parte desse conteúdo? Basta digitar
+              logo abaixo.
+            </p>
+            <textarea
+              className="w-full border border-gray-300 rounded-md p-2 mb-4"
+              placeholder="Escreva sua pergunta"
+            ></textarea>
+            <button className="w-full bg-mainBlue text-white py-2 rounded-md hover:bg-blue-600">
+              Enviar
+            </button>
+          </div>
         </div>
       </div>
     </div>

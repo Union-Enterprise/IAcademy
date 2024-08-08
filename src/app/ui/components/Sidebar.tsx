@@ -1,6 +1,6 @@
 "use client";
 
-import { faHouse, faCompass, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faCompass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useSidebar } from "./context/SidebarContext";
@@ -36,7 +36,7 @@ const Sidebar = () => {
         icon={faCompass}
         isOpen={isOpen}
         href="/trilhas"
-        isSelected={selectedItem === "/trilhas"}
+        isSelected={selectedItem.startsWith("/trilhas")}
         onClick={() => setSelectedItem("/trilhas")}
       />
       <Item

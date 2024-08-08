@@ -10,7 +10,7 @@ const Navbar = () => {
   const { toggleSidebar } = useSidebar();
 
   return (
-    <section className="h-20 bg-secondaryWhite px-3 flex justify-between items-center border-b-2 border-b-whiteBorder">
+    <section className="h-20 *:h-full bg-secondaryWhite px-3 py-2 flex justify-between items-center border-b-2 border-b-whiteBorder">
       <div className="flex gap-5 items-center">
         <Image
           src="./menuIcon.svg"
@@ -44,16 +44,27 @@ const Navbar = () => {
           <FontAwesomeIcon icon={faMagnifyingGlass} className="text-white" />
         </button>
       </form>
-      <div className="flex gap-5 items-center">
-        <Link href= "/perfil">
-        <Image
+      <div className="flex gap-3 items-center">
+        <p>Moedas</p>
+        <Link
+          href="/login"
+          className="px-7 bg-white rounded-md py-3 flex items-center text-whiteText bg-opacity-80 border-2 border-whiteBorder hover:bg-opacity-100 duration-100"
+        >
+          <p className="font-semibold">Entrar</p>
+        </Link>
+        <Link
+          href="/register"
+          className="px-7 bg-mainBlue text-white bg-opacity-80 hover:bg-opacity-100 rounded-md py-3 flex items-center duration-100"
+        >
+          <p className="font-semibold">Cadastrar-se</p>
+        </Link>
+        {/* <Image
           src="./blueIcon.svg"
           alt="Descrição da Imagem"
           width={60}
           height={60}
           className="border-whiteBorder border-2 rounded-full"
-        />
-        </Link>
+        /> */}
       </div>
     </section>
   );

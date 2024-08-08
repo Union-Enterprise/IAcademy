@@ -56,7 +56,7 @@ export function Trail({ description = "", href = "" }) {
   );
 }
 
-function Tag({ name = "" }) {
+export function Tag({ name = "" }) {
   return (
     <div className="flex justify-center items-center rounded-md px-[15px] border-whiteBorder border-2">
       <p className="whitespace-nowrap">{name}</p>

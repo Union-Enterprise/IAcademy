@@ -20,7 +20,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} h-[100vh] overflow-hidden select-none grid grid-cols-3`}
       >
-        <div className="bg-mainBlue col-span-2 flex items-center justify-center">
+        <div className="bg-mainBlue col-span-2 flex items-center justify-center h-full">
           <Image
             src=".\whiteIcon.svg"
             alt="Descrição da Imagem"
@@ -28,7 +28,9 @@ export default function RootLayout({
             height={460.63}
           />
         </div>
-        <div className="col-span-1 bg-white">{children}</div>
+        <div className="col-span-1 bg-white px-[80px] py-[60px]">
+          {children}
+        </div>
       </body>
     </html>
   );
