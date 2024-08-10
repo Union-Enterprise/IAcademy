@@ -2,7 +2,7 @@ import { Trail } from "../../ui/components/ContentList";
 
 export default function Trilhas() {
   return (
-    <div>
+    <div className="mx-[200px] mt-[70px]">
       <div className="flex flex-col gap-5 mb-8">
         <h1 className="text-3xl font-bold">Trilhas de Aprendizado</h1>
         <p className="max-w-3xl">

@@ -14,8 +14,8 @@ export default function TrilhaLayout({
   const pathname = usePathname();
 
   return (
-    <div className="h-full *:px-[250px]">
-      <div className="bg-secondaryWhite pt-[60px] h-[300px] flex flex-col justify-between">
+    <div className="h-full">
+      <div className="bg-secondaryWhite h-[300px] flex flex-col justify-between px-[200px] pt-[60px]">
         <div className="flex flex-col gap-3">
           <Link
             href="/trilhas"
@@ -57,7 +57,7 @@ export default function TrilhaLayout({
           </Link>
         </div>
       </div>
-      <div className="h-full mt-20 grid grid-cols-3 gap-10">
+      <div className="h-full mt-20 grid grid-cols-3 gap-10 px-[200px]">
         <div className="w-full col-span-2">{children}</div>
         <div className="col-span-1 gap-5 flex flex-col relative">
           <div

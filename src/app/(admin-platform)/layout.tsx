@@ -8,8 +8,8 @@ import { SidebarProvider } from "../ui/components/context/SidebarContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "IAcademy",
-  description: "A sua plataforma de ensino por IA",
+  title: "Dashboard IAcademy",
+  description: "Dashboard",
 };
 
 export default function RootLayout({
@@ -25,8 +25,8 @@ export default function RootLayout({
         <SidebarProvider>
           <Navbar />
           <main className="flex w-full h-full">
-            <Sidebar />
-            <section className="gap-10 *:mb-[140px] flex flex-col overflow-auto w-full">
+            <Sidebar isUserLayout={false} />
+            <section className="gap-10 pb-[770px] *:mx-[200px] *:mt-[70px] flex flex-col overflow-auto w-full">
               {children}
             </section>
           </main>

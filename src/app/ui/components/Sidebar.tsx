@@ -1,6 +1,11 @@
 "use client";
 
-import { faHouse, faCompass } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHouse,
+  faCompass,
+  faDashboard,
+  faUserAstronaut,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useSidebar } from "./context/SidebarContext";
@@ -8,7 +13,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-const Sidebar = () => {
+const Sidebar = ({ isUserLayout = true }) => {
   const { isOpen } = useSidebar();
   const pathname = usePathname();
 
@@ -24,29 +29,52 @@ const Sidebar = () => {
         isOpen ? "w-[300px]" : "w-[90px]"
       } flex flex-col gap-[10px] px-3 py-6 bg-whiteBorder duration-300`}
     >
-      <Item
-        title="Home"
-        isOpen={isOpen}
-        href="/"
-        isSelected={selectedItem === "/"}
-        onClick={() => setSelectedItem("/")}
-      />
-      <Item
-        title="Trilhas"
-        icon={faCompass}
-        isOpen={isOpen}
-        href="/trilhas"
-        isSelected={selectedItem.startsWith("/trilhas")}
-        onClick={() => setSelectedItem("/trilhas")}
-      />
-      <Item
-        title="Premium"
-        isPremium={true}
-        isOpen={isOpen}
-        href="/premium"
-        isSelected={selectedItem === "/premium"}
-        onClick={() => setSelectedItem("/premium")}
-      />
+      {isUserLayout ? (
+        <>
+          <Item
+            title="Home"
+            isOpen={isOpen}
+            href="/"
+            isSelected={selectedItem === "/"}
+            onClick={() => setSelectedItem("/")}
+          />
+          <Item
+            title="Trilhas"
+            icon={faCompass}
+            isOpen={isOpen}
+            href="/trilhas"
+            isSelected={selectedItem.startsWith("/trilhas")}
+            onClick={() => setSelectedItem("/trilhas")}
+          />
+          <Item
+            title="Premium"
+            isPremium={true}
+            isOpen={isOpen}
+            href="/premium"
+            isSelected={selectedItem === "/premium"}
+            onClick={() => setSelectedItem("/premium")}
+          />
+        </>
+      ) : (
+        <>
+          <Item
+            title="Dashboard"
+            icon={faDashboard}
+            isOpen={isOpen}
+            href="/dashboard"
+            isSelected={selectedItem === "/dashboard"}
+            onClick={() => setSelectedItem("/dashboard")}
+          />
+          <Item
+            title="Administradores"
+            icon={faUserAstronaut}
+            isOpen={isOpen}
+            href="/admins"
+            isSelected={selectedItem === "/admins"}
+            onClick={() => setSelectedItem("/admins")}
+          />
+        </>
+      )}
     </section>
   );
 };

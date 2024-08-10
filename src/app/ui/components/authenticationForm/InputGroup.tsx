@@ -1,30 +1,42 @@
+"use client";
+
 import Link from "next/link";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EyeOff, Eye } from "lucide-react";
+import { useState } from "react";
 
 export default function InputGroup({
   label = "E-mail",
   inputType = "email",
-  placeholder = "Digite seu e-mail",
-  isConfirm = false,
+  placeholder = "Digite algo aqui",
+  isRecoveryInput = false,
 }) {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className="flex flex-col gap-[10px]">
       <label className="text-whiteText text-lg font-bold">{label}</label>
       {inputType === "password" ? (
         <>
-          <div className="relative">
+          <div className="relative flex items-center overflow-hidden rounded-md group/input">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder={placeholder}
-              className="w-full p-[10px] border rounded-md focus:outline-none focus:ring-2 focus:ring-mainBlue peer duration-100"
+              required
+              className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none group-hover/input:border-mainBlue focus:border-mainBlue peer duration-200"
             />
-            <FontAwesomeIcon
-              icon={faEye}
-              className="bg-red h-[25px] w-[25px] absolute right-[10px] bottom-[10px] opacity-20 text-whiteText hover:text-mainBlue cursor-pointer hover:opacity-100 duration-100 peer-focus:text-mainBlue peer-focus:opacity-100"
-            />
+            {showPassword ? (
+              <Eye
+                className="absolute right-0 px-[10px] w-[60px] peer-focus:opacity-100 peer-focus:text-mainBlue group-hover/input:text-mainBlue group-hover/input:opacity-100 text-whiteText opacity-20 cursor-pointer duration-200"
+                onClick={() => setShowPassword(false)}
+              />
+            ) : (
+              <EyeOff
+                className="absolute right-0 px-[10px] w-[60px] peer-focus:opacity-100 peer-focus:text-mainBlue group-hover/input:text-mainBlue group-hover/input:opacity-100 text-whiteText opacity-20 cursor-pointer duration-200"
+                onClick={() => setShowPassword(true)}
+              />
+            )}
           </div>
-          {!isConfirm && (
+          {isRecoveryInput && (
             <Link
               href="/recovery"
               className="text-blue-600 hover:underline w-fit"

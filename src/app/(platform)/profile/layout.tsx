@@ -8,7 +8,7 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className=" grid grid-cols-3 gap-5">
+    <div className=" grid grid-cols-3 gap-5 px-[200px] pt-[70px]">
       <div className="col-span-1 flex flex-col gap-5">
         <div className="border-2 flex flex-col items-center pt-[70px] border-whiteBorder bg-[rgba(253,253,253)] rounded-md relative">
           <div className="absolute left-0 top-0 w-full h-[40%] bg-[rgba(240,240,240)] p-3 flex justify-end">

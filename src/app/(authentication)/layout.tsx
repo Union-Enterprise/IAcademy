@@ -28,9 +28,12 @@ export default function RootLayout({
             height={460.63}
           />
         </div>
-        <div className="col-span-1 bg-white px-[80px] py-[60px]">
-          {children}
-        </div>
+        <main className="col-span-1 bg-white px-[80px] py-[60px]">
+          <div className="flex flex-col justify-between h-full">
+            <img src="./bluelogo.svg" alt="" className="w-[250px]" />
+            {children}
+          </div>
+        </main>
       </body>
     </html>
   );
