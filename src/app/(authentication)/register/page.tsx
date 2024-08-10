@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import InputGroup from "@/app/ui/components/form/InputGroup";
-import SubmitButton from "@/app/ui/components/form/SubmitButton";
+import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
+import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 
 export default function Register() {
   return (

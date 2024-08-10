@@ -26,8 +26,7 @@ export default function RootLayout({
           <Navbar />
           <main className="flex w-full h-full">
             <Sidebar />
-            {/* <section className="*:px-[200px] pb-[140px] gap-10 flex flex-col overflow-auto w-full"> */}
-            <section className="gap-10 flex flex-col overflow-auto w-full">
+            <section className="gap-10 *:mx-[200px] *:mb-[140px] flex flex-col overflow-auto w-full *:mt-[70px]">
               {children}
             </section>
           </main>

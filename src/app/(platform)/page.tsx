@@ -3,7 +3,7 @@ import ContentList from "../ui/components/ContentList";
 
 export default function Home() {
   return (
-    <div className="px-[200px] pt-[40px] pb-[140px]">
+    <div>
       <div>
         <h1 className="text-3xl font-bold">Página Inicial</h1>
         <p className="text-base mb-5">

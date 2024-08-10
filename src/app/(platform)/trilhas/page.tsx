@@ -2,8 +2,8 @@ import { Trail } from "../../ui/components/ContentList";
 
 export default function Trilhas() {
   return (
-    <div className="px-[200px] pt-[40px] pb-[140px]">
-      <div className="flex flex-col gap-2">
+    <div>
+      <div className="flex flex-col gap-5 mb-8">
         <h1 className="text-3xl font-bold">Trilhas de Aprendizado</h1>
         <p className="max-w-3xl">
           Bem-vindo às trilhas. Aqui você encontrará tudo que você precisa para

@@ -2,9 +2,9 @@ import Link from "next/link";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import InputGroup from "@/app/ui/components/form/InputGroup";
-import SubmitButton from "@/app/ui/components/form/SubmitButton";
-import SocialOptions from "@/app/ui/components/form/SocialsOptions";
+import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
+import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
+import SocialOptions from "@/app/ui/components/authenticationForm/SocialsOptions";
 
 export default function Login() {
   return (
