@@ -16,7 +16,7 @@ export default function ProfileLayout({
           </div>
           <div className="relative z-10 overflow-hidden rounded-[70px] group cursor-pointer">
             <Image
-              src="./blueIcon.svg"
+              src="/blueIcon.svg"
               alt="Profile Image"
               width={60}
               height={60}

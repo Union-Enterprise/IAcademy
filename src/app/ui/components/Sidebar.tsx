@@ -115,7 +115,7 @@ function Item({
     >
       {isPremium ? (
         <Image
-          src="./premiumIcon.svg"
+          src="/premiumIcon.svg"
           alt="Premium Icon"
           width={25}
           height={25}
