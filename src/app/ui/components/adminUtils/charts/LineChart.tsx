@@ -10,6 +10,8 @@ import {
   Legend,
 } from "chart.js";
 
+ChartJS.defaults.font.family = "__Inter_36bd41";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -17,10 +19,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
-
-ChartJS.defaults.font.family = "__Inter_36bd41";
 
 const data = {
   labels: [
@@ -40,9 +40,11 @@ const data = {
   datasets: [
     {
       label: "Usuários registrados",
-      data: [0, 0, 0, 40, 40, 100, 40, 40, 0, 0, 0, 0],
+      data: [65, 59, 80, 81, 56, 55, 40, 15, 0, 0, 8, 10],
       borderColor: "#1865F2",
+      backgroundColor: "#1865F2",
       fill: true,
+      tension: 0.1,
     },
   ],
 };

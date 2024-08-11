@@ -1,13 +1,25 @@
+"use client";
+
 import { PenLine, Camera } from "lucide-react";
 import Image from "next/image";
 import ProfileSidebar from "@/app/ui/components/profile/ProfileSidebar";
+import { useState } from "react";
+import SettingsImage from "@/app/ui/components/profile/SettingsImage";
+
 
 export default function ProfileLayout({
+  
   children,
 }: Readonly<{
+  
   children: React.ReactNode;
+  
 }>) {
+  const [passwordView, setPasswordView] = useState(false);
+  const [emailView, setEmailView] = useState(false);
+
   return (
+    <>
     <div className=" grid grid-cols-3 gap-5 px-[200px] pt-[70px]">
       <div className="col-span-1 flex flex-col gap-5">
         <div className="border-2 flex flex-col items-center pt-[70px] border-whiteBorder bg-[rgba(253,253,253)] rounded-md relative">
@@ -16,14 +28,14 @@ export default function ProfileLayout({
           </div>
           <div className="relative z-10 overflow-hidden rounded-[70px] group cursor-pointer">
             <Image
-              src="/blueIcon.svg"
+              src="./blueIcon.svg"
               alt="Profile Image"
               width={60}
               height={60}
               className="bg-blue-200 w-[175px]"
             />
             <div className="bg-black opacity-0 duration-200 absolute left-0 top-0 w-full h-full *:text-white justify-center items-center flex group-hover:opacity-100 group-hover:bg-opacity-35">
-              <Camera className="w-[50px] h-[50px]" />
+              <Camera className="w-[50px] h-[50px]"  onClick={() => setPasswordView(true)} />
             </div>
           </div>
           <h1 className="text-2xl font-bold mt-5">Nome de exibição</h1>
@@ -36,5 +48,8 @@ export default function ProfileLayout({
       </div>
       <div className=" col-span-2 flex flex-col gap-5">{children}</div> 
     </div>
+     {emailView && <SettingsImage closeView={() => setEmailView(false)} />}
+     {passwordView && <SettingsImage closeView={() => setPasswordView(false)} />}
+     </>
   );
 }

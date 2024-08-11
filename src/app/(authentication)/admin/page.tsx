@@ -11,6 +11,7 @@ export default function Admin() {
           label="Senha"
           inputType="password"
           placeholder="Digite sua senha"
+          isRecoveryInput={true}
         />
         <SubmitButton text="Acessar" />
       </form>
