@@ -5,8 +5,8 @@ import { EyeOff, Eye } from "lucide-react";
 import { useState } from "react";
 
 export default function InputGroup({
-  label = "E-mail",
-  inputType = "email",
+  label = "Digite algo aqui",
+  inputType = "text",
   placeholder = "Digite algo aqui",
   isRecoveryInput = false,
 }) {
@@ -14,7 +14,7 @@ export default function InputGroup({
 
   return (
     <div className="flex flex-col gap-[10px]">
-      <label className="text-whiteText text-lg font-bold">{label}</label>
+      <label className="text-whiteText text-lg font-semibold">{label}</label>
       {inputType === "password" ? (
         <>
           <div className="relative flex items-center overflow-hidden rounded-md group/input">
@@ -22,7 +22,7 @@ export default function InputGroup({
               type={showPassword ? "text" : "password"}
               placeholder={placeholder}
               required
-              className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none group-hover/input:border-mainBlue focus:border-mainBlue peer duration-200"
+              className="w-full p-[10px] pr-[65px] border-2 rounded-md outline-none group-hover/input:border-mainBlue focus:border-mainBlue peer duration-200"
             />
             {showPassword ? (
               <Eye
@@ -49,7 +49,8 @@ export default function InputGroup({
         <input
           type={inputType}
           placeholder={placeholder}
-          className="w-full p-[10px] border rounded-md focus:outline-none focus:ring-2 focus:ring-mainBlue peer duration-100"
+          required
+          className="w-full p-[10px] pr-[65px] border-2 rounded-md outline-none hover:border-mainBlue focus:border-mainBlue duration-200"
         />
       )}
     </div>

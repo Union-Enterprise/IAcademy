@@ -43,7 +43,7 @@ const data = {
       data: [65, 59, 80, 81, 56, 55, 40, 15, 0, 0, 8, 10],
       borderColor: "#1865F2",
       backgroundColor: "#1865F2",
-      fill: true,
+      fill: false,
       tension: 0.1,
     },
   ],

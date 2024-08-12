@@ -18,8 +18,6 @@ export default function SettingsCPF({ closeView }: { closeView: () => void }) {
           className="cursor-pointer opacity-40 hover:text-red-600 hover:opacity-100 duration-200 w-[30px] h-[30px] absolute right-6 top-6"
           onClick={closeView}
         />
-        
-        {/* Componente de Upload de Imagem */}
         <div className="flex flex-col items-center justify-center">
           <div className="flex items-center justify-center bg-slate-300 w-60 h-60 rounded-lg">
             <label

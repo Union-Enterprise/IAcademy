@@ -78,10 +78,10 @@ function Item({
     <Link
       href={href}
       onClick={onClick}
-      className={`items-center px-5 h-[50px] flex border-l-4 border-transparent justify-between hover:bg-secondaryWhite duration-200 ${
+      className={`${
         isSelected &&
-        "opacity-100 border-mainBlue *:text-mainBlue *:font-bold bg-secondaryWhite"
-      }`}
+        "opacity-100 border-l-mainBlue *:text-mainBlue *:font-bold bg-secondaryWhite"
+      } items-center px-5 h-[50px] flex border-l-4 border-transparent justify-between hover:bg-secondaryWhite duration-200`}
     >
       <div className="flex gap-5">
         {iconsList[iconId]}

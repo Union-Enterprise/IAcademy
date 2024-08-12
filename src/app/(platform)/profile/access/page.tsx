@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronLeft, KeyRound } from "lucide-react";
 import SettingsSection from "@/app/ui/components/profile/SettingsSection";
 import { useState } from "react";
+import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
 import SettingsView from "@/app/ui/components/profile/SettingsView";
 
 export default function Access() {
@@ -61,9 +62,33 @@ export default function Access() {
           </div>
         </div>
       </SettingsSection>
-      {emailView && <SettingsView closeView={() => setEmailView(false)} />}
+      {emailView && (
+        <SettingsView closeView={() => setEmailView(false)}>
+          <InputGroup
+            label="Novo e-mail"
+            inputType="email"
+            placeholder="Digite seu novo e-mail"
+          />
+        </SettingsView>
+      )}
       {passwordView && (
-        <SettingsView closeView={() => setPasswordView(false)} />
+        <SettingsView closeView={() => setPasswordView(false)}>
+          <InputGroup
+            label="Senha"
+            inputType="password"
+            placeholder="Digite sua senha atual"
+          />
+          <InputGroup
+            label="Nova senha"
+            inputType="password"
+            placeholder="Digite sua nova senha"
+          />
+          <InputGroup
+            label="Confirme a nova senha"
+            inputType="password"
+            placeholder="Confirme sua nova senha"
+          />
+        </SettingsView>
       )}
     </>
   );

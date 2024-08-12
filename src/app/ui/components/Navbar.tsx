@@ -3,13 +3,18 @@
 import Image from "next/image";
 import { useSidebar } from "./context/SidebarContext";
 import Link from "next/link";
-import { Search, Menu } from "lucide-react";
+import { Menu, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import Searchbar, { SearchView } from "./Searchbar";
 
 const Navbar = () => {
   const { toggleSidebar } = useSidebar();
 
+  const [showSearchView, setShowSearchView] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
-    <section className="h-20 *:h-full bg-secondaryWhite px-3 py-2 flex justify-between items-center border-b-2 border-b-whiteBorder">
+    <nav className="h-20 *:h-full bg-secondaryWhite px-3 py-2 flex justify-between items-center border-b-2 border-b-whiteBorder">
       <div className="flex gap-5 items-center">
         <Menu
           onClick={toggleSidebar}
@@ -17,28 +22,15 @@ const Navbar = () => {
         />
         <Link href="/">
           <Image
-            src="./blueLogo.svg"
+            src="/blueLogo.svg"
             alt="Descrição da Imagem"
             width={160}
             height={40}
+            priority
           />
         </Link>
       </div>
-      <form className="bg-white rounded-md border-2 py-2 px-4 h-[60px] w-[400px] border-whiteBorder flex gap-2">
-        <input
-          type="search"
-          name=""
-          id=""
-          placeholder="Busque por conteúdos aqui"
-          className="h-full w-full border-none focus:outline-none focus:ring-0 bg-transparent"
-        />
-        <button
-          type="submit"
-          className="bg-mainBlue opacity-80 duration-100 h-full hover:opacity-100 px-5 rounded-md"
-        >
-          <Search className="text-white" />
-        </button>
-      </form>
+      <Searchbar setShowSearchView={setShowSearchView} inputRef={inputRef} />
       <div className="flex gap-3 items-center">
         <Link
           href="/login"
@@ -54,15 +46,19 @@ const Navbar = () => {
         </Link>
         <Link href="/profile">
           <Image
-            src="./blueIcon.svg"
+            src="/blueIcon.svg"
             alt="Descrição da Imagem"
             width={60}
             height={60}
             className="border-whiteBorder border-2 rounded-[20px] bg-blue-200"
+            priority
           />
         </Link>
       </div>
-    </section>
+      {showSearchView && (
+        <SearchView setShowSearchView={setShowSearchView} inputRef={inputRef} />
+      )}
+    </nav>
   );
 };
 
