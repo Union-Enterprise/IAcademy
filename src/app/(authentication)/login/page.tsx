@@ -1,3 +1,5 @@
+"use client";
+
 import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
 import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
 import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
@@ -5,22 +7,50 @@ import SocialOptions, {
   Option,
 } from "@/app/ui/components/authenticationForm/SocialsOptions";
 import RedirectLink from "@/app/ui/components/authenticationForm/RedirectLink";
+import axios from "axios";
+import React, { useState } from "react";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const sendData = () => {
+    axios
+      .post("http://localhost:5002/login", {
+        email: email,
+        password: password,
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
   return (
     <>
       <h1 className="text-4xl font-bold text-mainBlue">Entrar</h1>
-      <form className="flex flex-col gap-5">
+      <form
+        className="flex flex-col gap-5"
+        onSubmit={(e) => {
+          e.preventDefault();
+          sendData();
+        }}
+      >
         <InputGroup
           label="E-mail"
+          labelFor="email"
           inputType="email"
           placeholder="Digite seu E-mail"
+          onChange={(e) => setEmail(e.target.value)}
         />
         <InputGroup
           label="Senha"
+          labelFor="password"
           inputType="password"
           placeholder="Digite sua senha"
           isRecoveryInput={true}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <SubmitButton text="Entrar" />
       </form>

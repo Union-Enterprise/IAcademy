@@ -2,27 +2,45 @@
 
 import Link from "next/link";
 import { EyeOff, Eye } from "lucide-react";
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
+
+interface InputGroupProps {
+  label: string;
+  labelFor: string;
+  inputType?: string;
+  placeholder: string;
+  isRecoveryInput?: boolean;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+}
 
 export default function InputGroup({
-  label = "Digite algo aqui",
+  label,
+  labelFor,
   inputType = "text",
   placeholder = "Digite algo aqui",
   isRecoveryInput = false,
-}) {
+  onChange,
+}: InputGroupProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="flex flex-col gap-[10px]">
-      <label className="text-whiteText text-lg font-semibold">{label}</label>
+      <label
+        className="text-title-light text-lg font-semibold"
+        htmlFor={labelFor}
+      >
+        {label}
+      </label>
       {inputType === "password" ? (
         <>
           <div className="relative flex items-center overflow-hidden rounded-md group/input">
             <input
+              id={labelFor}
               type={showPassword ? "text" : "password"}
               placeholder={placeholder}
               required
-              className="w-full p-[10px] pr-[65px] border-2 border-border-light bg-background-lightA rounded-md outline-none group-hover/input:border-mainBlue focus:border-mainBlue peer duration-200"
+              onChange={onChange}
+              className="w-full p-[10px] pr-[65px] border-2 border-border-light text-text-light bg-background-lightA rounded-md outline-none group-hover/input:border-mainBlue focus:border-mainBlue peer duration-200"
             />
             {showPassword ? (
               <Eye
@@ -47,10 +65,12 @@ export default function InputGroup({
         </>
       ) : (
         <input
+        id={labelFor}
           type={inputType}
           placeholder={placeholder}
           required
-          className="w-full p-[10px] pr-[65px] border-2 border-border-light bg-background-lightA rounded-md outline-none hover:border-mainBlue focus:border-mainBlue duration-200"
+          onChange={onChange}
+          className="w-full p-[10px] pr-[65px] border-2 border-border-light text-text-light bg-background-lightA rounded-md outline-none hover:border-mainBlue focus:border-mainBlue duration-200"
         />
       )}
     </div>
