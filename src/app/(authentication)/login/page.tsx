@@ -11,7 +11,11 @@ export default function Login() {
     <>
       <h1 className="text-4xl font-bold text-mainBlue">Entrar</h1>
       <form className="flex flex-col gap-5">
-        <InputGroup />
+        <InputGroup
+          label="E-mail"
+          inputType="email"
+          placeholder="Digite seu E-mail"
+        />
         <InputGroup
           label="Senha"
           inputType="password"

@@ -26,8 +26,8 @@ const Sidebar = ({ isUserLayout = true }) => {
   return (
     <section
       className={`h-full ${
-        isOpen ? "w-[300px]" : "w-[90px]"
-      } flex flex-col gap-[10px] px-3 py-6 bg-whiteBorder duration-300`}
+        isOpen ? "w-[300px] pr-3" : "w-[90px] px-3"
+      } flex flex-col gap-[10px] py-6 bg-background-lightA border-r-2 border-border-light duration-300`}
     >
       {isUserLayout ? (
         <>
@@ -107,7 +107,7 @@ function Item({
           isSelected
             ? isPremium
               ? "opacity-100"
-              : "opacity-100 bg-white *:text-mainBlue *:font-bold"
+              : "opacity-100 bg-background-light *:text-mainBlue *:font-bold"
             : "opacity-50"
         } 
         

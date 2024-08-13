@@ -71,29 +71,25 @@ export default function TrilhaContent() {
           </li>
         </ul>
       </div>
-      <div className="w-full bg-white rounded-md p-5 shadow-md">
+      <div className="w-full bg-background-lightA p-5 rounded-md mt-5 shadow-md">
         <h2 className="text-xl font-semibold mb-4">Conte-nos o motivo:</h2>
         <div className="flex flex-wrap w-full justify-center gap-2">
-          <button className="bg-gray-200 text-sm text-gray-800 px-8 py-3 rounded-md hover:bg-gray-300">
-            Não gostei do estilo
-          </button>
-          <button className="bg-gray-200 text-sm text-gray-800 px-6 py-3 rounded-md hover:bg-gray-300">
-            Conteúdo incoerente
-          </button>
-          <button className="bg-gray-200 text-sm text-gray-800 px-6 py-3 rounded-md hover:bg-gray-300">
-            Não correspondeu às expectativas
-          </button>
-          <button className="bg-gray-200 text-sm text-gray-800 px-6 py-3 rounded-md hover:bg-gray-300">
-            Confuso
-          </button>
-          <button className="bg-gray-200 text-sm text-gray-800 px-6 py-3 rounded-md hover:bg-gray-300">
-            Entediante
-          </button>
-          <button className="bg-gray-200 text-sm text-gray-800 px-6 py-3 rounded-md hover:bg-gray-300">
-            Outro
-          </button>
+          <FeedbackButton text="Não gostei do estilo" />
+          <FeedbackButton text="Conteúdo incoerente" />
+          <FeedbackButton text="Não correspondeu às expectativas" />
+          <FeedbackButton text="Confuso" />
+          <FeedbackButton text="Entediante" />
+          <FeedbackButton text="Outro" />
         </div>
       </div>
     </>
+  );
+}
+
+function FeedbackButton({ text = "Motivo aqui" }) {
+  return (
+    <button className="bg-background-lightB text-sm text-gray-800 px-8 py-3 rounded-md hover:bg-gray-300 duration-200">
+      {text}
+    </button>
   );
 }

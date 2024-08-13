@@ -9,11 +9,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        mainBlue: "#1865F2",
-        secondaryWhite: "#F9F9F9",
-        whiteBorder: "#F4F4F4",
         whiteText: "#21242C",
         loginFundo: "#D7D7D7",
+        mainBlue: "#1865F2",
+        background: {
+          light: "#FFFFFF",
+          lightA: "#F9F9F9",
+          lightB: "#F1F3F5",
+          lightC: "#D9D9D9",
+        },
+        linkText: {
+          light: "",
+        },
+        text: {
+          light: "",
+        },
+        selected: {
+          light: "",
+        },
+        border: {
+          light: "#F4F4F4",
+        },
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

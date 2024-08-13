@@ -15,7 +15,7 @@ export default function TrilhaLayout({
 
   return (
     <div className="h-full">
-      <div className="bg-secondaryWhite h-[300px] flex flex-col justify-between px-[200px] pt-[60px]">
+      <div className="bg-background-lightA h-[300px] flex flex-col justify-between px-[200px] pt-[60px]">
         <div className="flex flex-col gap-3">
           <Link
             href="/trilhas"
@@ -68,18 +68,18 @@ export default function TrilhaLayout({
             <p className="mb-4 text-white">
               Estude sem preocupações ou distrações a qualquer momento.
             </p>
-            <button className="w-full bg-white text-mainBlue py-2 rounded-md hover:bg-mainBlue border-2 hover:border-white border-transparent duration-100 hover:text-white">
+            <button className="w-full bg-background-light text-mainBlue py-2 rounded-md hover:bg-mainBlue border-2 hover:border-white border-transparent duration-100 hover:text-white">
               Assinar
             </button>
           </div>
-          <div className="bg-white p-6 rounded-md shadow-md sticky top-[235px]">
+          <div className="bg-background-lightA p-6 rounded-md shadow-md sticky top-[235px]">
             <h2 className="text-xl font-bold mb-4">Pergunte à IA</h2>
             <p className="mb-4">
               Ficou com dúvida em alguma parte desse conteúdo? Basta digitar
               logo abaixo.
             </p>
             <textarea
-              className="w-full border border-gray-300 rounded-md p-2 mb-4"
+              className="w-full border border-border-light rounded-md p-2 mb-4"
               placeholder="Escreva sua pergunta"
             ></textarea>
             <button className="w-full bg-mainBlue text-white py-2 rounded-md hover:bg-blue-600">

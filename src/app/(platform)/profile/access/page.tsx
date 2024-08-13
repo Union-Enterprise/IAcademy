@@ -33,7 +33,7 @@ export default function Access() {
                 type="email"
                 disabled
                 placeholder="emaildousuario@email.com"
-                className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue peer duration-100"
+                className="bg-background-lightA w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue peer duration-100"
               />
               <button
                 className="text-mainBlue text-sm absolute right-0 px-[10px] h-full"
@@ -50,7 +50,7 @@ export default function Access() {
                 type="password"
                 disabled
                 placeholder="********************"
-                className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue peer duration-100"
+                className="bg-background-lightA w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue peer duration-100"
               />
               <button
                 className="text-mainBlue text-sm absolute right-0 px-[10px] h-full"

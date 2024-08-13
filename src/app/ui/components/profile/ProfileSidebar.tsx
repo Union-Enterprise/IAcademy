@@ -20,7 +20,7 @@ const ProfileSidebar = () => {
   }, [pathname]);
 
   return (
-    <section className="border-whiteBorder py-5 border-2 rounded-md">
+    <section className="border-border-light py-5 border-2 rounded-md">
       <Item
         title="Visão Geral"
         href="/profile"
@@ -80,8 +80,8 @@ function Item({
       onClick={onClick}
       className={`${
         isSelected &&
-        "opacity-100 border-l-mainBlue *:text-mainBlue *:font-bold bg-secondaryWhite"
-      } items-center px-5 h-[50px] flex border-l-4 border-transparent justify-between hover:bg-secondaryWhite duration-200`}
+        "opacity-100 border-l-mainBlue *:text-mainBlue *:font-bold bg-background-lightA"
+      } items-center px-5 h-[50px] flex border-l-4 border-transparent justify-between hover:bg-background-lightA duration-200`}
     >
       <div className="flex gap-5">
         {iconsList[iconId]}

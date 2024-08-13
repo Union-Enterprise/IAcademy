@@ -13,10 +13,10 @@ export default function RedirectLink({
   href,
 }: RedirectLinkProps) {
   return (
-    <div className="border-t-2 border-whiteBorder pt-5">
+    <div className="border-t-2 border-border-light pt-5">
       <Link
         href={href}
-        className="bg-secondaryWhite hover:bg-[#D9D9D9D9] duration-100 p-5 rounded-md relative flex flex-col justify-center"
+        className="bg-background-lightA hover:bg-background-lightC duration-100 p-5 rounded-md relative flex flex-col justify-center"
       >
         <p>{message}</p>
         <p className="text-mainBlue font-bold text-lg">{action}</p>

@@ -7,12 +7,12 @@ export default function Register() {
     <>
       <h1 className="text-4xl font-bold text-mainBlue">Cadastrar</h1>
       <form className="flex flex-col gap-5">
+        <InputGroup label="Nome" placeholder="Digite seu Nome" />
         <InputGroup
-          label="Nome"
-          inputType="text"
-          placeholder="Digite seu Nome"
+          label="E-mail"
+          inputType="email"
+          placeholder="Digite seu E-mail"
         />
-        <InputGroup />
         <InputGroup
           label="Senha"
           inputType="password"

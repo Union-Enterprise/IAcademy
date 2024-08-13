@@ -18,8 +18,8 @@ export default function SettingsSection({
       }
       ${
         !isDeleteAccount
-          ? "border-2 rounded-md bg-[rgba(253,253,253)]"
-          : "border-t-2 *:text-red-700"
+          ? "border-2 rounded-md bg-background-lightA" 
+          : "border-t-2 *:text-red-700 bg-background-light"
       }`}
     >
       {children}

@@ -24,13 +24,13 @@ export default function Dashboard() {
         <StatResume />
       </div>
       <div className="grid grid-cols-3 h-[500px] gap-5 mt-5">
-        <div className="col-span-2 rounded-md border-2 border-whiteBorder bg-secondaryWhite p-5">
+        <div className="col-span-2 rounded-md border-2 border-whiteBorder bg-background-lightA p-5">
           <LineChartStepped />
         </div>
-        <div className="col-span-1 rounded-md border-2 border-whiteBorder bg-secondaryWhite">
+        <div className="col-span-1 rounded-md border-2 border-whiteBorder bg-background-lightA">
           <p>Usuarios_talvez_aqui</p>
         </div>
-        <div className="col-span-3 rounded-md border-2 border-whiteBorder bg-secondaryWhite p-5">
+        <div className="col-span-3 rounded-md border-2 border-whiteBorder bg-background-lightA p-5">
           <LineChart />
         </div>
       </div>

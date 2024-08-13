@@ -14,11 +14,11 @@ const Navbar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <nav className="h-20 *:h-full bg-secondaryWhite px-3 py-2 flex justify-between items-center border-b-2 border-b-whiteBorder">
+    <nav className="h-20 bg-background-light px-3 py-2 flex justify-between items-center border-b-2 border-b-border-light">
       <div className="flex gap-5 items-center">
         <Menu
           onClick={toggleSidebar}
-          className="cursor-pointer bg-white rounded-md text-mainBlue w-[45px] h-[45px] p-2"
+          className="cursor-pointer border-2 border-border-light rounded-md text-mainBlue w-[65px] h-[45px] p-2 hover:bg-background-lightA duration-200"
         />
         <Link href="/">
           <Image
@@ -26,7 +26,6 @@ const Navbar = () => {
             alt="Descrição da Imagem"
             width={160}
             height={40}
-            priority
           />
         </Link>
       </div>
@@ -34,7 +33,7 @@ const Navbar = () => {
       <div className="flex gap-3 items-center">
         <Link
           href="/login"
-          className="px-7 bg-white rounded-md py-3 flex items-center text-whiteText bg-opacity-80 border-2 border-whiteBorder hover:bg-opacity-100 duration-100"
+          className="px-7 bg-white rounded-md py-3 flex items-center text-whiteText bg-opacity-80 border-2 hover:bg-background-lightA border-border-light hover:bg-opacity-100 duration-100"
         >
           <p className="font-semibold">Entrar</p>
         </Link>
@@ -51,7 +50,6 @@ const Navbar = () => {
             width={60}
             height={60}
             className="border-whiteBorder border-2 rounded-[20px] bg-blue-200"
-            priority
           />
         </Link>
       </div>

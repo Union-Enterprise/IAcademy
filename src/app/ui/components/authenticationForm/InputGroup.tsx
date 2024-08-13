@@ -22,7 +22,7 @@ export default function InputGroup({
               type={showPassword ? "text" : "password"}
               placeholder={placeholder}
               required
-              className="w-full p-[10px] pr-[65px] border-2 rounded-md outline-none group-hover/input:border-mainBlue focus:border-mainBlue peer duration-200"
+              className="w-full p-[10px] pr-[65px] border-2 border-border-light bg-background-lightA rounded-md outline-none group-hover/input:border-mainBlue focus:border-mainBlue peer duration-200"
             />
             {showPassword ? (
               <Eye
@@ -50,7 +50,7 @@ export default function InputGroup({
           type={inputType}
           placeholder={placeholder}
           required
-          className="w-full p-[10px] pr-[65px] border-2 rounded-md outline-none hover:border-mainBlue focus:border-mainBlue duration-200"
+          className="w-full p-[10px] pr-[65px] border-2 border-border-light bg-background-lightA rounded-md outline-none hover:border-mainBlue focus:border-mainBlue duration-200"
         />
       )}
     </div>

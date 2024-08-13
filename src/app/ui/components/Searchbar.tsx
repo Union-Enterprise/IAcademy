@@ -27,7 +27,7 @@ export default function Searchbar({
 
   return (
     <button
-      className="w-[400px] px-4 py-2 h-[50px] border-2 border-whiteBorder rounded-md duration-200 cursor-pointer relative flex items-center hover:border-mainBlue group"
+      className="w-[400px] h-[50px] px-4 border-2 border-border-light bg-background-lightA rounded-md duration-200 cursor-pointer relative flex items-center hover:border-mainBlue group"
       onClick={() => setShowSearchView(true)}
     >
       <p className="text-gray-400">Pesquise aqui</p>
