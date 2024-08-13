@@ -72,22 +72,10 @@ export default function TrilhaLayout({
               Assinar
             </button>
           </div>
-          <div className="bg-background-lightA p-6 rounded-md shadow-md sticky top-[235px]">
-            <h2 className="text-xl font-bold mb-4">Pergunte à IA</h2>
-            <p className="mb-4">
-              Ficou com dúvida em alguma parte desse conteúdo? Basta digitar
-              logo abaixo.
-            </p>
-            <textarea
-              className="w-full border border-border-light rounded-md p-2 mb-4"
-              placeholder="Escreva sua pergunta"
-            ></textarea>
-            <button className="w-full bg-mainBlue text-white py-2 rounded-md hover:bg-blue-600">
-              Enviar
-            </button>
+         
           </div>
         </div>
       </div>
-    </div>
+    
   );
 }

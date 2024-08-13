@@ -1,95 +1,84 @@
 import Link from "next/link";
-//fiz só a parte do texto sobre o plano premiun pq n sabia como fazer a parte de trilhas do plano premiun😭😭😭😭
-// na paz irmao tamo junto !111!
 
-export default function TrilhaContent() {
+export default function TrilhaContent({ title = "" }) {
   return (
-    <>
-      <div className="">
-        <h1 className="text-2xl font-bold mb-4">Geometria Espacial</h1>
-        <p className="mb-4">
-          A geometria espacial, também conhecida como geometria tridimensional,
-          é a área da matemática que estuda as propriedades e relações de
-          figuras no espaço tridimensional.
-        </p>
-        <p className="mb-4">
-          Diferente da geometria plana, que trata de figuras bidimensionais como
-          triângulos e círculos, a geometria espacial lida com sólidos e figuras
-          que possuem três dimensões: comprimento, largura e altura.
-        </p>
-        <h2 className="text-xl font-semibold mb-2">
-          Principais Conceitos da Geometria Espacial
-        </h2>
-        <ul className="list-disc list-inside mb-4">
-          <li>
-            <strong>Ponto:</strong> Indica uma posição no espaço e não possui
-            dimensões.
-          </li>
-          <li>
-            <strong>Linha:</strong> Conjunto infinito de pontos alinhados em uma
-            única direção. Pode ser reta ou curva.
-          </li>
-          <li>
-            <strong>Plano:</strong> Superfície bidimensional que se estende
-            infinitamente em todas as direções.
-          </li>
-        </ul>
-        <h2 className="text-xl font-semibold mb-2">Sólidos Geométricos</h2>
-        <p className="mb-4">
-          Os sólidos geométricos são as figuras tridimensionais estudadas na
-          geometria espacial. Alguns exemplos comuns incluem:
-        </p>
-        <ul className="list-disc list-inside mb-4">
-          <li>
-            <strong>Cubo:</strong> Seis faces quadradas iguais, doze arestas e
-            oito vértices.
-          </li>
-          <li>
-            <strong>Paralelepípedo:</strong> Seis faces retangulares, doze
-            arestas e oito vértices.
-          </li>
-          <li>
-            <strong>Pirâmide:</strong> Base poligonal e faces triangulares que
-            se encontram em um vértice comum. A mais comum é a pirâmide de base
-            quadrada.
-          </li>
-          <li>
-            <strong>Prisma:</strong> Duas bases poligonais paralelas e faces
-            laterais retangulares.
-          </li>
-          <li>
-            <strong>Cilindro:</strong> Duas bases circulares paralelas e uma
-            superfície lateral curva.
-          </li>
-          <li>
-            <strong>Cone:</strong> Base circular e uma superfície lateral que se
-            afunila até um ponto (vértice).
-          </li>
-          <li>
-            <strong>Esfera:</strong> Superfície totalmente curva onde todos os
-            pontos estão a uma distância constante do centro.
-          </li>
-        </ul>
+    <section className="flex flex-col ">
+      <div className="flex justify-between items-center">
       </div>
-      <div className="w-full bg-background-lightA p-5 rounded-md mt-5 shadow-md">
-        <h2 className="text-xl font-semibold mb-4">Conte-nos o motivo:</h2>
-        <div className="flex flex-wrap w-full justify-center gap-2">
-          <FeedbackButton text="Não gostei do estilo" />
-          <FeedbackButton text="Conteúdo incoerente" />
-          <FeedbackButton text="Não correspondeu às expectativas" />
-          <FeedbackButton text="Confuso" />
-          <FeedbackButton text="Entediante" />
-          <FeedbackButton text="Outro" />
+      <div className="mb-1  ">
+        <Link href={'./contentIA'}>
+          <Item title="Geometria" text="Este módulo oferece uma imersão nos fundamentos da programação em Go,
+            preparando você para o projeto prático Guessing Game. Abordamos desde as razões para escolher Go até a criação do seu primeiro programa,
+            proporcionando uma compreensão detalhada da linguagem. Este módulo é essencial para estabelecer uma base sólida em Go e desenvolver projetos robustos com confiança." />
+        </Link>
+        <div className="mt-3">
+          <Item 
+          title="Seno, Cosseno e Tangente" 
+          text="Nos módulos de Fundamentos,
+            vamos explorar as bases essenciais do universo C#.
+            Vamos entender e conhecer a história dessa linguagem de programação;
+            as diferentes versões de IDEs disponíveis para nós desenvolvedores utilizarmos,
+            e claro, exploraremos a sintaxe e faremos nosso primeiro Hello World." />
         </div>
+        <div className="mt-3">
+          <Item 
+          title="Angulos" 
+          text="Neste módulo prático, iremos criar a primeira API usando. 
+          NET Core: Desde a configuração do ambiente de desenvolvimento até a implementação de operações CRUD.
+          Ao final do módulo, teremos uma compreensão prática e sólida de como criar APIs funcionais e escaláveis, 
+          prontas para serem integradas em seus projetos."/>
+        </div>
+        <div className="mt-3">
+          <Item title="Angulos" text="Neste módulo, o objetivo é demonstrar que o projeto deve ser organizado em camadas distintas.
+           O projeto de API deve ser responsável exclusivamente por receber as requisições e fornecer as respostas correspondentes." />
+        </div>
+        
+  
       </div>
-    </>
+    </section>
   );
 }
 
-function FeedbackButton({ text = "Motivo aqui" }) {
+function Item({title = '',text= ''}) {
   return (
-    <button className="bg-background-lightB text-sm text-gray-800 px-8 py-3 rounded-md hover:bg-gray-300 duration-200">
-      {text}
-    </button>
+    <div className="flex flex-col  justify-between p-5 rounded-md w-full h-[200px] border-whiteBorder border-2  hover:border-mainBlue">
+      <div>
+        <h6 className="font-bold text-lg text-whiteText mb-1">{title}</h6>
+        <p className="text-sm text-[rgba(0,0,0,0.57)]">
+        {text}
+        </p>
+      </div>
+     
+    </div>
+  );
+}
+
+export function Trail({ description = "", href = "" }) {
+  return (
+    <Link
+      href={href}
+      className="hover:border-mainBlue flex flex-col justify-between p-5 rounded-md w-full min-h-[250px] duration-100 border-whiteBorder border-2 gap-4"
+    >
+      <div>
+        <h6 className="font-bold text-lg text-whiteText">Geometria</h6>
+        <p className="text-sm text-[rgba(0,0,0,0.4)]">
+          00/00 tópicos estudados
+        </p>
+      </div>
+      <p className="text-sm leading-6 justify-items-end flex">{description}</p>
+      <div className="flex gap-2 *:text-sm overflow-hidden">
+        <Tag name="Intermediário" />
+        <Tag name="Geometria" />
+        <Tag name="Matemática" />
+      </div>
+    </Link>
+  );
+}
+
+export function Tag({ name = "" }) {
+  return (
+    <div className="flex justify-center items-center rounded-md px-[15px] border-whiteBorder border-2">
+      <p className="whitespace-nowrap">{name}</p>
+    </div>
   );
 }
