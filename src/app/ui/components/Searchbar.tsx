@@ -32,7 +32,7 @@ export default function Searchbar({
     >
       <p className="text-gray-400">Pesquise aqui</p>
       <span className="absolute right-2 opacity-80 bg-mainBlue pointer-events-none h-fit py-1 px-5 text-sm rounded-md flex items-center justify-center text-white font-bold duration-200">
-        /
+        clique / para pesquisar
       </span>
     </button>
   );
