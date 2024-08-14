@@ -26,8 +26,8 @@ const Sidebar = ({ isUserLayout = true }) => {
   return (
     <section
       className={`h-full ${
-        isOpen ? "w-[300px]" : "w-[90px]"
-      } flex flex-col gap-[10px] px-3 py-6 bg-background-lightCard border-r-2 border-border-light duration-300`}
+        isOpen ? "w-[300px] pr-3" : "w-[90px] px-3"
+      } flex flex-col gap-[10px] py-6 bg-background-lightA border-r-2 border-border-light duration-300`}
     >
       {isUserLayout ? (
         <>
@@ -102,7 +102,7 @@ function Item({
     <Link
       onClick={onClick}
       href={href}
-      className={`flex overflow-hidden gap-6 px-5 h-[50px] rounded-md items-center cursor-pointer hover:opacity-100 duration-200
+      className={`flex overflow-hidden gap-6 px-5 h-[50px] rounded-md items-center cursor-pointer hover:opacity-100 duration-200 
         ${
           isSelected
             ? isPremium
@@ -111,7 +111,7 @@ function Item({
             : "opacity-50"
         } 
         
-        ${isPremium ? "bg-mainBlue text-white" : "text-title-light"}`}
+        ${isPremium ? "bg-mainBlue text-white" : "text-whiteText"}`}
     >
       {isPremium ? (
         <Image

@@ -1,7 +1,5 @@
 import React from "react";
 
-import { FilterIcon } from "lucide-react";
-
 interface FilterItem {
   name: string;
 }
@@ -13,13 +11,8 @@ interface FilterListProps {
 
 export default function FilterSection() {
   return (
-    <section className="flex flex-col gap-4 w-[300px]">
-      <div className="flex gap-3 items-center">
-        <FilterIcon />
-        <h3 className="text-xl font-bold text-title-light">
-          Filtros
-        </h3>
-      </div>
+    <section className="flex flex-col gap-5 w-[300px]">
+      <h3 className="text-lg font-bold">Filtre os conteúdos</h3>
       <FilterList
         title="Conteúdo"
         items={[
@@ -52,16 +45,14 @@ export default function FilterSection() {
 
 const FilterList: React.FC<FilterListProps> = ({ title = "", items = [] }) => {
   return (
-    <div className="flex flex-col">
-      <h4 className="font-bold text-title-light text-lg">{title}</h4>
-      <div className="flex flex-col gap-2">
-        {items.map((item, index) => (
-          <div key={index} className="flex items-center gap-2">
-            <input type="checkbox" name={item.name} id={item.name} />
-            <p className="text-text-lightSub">{item.name}</p>
-          </div>
-        ))}
-      </div>
+    <div className="flex flex-col gap-4">
+      <h4 className="font-bold">{title}</h4>
+      {items.map((item, index) => (
+        <div key={index} className="flex gap-4">
+          <input type="checkbox" name={item.name} id={item.name} />
+          <p>{item.name}</p>
+        </div>
+      ))}
     </div>
   );
 };

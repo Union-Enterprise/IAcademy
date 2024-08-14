@@ -17,22 +17,18 @@ const config: Config = {
           lightA: "#F9F9F9",
           lightB: "#F1F3F5",
           lightC: "#D9D9D9",
-          lightCard: "#FDFDFD",
         },
         linkText: {
-          light: "#71717A",
-          lightEnabled: "#18181B",
-        },
-        title: {
-          light: "#080808",
+          light: "",
         },
         text: {
-          light: "#080808",
-          lightSub: "#909090",
+          light: "",
+        },
+        selected: {
+          light: "",
         },
         border: {
           light: "#F4F4F4",
-          lightA: "#E4E4E7",
         },
       },
       backgroundImage: {

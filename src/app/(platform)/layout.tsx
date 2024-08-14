@@ -20,13 +20,13 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body
-        className={`${inter.className} h-[100vh] overflow-hidden select-none bg-background-light`}
+        className={`${inter.className} h-[100vh] overflow-hidden select-none`}
       >
         <SidebarProvider>
           <Navbar />
           <main className="flex w-full h-full">
             <Sidebar />
-            <section className="gap-10 *:mb-[140px] flex flex-col overflow-auto w-full">
+            <section className="gap-10 *:mb-[140px] bg-wm-white flex flex-col overflow-auto w-full">
               {children}
             </section>
           </main>

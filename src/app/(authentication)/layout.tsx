@@ -22,11 +22,10 @@ export default function RootLayout({
       >
         <div className="bg-mainBlue col-span-2 flex items-center justify-center h-full">
           <Image
-            src="/whiteIcon.svg"
+            src=".\whiteIcon.svg"
             alt="Descrição da Imagem"
             width={500}
             height={460.63}
-            className="w-[500px] h-[460px]"
           />
         </div>
         <main className="col-span-1 bg-white px-[80px] py-[60px]">

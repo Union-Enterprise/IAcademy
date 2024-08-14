@@ -17,9 +17,9 @@ export default function ProfileLayout({
     <>
       <div className=" grid grid-cols-3 gap-5 px-[200px] pt-[70px]">
         <div className="col-span-1 flex flex-col gap-5">
-          <div className="border-2 flex flex-col items-center pt-[70px] border-border-light bg-background-lightCard rounded-md relative">
-            <div className="absolute left-0 top-0 w-full h-[40%] bg-background-lightB p-3 flex justify-end">
-              <PenLine className="h-[40px] w-[40px] bg-background-light text-title-light rounded-md p-2 cursor-pointer hover:bg-mainBlue hover:text-background-light duration-200" />
+          <div className="border-2 flex flex-col items-center pt-[70px] border-whiteBorder bg-[rgba(253,253,253)] rounded-md relative">
+            <div className="absolute left-0 top-0 w-full h-[40%] bg-[rgba(240,240,240)] p-3 flex justify-end">
+              <PenLine className="h-[40px] w-[40px] bg-white text-whiteText rounded-md p-2 cursor-pointer hover:bg-mainBlue hover:text-white duration-200" />
             </div>
             <div className="relative z-10 overflow-hidden rounded-[70px] group cursor-pointer">
               <Image
@@ -36,17 +36,15 @@ export default function ProfileLayout({
                 <Camera className="w-[50px] h-[50px]" />
               </button>
             </div>
-            <h1 className="text-2xl text-title-light font-bold mt-5">
-              Nome de exibição
-            </h1>
+            <h1 className="text-2xl font-bold mt-5">Nome de exibição</h1>
             <h2 className="text-gray-600 font-semibold">@nome-do-usuário</h2>
-            <p className="text-text-lightSub text-sm flex mt-12 py-5 border-t-2 border-border-light w-full justify-center">
+            <p className="text-gray-500 text-sm flex mt-12 py-5 border-t-2 border-whiteBorder w-full justify-center">
               Aluno IAcademy desde 00/00/0000
             </p>
           </div>
           <ProfileSidebar />
         </div>
-        <div className="col-span-2 flex flex-col gap-5">{children}</div>
+        <div className=" col-span-2 flex flex-col gap-5">{children}</div>
       </div>
       {showImageView && (
         <SettingsImage closeView={() => setShowImageView(false)} />

@@ -24,8 +24,8 @@ export default function TrilhaLayout({
             <FontAwesomeIcon icon={faArrowLeft} className="w-5 h-5" />
             <p className="text-lg">Voltar</p>
           </Link>
-          <h1 className="text-5xl font-bold text-title-light">Geometria</h1>
-          <p className="text-text-lightSub text-lg">
+          <h1 className="text-5xl font-bold">Geometria</h1>
+          <p className="text-gray-500 text-lg">
             Aprenda tudo sobre o universo da geometria.
           </p>
           <div className="flex gap-3">
@@ -41,7 +41,7 @@ export default function TrilhaLayout({
               pathname.includes("/general")
                 ? "border-b-mainBlue font-semibold"
                 : "opacity-50 hover:opacity-100 hover:border-opacity-75 hover:border-b-mainBlue "
-            } *:text-text-light border-b-2 p-2 text-lg duration-100`}
+            } border-b-2 p-2 text-lg duration-100`}
           >
             <p>Visão Geral</p>
           </Link>
@@ -51,7 +51,7 @@ export default function TrilhaLayout({
               pathname.includes("/content")
                 ? "border-b-mainBlue font-semibold"
                 : "opacity-50 hover:opacity-100 hover:border-opacity-75 hover:border-b-mainBlue "
-            } *:text-text-light border-b-2 p-2 text-lg duration-100`}
+            } border-b-2 p-2 text-lg duration-100`}
           >
             <p>Conteúdo</p>
           </Link>
@@ -72,8 +72,10 @@ export default function TrilhaLayout({
               Assinar
             </button>
           </div>
+         
+          </div>
         </div>
       </div>
-    </div>
+    
   );
 }

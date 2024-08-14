@@ -5,8 +5,8 @@ export default function Home() {
   return (
     <div className="mx-[200px] mt-[70px]">
       <div>
-        <h1 className="text-3xl font-bold text-title-light">Página Inicial</h1>
-        <p className="mb-5 mt-2 text-text-light">
+        <h1 className="text-3xl font-bold">Página Inicial</h1>
+        <p className="text-base mb-5">
           Navegue por nosso catálogo de conteúdos e se prepare para os mais
           diversos Vestibulares.
         </p>
@@ -30,6 +30,8 @@ export default function Home() {
             </button>
           </div>
           <ContentList title="Assuntos em destaque" />
+          <ContentList title="Tópicos" />
+          <ContentList title="Tópicos" />
           <ContentList title="Tópicos" />
         </div>
         <FilterSection />
