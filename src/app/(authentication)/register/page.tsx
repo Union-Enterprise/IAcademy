@@ -1,48 +1,75 @@
-"use client"
+"use client";
 
 import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
 import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 import RedirectLink from "@/app/ui/components/authenticationForm/RedirectLink";
-
 import axios from "axios";
+import React, { useState } from "react";
 
 export default function Register() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const sendData = () => {
-    axios.post('http://localhost:5002/signup', {
-      "name": 'teste',
-      "email": 'oioioi@gmail.com',
-      "password": "12342131235" 
-    })
-    .then(function (response) {
-      console.log(response.status); // cod da requisição
-      console.log(response.data); // mensagem de erro ou de sucesso (e.g usuario ja cadastrado)
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
-  }
+    axios
+      .post("http://localhost:5002/signup", {
+        name: name,
+        email: email,
+        password: password,
+      })
+      .then(function (response) {
+        console.log(response.status); // cod da requisição
+        console.log(response.data); // mensagem de erro ou de sucesso (e.g usuario ja cadastrado)
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
   return (
     <>
       <h1 className="text-4xl font-bold text-mainBlue">Cadastrar</h1>
-      <form className="flex flex-col gap-5">
-        <InputGroup label="Nome" placeholder="Digite seu Nome" />
+      <form
+        className="flex flex-col gap-5"
+        onSubmit={(e) => {
+          e.preventDefault();
+
+          {
+            password === confirmPassword
+              ? sendData()
+              : console.log("senhas não coincidem");
+          }
+        }}
+      >
+        <InputGroup
+          label="Nome"
+          labelFor="name"
+          placeholder="Digite seu Nome"
+          onChange={(e) => setName(e.target.value)}
+        />
         <InputGroup
           label="E-mail"
+          labelFor="email"
           inputType="email"
           placeholder="Digite seu E-mail"
+          onChange={(e) => setEmail(e.target.value)}
         />
         <InputGroup
           label="Senha"
+          labelFor="password"
           inputType="password"
           placeholder="Digite sua senha"
+          onChange={(e) => setPassword(e.target.value)}
         />
         <InputGroup
           label="Confirmação"
+          labelFor="confirmation"
           inputType="password"
           placeholder="Confirme sua senha"
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <SubmitButton text="Cadastrar" onclick={() => sendData()}/>
+        <SubmitButton text="Cadastrar" />
       </form>
       <RedirectLink
         message="Já tem uma conta?"

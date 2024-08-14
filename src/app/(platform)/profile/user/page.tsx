@@ -54,7 +54,7 @@ export default function User() {
               <input
                 type="text"
                 disabled
-                placeholder="999.999.999-99"
+                placeholder="___.___.___-__"
                 className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue peer duration-100"
               />
               <button
