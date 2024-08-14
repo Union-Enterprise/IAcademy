@@ -1,8 +1,27 @@
+"use client"
+
 import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
 import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 import RedirectLink from "@/app/ui/components/authenticationForm/RedirectLink";
 
+import axios from "axios";
+
 export default function Register() {
+
+  const sendData = () => {
+    axios.post('http://localhost:5002/signup', {
+      "name": 'teste',
+      "email": 'oioioi@gmail.com',
+      "password": "12342131235" 
+    })
+    .then(function (response) {
+      console.log(response.status); // cod da requisição
+      console.log(response.data); // mensagem de erro ou de sucesso (e.g usuario ja cadastrado)
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+  }
   return (
     <>
       <h1 className="text-4xl font-bold text-mainBlue">Cadastrar</h1>
@@ -23,7 +42,7 @@ export default function Register() {
           inputType="password"
           placeholder="Confirme sua senha"
         />
-        <SubmitButton text="Cadastrar" />
+        <SubmitButton text="Cadastrar" onclick={() => sendData()}/>
       </form>
       <RedirectLink
         message="Já tem uma conta?"
