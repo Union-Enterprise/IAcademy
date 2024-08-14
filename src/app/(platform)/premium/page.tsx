@@ -6,8 +6,8 @@ import { ChevronRight, CreditCard, Barcode, HandCoins, SmartphoneNfc, UserRound,
 
 export default function CheckoutPage() {
   return (
-    <div className="flex justify-start ml-20 mt-10">
-      <div className="max-w-xl p-6 rounded-lg shadow-xl">
+    <div className="flex justify-center  mt-10 ">
+      <div className="max-w-xl p-6 rounded-lg shadow-xl border-2">
       
         <div className="mb-8">
           <img src="/blueLogo.svg" alt="Logo" className="h-30 w-28" />
@@ -45,7 +45,7 @@ export default function CheckoutPage() {
 
     
         <div className="mb-4">
-          <div className="shadow-lg p-4 rounded-lg">
+          <div className="shadow-lg border-mainBlue border-b-2 p-4 rounded-lg">
           <div className='flex  items-center '>
                 <UserRound className='text-mainBlue'/><h2 className="text-lg font-bold ml-2">Meus dados</h2>
             </div>
@@ -54,7 +54,7 @@ export default function CheckoutPage() {
 
       
         <div>
-          <div className="shadow-lg p-4 rounded-lg">
+          <div className="shadow-lg p-4 rounded-lg border-mainBlue border-b-2 ">
              <div className='flex  items-center '>
                 <CreditCard className='text-mainBlue'/><h2 className="text-lg font-bold ml-2">Informações de pagamento</h2>
             </div>

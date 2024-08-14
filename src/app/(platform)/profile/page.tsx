@@ -1,4 +1,7 @@
+"use client";
+
 import SettingsSection from "@/app/ui/components/profile/SettingsSection";
+import SettingsRemove from "@/app/ui/components/profile/SettingsRemove";
 import {
   BadgeCheck,
   KeyRound,
@@ -9,8 +12,11 @@ import {
   Skull,
 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Profile() {
+  const [showRemoveView, setShowRemoveView] = useState(false);
+
   return (
     <>
       <SettingsSection isPremium={true}>
@@ -30,6 +36,7 @@ export default function Profile() {
           e conheça as opções.
         </p>
       </SettingsSection>
+
       <SettingsSection>
         <div className="flex gap-2 items-center">
           <KeyRound className="w-[30px] h-[30px]" />
@@ -38,7 +45,7 @@ export default function Profile() {
             <p className="text-mainBlue text-sm">Alterar</p>
           </Link>
         </div>
-        <div className="flex flex-col gap-2 *:text-whiteText">
+        <div className="flex flex-col gap-2 text-whiteText">
           <div className="flex gap-2 items-center">
             <Mail className="w-[20px] h-[20px]" />
             <p>emaildousuario@email.com</p>
@@ -49,6 +56,7 @@ export default function Profile() {
           </div>
         </div>
       </SettingsSection>
+
       <SettingsSection>
         <div className="flex gap-2 items-center">
           <UsersRound className="w-[30px] h-[30px]" />
@@ -57,13 +65,14 @@ export default function Profile() {
             <p className="text-mainBlue text-sm">Alterar</p>
           </Link>
         </div>
-        <div className="flex flex-col gap-2 *:text-whiteText">
+        <div className="flex flex-col gap-2 text-whiteText">
           <div className="flex gap-2 items-center">
             <UserRoundPen className="w-[20px] h-[20px]" />
             <p>Nome do usuário</p>
           </div>
         </div>
       </SettingsSection>
+
       <SettingsSection isDeleteAccount={true}>
         <div className="flex gap-2 items-center">
           <Skull className="w-[30px] h-[30px]" />
@@ -73,10 +82,17 @@ export default function Profile() {
           Ao excluir sua conta, todos os dados relacionados a você e sua conta
           serão deletados e não será possível restaurá-los.
         </p>
-        <button className=" px-4 py-2 bg-red-400 hover:bg-red-600 duration-200 w-fit rounded-md">
+        <button
+          className="px-4 py-2 bg-red-400 hover:bg-red-600 duration-200 w-fit rounded-md"
+          onClick={() => setShowRemoveView(true)}
+        >
           <p className="text-white text-sm">Excluir minha conta</p>
         </button>
       </SettingsSection>
+
+      {showRemoveView && (
+        <SettingsRemove closeView={() => setShowRemoveView(false)}/>
+      )}
     </>
   );
 }

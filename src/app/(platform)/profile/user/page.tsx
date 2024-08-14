@@ -27,12 +27,23 @@ export default function User() {
 
         <div className="grid grid-cols-2 gap-x-3 gap-y-5">
           <div className="flex flex-col">
-            <label className="text-whiteText mb-3">Nome</label>
+            <label className="text-whiteText mb-3">Nome de exibição</label>
             <div className="relative flex items-center overflow-hidden rounded-md">
               <input
                 type="text"
-                placeholder="Nome do usuário"
+                placeholder="Nome do exibição"
                 className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue hover:border-mainBlue peer duration-100"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-whiteText mb-3">Nome do usuário</label>
+            <div className="relative flex items-center overflow-hidden rounded-md">
+              <input
+                type="text"
+                placeholder="Nome de usuário"
+                className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue peer duration-100"
               />
             </div>
           </div>

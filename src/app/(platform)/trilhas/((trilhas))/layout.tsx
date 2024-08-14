@@ -68,9 +68,11 @@ export default function TrilhasLayout({
             <p className="mb-4 text-white">
               Estude sem preocupações ou distrações a qualquer momento.
             </p>
-            <button className="w-full bg-background-light text-mainBlue py-2 rounded-md hover:bg-mainBlue border-2 hover:border-white border-transparent duration-100 hover:text-white">
-              Assinar
-            </button>
+            <Link href={'/premium'}>
+              <button className="w-full bg-background-light text-mainBlue py-2 rounded-md hover:bg-mainBlue border-2 hover:border-white border-transparent duration-100 hover:text-white">
+                Assinar
+              </button>
+            </Link>
           </div>
           <div className="bg-background-lightA p-6 rounded-md shadow-md sticky top-[235px] ">
             <h2 className="text-xl font-bold mb-4">Pergunte à IA</h2>
