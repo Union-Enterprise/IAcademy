@@ -15,9 +15,9 @@ export default function Register() {
   const sendData = () => {
     axios
       .post("http://localhost:5002/signup", {
-        name: name,
-        email: email,
-        password: password,
+        name,
+        email,
+        password,
       })
       .then(function (response) {
         console.log(response.status); // cod da requisição
@@ -34,6 +34,8 @@ export default function Register() {
         className="flex flex-col gap-5"
         onSubmit={(e) => {
           e.preventDefault();
+
+          console.log(name, email, password);
 
           {
             password === confirmPassword

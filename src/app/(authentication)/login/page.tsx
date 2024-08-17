@@ -17,8 +17,8 @@ export default function Login() {
   const sendData = () => {
     axios
       .post("http://localhost:5002/login", {
-        email: email,
-        password: password,
+        email,
+        password,
       })
       .then(function (response) {
         console.log(response.status); // cod da requisição
@@ -36,6 +36,9 @@ export default function Login() {
         className="flex flex-col gap-5"
         onSubmit={(e) => {
           e.preventDefault();
+
+          console.log(name, email, password);
+
           sendData();
         }}
       >
