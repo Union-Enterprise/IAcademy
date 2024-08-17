@@ -1,38 +1,30 @@
+"use client";
+
+import { Search } from "lucide-react";
 import FilterSection from "../ui/components/FilterSection";
 import ContentList from "../ui/components/ContentList";
 
 export default function Home() {
   return (
-    <div className="mx-[200px] mt-[70px]">
-      <div>
-        <h1 className="text-3xl font-bold text-title-light">Página Inicial</h1>
-        <p className="mb-5 mt-2 text-text-light">
-          Navegue por nosso catálogo de conteúdos e se prepare para os mais
-          diversos Vestibulares.
-        </p>
-      </div>
-      <div className="flex justify-between gap-[40px]">
-        <div className="flex flex-col gap-[40px] w-full">
-          <div className="flex bg-mainBlue gap-10 justify-center items-center *:text-white p-[60px] rounded-xl">
-            <div>
-              <h2 className="text-2xl font-bold">
-                Aprenda Matemática do jeito mais simples.
-              </h2>
-              <p className="">
-                Com nossa trilha de matemática você aprende no seu tempo e do
-                seu jeito.
-              </p>
-            </div>
-            <button className="bg-white rounded-md px-10 hover:border-white border-2 border-transparent hover:bg-transparent duration-200 py-[10px] group">
-              <p className="text-lg text-mainBlue duration-200 group-hover:text-white font-semi">
-                Conhecer
-              </p>
-            </button>
+    <div className="mx-[32px] mt-[40px]">
+      <div className="flex flex-col gap-[40px]">
+        <div className="flex flex-col bg-mainBlue gap-8 justify-center items-center *:text-white py-[80px] rounded-xl">
+          <h2 className="text-5xl font-bold">Tá afim de estudar o que hoje?</h2>
+          <div className="relative flex w-[30%] h-[45px] items-center">
+            <input
+              placeholder="Busque os conteúdos da IAcademy"
+              className="w-full h-full px-4 ring-0 outline-none rounded-md flex items-center text-text-light"
+            />
+            <Search size={25} className="absolute right-3 text-text-lightSub" />
           </div>
-          <ContentList title="Assuntos em destaque" />
-          <ContentList title="Tópicos" />
         </div>
-        <FilterSection />
+        <div className="flex gap-[40px]">
+          <div className="flex flex-col gap-[40px] w-full col-span-2">
+            <ContentList title="Conteúdos em destaque" />
+            <ContentList title="Tópicos mais estudados" />
+          </div>
+          <FilterSection />
+        </div>
       </div>
     </div>
   );

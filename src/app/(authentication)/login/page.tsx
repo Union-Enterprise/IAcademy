@@ -31,7 +31,7 @@ export default function Login() {
 
   return (
     <>
-      <h1 className="text-4xl font-bold text-mainBlue">Entrar</h1>
+      <h1 className="text-[24px] font-bold text-mainBlue">Entrar</h1>
       <form
         className="flex flex-col gap-5"
         onSubmit={(e) => {

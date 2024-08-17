@@ -18,15 +18,6 @@ export default function FilterSection() {
         <h3 className="text-xl font-bold text-title-light">Filtros</h3>
       </div>
       <FilterList
-        title="Conteúdo"
-        items={[
-          { name: "Geometria" },
-          { name: "Estatística" },
-          { name: "Aritmética" },
-          { name: "Álgebra" },
-        ]}
-      />
-      <FilterList
         title="Tópicos"
         items={[
           { name: "Sólidos Geométricos" },

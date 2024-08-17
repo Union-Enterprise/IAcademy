@@ -3,19 +3,20 @@ import { useEffect } from "react";
 
 interface SearchProps {
   setShowSearchView: React.Dispatch<React.SetStateAction<boolean>>;
-  inputRef: React.RefObject<HTMLInputElement>;
+  height?: string;
+  width?: string;
 }
 
 export default function Searchbar({
   setShowSearchView,
-  inputRef,
+  height = "h-full",
+  width = "w-[400px]",
 }: SearchProps) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "/") {
         event.preventDefault();
         setShowSearchView(true);
-        inputRef.current?.focus();
       }
     };
 
@@ -23,11 +24,11 @@ export default function Searchbar({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [setShowSearchView, inputRef]);
+  }, [setShowSearchView]);
 
   return (
     <button
-      className="w-[400px] h-[50px] px-4 border-2 border-border-light bg-background-lightCard rounded-md duration-200 cursor-pointer relative flex items-center hover:border-mainBlue group"
+      className={`${width} ${height} px-4 border-2 border-border-light bg-background-lightCard rounded-md duration-200 cursor-pointer relative flex items-center hover:border-mainBlue group`}
       onClick={() => setShowSearchView(true)}
     >
       <p className="text-gray-400">Pesquise aqui</p>
@@ -38,7 +39,7 @@ export default function Searchbar({
   );
 }
 
-export function SearchView({ setShowSearchView, inputRef }: SearchProps) {
+export function SearchView({ setShowSearchView }: SearchProps) {
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -58,7 +59,6 @@ export function SearchView({ setShowSearchView, inputRef }: SearchProps) {
         <div className="flex items-center relative">
           <input
             type="search"
-            ref={inputRef}
             placeholder="Pesquise aqui"
             className="w-full px-5 py-2 h-[60px] pr-24 border-2 rounded-md rounded-b-none focus:outline-none focus:border-mainBlue focus:ring-transparent duration-100"
           />

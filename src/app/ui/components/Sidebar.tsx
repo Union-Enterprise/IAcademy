@@ -1,15 +1,15 @@
 "use client";
 
 import {
-  faHouse,
-  faCompass,
-  faDashboard,
-  faUserAstronaut,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  House,
+  Compass,
+  Map,
+  BadgeCheck,
+  PanelsTopLeft,
+  UserRoundPlus,
+} from "lucide-react";
 import Link from "next/link";
 import { useSidebar } from "./context/SidebarContext";
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
@@ -26,13 +26,14 @@ const Sidebar = ({ isUserLayout = true }) => {
   return (
     <section
       className={`h-full ${
-        isOpen ? "w-[300px]" : "w-[90px]"
-      } flex flex-col gap-[10px] px-3 py-6 bg-background-lightCard border-r-2 border-border-light duration-300`}
+        isOpen ? "w-[300px]" : "w-[95px]"
+      } flex flex-col gap-2 px-5 py-6 duration-200`}
     >
       {isUserLayout ? (
         <>
           <Item
-            title="Home"
+            title="Início"
+            lucideIcon={House}
             isOpen={isOpen}
             href="/"
             isSelected={selectedItem === "/"}
@@ -40,7 +41,7 @@ const Sidebar = ({ isUserLayout = true }) => {
           />
           <Item
             title="Trilhas"
-            icon={faCompass}
+            lucideIcon={Compass}
             isOpen={isOpen}
             href="/trilhas"
             isSelected={selectedItem.startsWith("/trilhas")}
@@ -49,6 +50,7 @@ const Sidebar = ({ isUserLayout = true }) => {
           <Item
             title="Premium"
             isPremium={true}
+            lucideIcon={BadgeCheck}
             isOpen={isOpen}
             href="/premium"
             isSelected={selectedItem === "/premium"}
@@ -59,7 +61,7 @@ const Sidebar = ({ isUserLayout = true }) => {
         <>
           <Item
             title="Dashboard"
-            icon={faDashboard}
+            lucideIcon={PanelsTopLeft}
             isOpen={isOpen}
             href="/dashboard"
             isSelected={selectedItem === "/dashboard"}
@@ -67,7 +69,7 @@ const Sidebar = ({ isUserLayout = true }) => {
           />
           <Item
             title="Administradores"
-            icon={faUserAstronaut}
+            lucideIcon={UserRoundPlus}
             isOpen={isOpen}
             href="/admins"
             isSelected={selectedItem === "/admins"}
@@ -82,7 +84,7 @@ const Sidebar = ({ isUserLayout = true }) => {
 interface ItemProps {
   title: string;
   href: string;
-  icon?: typeof faHouse;
+  lucideIcon?: React.ElementType;
   isSelected?: boolean;
   isPremium?: boolean;
   isOpen: boolean;
@@ -90,9 +92,9 @@ interface ItemProps {
 }
 
 function Item({
-  title = "",
-  href = "",
-  icon = faHouse,
+  title,
+  href,
+  lucideIcon: LucideIcon,
   isSelected = false,
   isPremium = false,
   isOpen,
@@ -102,26 +104,21 @@ function Item({
     <Link
       onClick={onClick}
       href={href}
-      className={`flex overflow-hidden gap-6 px-5 h-[50px] rounded-md items-center cursor-pointer hover:opacity-100 duration-200
+      className={`relative pl-[55px] flex overflow-hidden gap-4 h-[50px] rounded-md items-center cursor-pointer hover:opacity-100 duration-200 w-full
         ${
           isSelected
             ? isPremium
               ? "opacity-100"
-              : "opacity-100 bg-background-light *:text-mainBlue *:font-bold"
+              : "opacity-100 bg-cyan-100 *:text-mainBlue"
             : "opacity-50"
-        } 
-        
-        ${isPremium ? "bg-mainBlue text-white" : "text-title-light"}`}
+        }
+
+        ${!isSelected && !isPremium && "hover:bg-background-lightHover"}
+
+        ${isPremium ? "bg-mainBlue text-white" : "text-title-light "}`}
     >
-      {isPremium ? (
-        <Image
-          src="/premiumIcon.svg"
-          alt="Premium Icon"
-          width={25}
-          height={25}
-        />
-      ) : (
-        <FontAwesomeIcon icon={icon} className="bg-red h-[25px] w-[25px]" />
+      {LucideIcon && (
+        <LucideIcon className="absolute left-[15px] h-[25px] w-[25px]" />
       )}
       {isOpen && <p className="whitespace-nowrap">{title}</p>}
     </Link>

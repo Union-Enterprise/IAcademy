@@ -30,8 +30,12 @@ export default function RootLayout({
           />
         </div>
         <main className="col-span-1 bg-white px-[80px] py-[60px]">
-          <div className="flex flex-col justify-between h-full">
-            <img src="./bluelogo.svg" alt="" className="w-[250px]" />
+          <div className="flex flex-col gap-8 h-full">
+            <img
+              width={200}
+              src="./bluelogo.svg"
+              alt="IAcademy Logo"
+            />
             {children}
           </div>
         </main>

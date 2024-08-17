@@ -1,37 +1,59 @@
 "use client";
 
 import StatResume from "@/app/ui/components/adminUtils/StatResume";
-import { FilePlus } from "lucide-react";
-import LineChart from "@/app/ui/components/adminUtils/charts/LineChart";
+import { PiggyBank, Users, CreditCard, GitBranchPlus } from "lucide-react";
 import LineChartStepped from "@/app/ui/components/adminUtils/charts/LineChartStepped";
+import AvatarResume from "@/app/ui/components/adminUtils/AvatarResume";
 
 export default function Dashboard() {
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex justify-between">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+    <div className="flex flex-col">
+      <div className="flex justify-between mb-6">
+        <h1 className="text-3xl font-bold text-title-light">Dashboard</h1>
         <button
           type="submit"
-          className="bg-mainBlue bg-opacity-90 px-5 py-[10px] rounded-md hover:bg-opacity-100 duration-100 *:text-white flex items-center gap-2"
+          className="bg-mainBlue bg-opacity-90 px-4 py-2 rounded-md hover:bg-opacity-100 duration-100 *:text-white flex items-center gap-2"
         >
-          <FilePlus />
-          <p className="font-bold">Gerar relatório PDF</p>
+          <p className="font-semibold text-sm">Download</p>
         </button>
       </div>
-      <div className="grid grid-cols-3 gap-5">
-        <StatResume />
-        <StatResume />
-        <StatResume />
+      <div className="grid grid-cols-4 gap-4">
+        <StatResume title="Receita" value="$1997,00" lucideIcon={PiggyBank} />
+        <StatResume title="Assinaturas" value="+2" lucideIcon={CreditCard} />
+        <StatResume
+          title="Usuários na plataforma"
+          value="5"
+          lucideIcon={Users}
+        />
+        <StatResume
+          title="Trilhas cadastradas"
+          value="1"
+          lucideIcon={GitBranchPlus}
+        />
       </div>
-      <div className="grid grid-cols-3 h-[500px] gap-5 mt-5">
-        <div className="col-span-2 rounded-md border-2 border-whiteBorder bg-background-lightA p-5">
-          <LineChartStepped />
+      <div className="grid grid-cols-7 gap-4 mt-5">
+        <div className="col-span-4 border-[1px] border-border-lightC rounded-xl shadow-md hover:-translate-y-1 duration-100 hover:shadow-lg">
+          <h3 className="text-title-light p-[24px] font-semibold">
+            Visão Geral
+          </h3>
+          <div className="pl-[8px] p-[24px] *:w-[100%]">
+            <LineChartStepped />
+          </div>
         </div>
-        <div className="col-span-1 rounded-md border-2 border-whiteBorder bg-background-lightA">
-          <p>Usuarios_talvez_aqui</p>
-        </div>
-        <div className="col-span-3 rounded-md border-2 border-whiteBorder bg-background-lightA p-5">
-          <LineChart />
+        <div className="col-span-3 rounded-xl border-[1px] shadow-md border-border-lightC hover:-translate-y-1 duration-100 hover:shadow-lg">
+          <div className="p-[24px] pb-[12px] border-b-2 border-border-lightC border-opacity-10">
+            <h3 className="text-title-light font-bold">Usuários Recentes</h3>
+            <p className="text-text-lightSub text-sm mt-1">
+              5 novos usuários se registraram na plataforma esse mês.
+            </p>
+          </div>
+          <div className="flex flex-col pt-0 mt-[12px] p-[24px] gap-[32px]">
+            <AvatarResume />
+            <AvatarResume />
+            <AvatarResume />
+            <AvatarResume />
+            <AvatarResume />
+          </div>
         </div>
       </div>
     </div>

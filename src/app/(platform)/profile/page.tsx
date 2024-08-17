@@ -24,13 +24,16 @@ export default function Profile() {
           <BadgeCheck className="w-[30px] h-[30px] text-mainBlue" />
           <h3 className="text-lg font-semibold">IAcademy Premium</h3>
           <Link href="/profile/signatures">
-            <p className="text-mainBlue text-sm">Ver Assinaturas</p>
+            <p className="text-blue-400 hover:text-mainBlue text-sm duration-100">Ver Assinaturas</p>
           </Link>
         </div>
 
         <p className="text-whiteText">
           Você ainda não possui nenhuma assinatura ativa.
-          <Link href="/premium" className="text-mainBlue mx-1">
+          <Link
+            href="/premium"
+            className="text-blue-400 hover:text-mainBlue duration-100 mx-1"
+          >
             Clique aqui
           </Link>
           e conheça as opções.
@@ -42,7 +45,9 @@ export default function Profile() {
           <KeyRound className="w-[30px] h-[30px]" />
           <h3 className="text-lg font-semibold">Dados de acesso</h3>
           <Link href="/profile/access">
-            <p className="text-mainBlue text-sm">Alterar</p>
+            <p className="text-blue-400 hover:text-mainBlue duration-100 text-sm">
+              Alterar
+            </p>
           </Link>
         </div>
         <div className="flex flex-col gap-2 text-whiteText">
@@ -62,7 +67,9 @@ export default function Profile() {
           <UsersRound className="w-[30px] h-[30px]" />
           <h3 className="text-lg font-semibold">Dados do usuário</h3>
           <Link href="/profile/user">
-            <p className="text-mainBlue text-sm">Alterar</p>
+            <p className="text-blue-400 hover:text-mainBlue duration-100 text-sm">
+              Alterar
+            </p>
           </Link>
         </div>
         <div className="flex flex-col gap-2 text-whiteText">
@@ -91,7 +98,7 @@ export default function Profile() {
       </SettingsSection>
 
       {showRemoveView && (
-        <SettingsRemove closeView={() => setShowRemoveView(false)}/>
+        <SettingsRemove closeView={() => setShowRemoveView(false)} />
       )}
     </>
   );

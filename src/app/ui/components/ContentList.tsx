@@ -18,33 +18,21 @@ export default function ContentList({ title = "" }) {
   );
 }
 
-function Item() {
-  return (
-    <div className="flex flex-col justify-between p-5 rounded-md w-full h-[200px] border-border-light shadow-sm border-2">
-      <div>
-        <h6 className="font-bold text-lg text-title-light mb-1">Geometria</h6>
-        <p className="text-sm text-text-lightSub">00/00 tópicos estudados</p>
-      </div>
-      <div className="flex gap-2 *:text-sm overflow-hidden">
-        <Tag name="Intermediário" />
-        <Tag name="Geometria" />
-        <Tag name="Matemática" />
-      </div>
-    </div>
-  );
-}
-
-export function Trail({ description = "", href = "" }) {
+export function Item({
+  title = "Título aqui",
+  description = "Descrição",
+  href = "",
+}) {
   return (
     <Link
       href={href}
-      className="hover:border-mainBlue flex flex-col justify-between p-5 rounded-md w-full min-h-[250px] duration-100 border-border-light border-2 gap-4"
+      className="rounded-xl border-2 border-border-lightC shadow-md hover:border-mainBlue flex flex-col justify-between p-5 w-full min-h-[250px] duration-100 gap-4"
     >
       <div>
-        <h6 className="font-bold text-lg text-text-light">Geometria</h6>
+        <h6 className="font-bold text-lg text-text-light">{title}</h6>
         <p className="text-sm text-text-lightSub">00/00 tópicos estudados</p>
       </div>
-      <p className="text-sm text-text-light leading-6 justify-items-end flex">
+      <p className="text-sm text-text-lightSub leading-6 justify-items-end flex h-[100px] overflow-hidden">
         {description}
       </p>
       <div className="flex gap-2 *:text-sm overflow-hidden">

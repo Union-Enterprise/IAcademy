@@ -44,13 +44,13 @@ export default function InputGroup({
                 onChange;
                 setIsFilled(e.target.value !== "");
               }}
-              className={`w-full p-[10px] pr-[65px] border-2 border-border-light text-text-light bg-background-lightA rounded-md outline-none group-hover/input:border-mainBlue focus:border-mainBlue peer duration-200 ${
+              className={`w-full p-[10px] pr-[65px] border-2 border-border-light text-text-light bg-background-lightA rounded-md outline-none group-hover/input:border-mainBlue focus:border-mainBlue peer duration-100 ${
                 isFilled && "border-mainBlue"
               }`}
             />
             {showPassword ? (
               <Eye
-                className={`absolute right-0 px-[10px] w-[60px] peer-focus:opacity-100 peer-focus:text-mainBlue group-hover/input:text-mainBlue group-hover/input:opacity-100 cursor-pointer duration-200 ${
+                className={`absolute right-0 px-[10px] w-[60px] peer-focus:opacity-100 peer-focus:text-mainBlue group-hover/input:text-mainBlue group-hover/input:opacity-100 cursor-pointer duration-100 ${
                   isFilled
                     ? "text-mainBlue opacity-100"
                     : "text-text-lightSub opacity-40"
@@ -59,7 +59,7 @@ export default function InputGroup({
               />
             ) : (
               <EyeOff
-                className={`absolute right-0 px-[10px] w-[60px] peer-focus:opacity-100 peer-focus:text-mainBlue group-hover/input:text-mainBlue group-hover/input:opacity-100 cursor-pointer duration-200
+                className={`absolute right-0 px-[10px] w-[60px] peer-focus:opacity-100 peer-focus:text-mainBlue group-hover/input:text-mainBlue group-hover/input:opacity-100 cursor-pointer duration-100
                   ${
                     isFilled
                       ? "text-mainBlue opacity-100"
@@ -72,7 +72,7 @@ export default function InputGroup({
           {isRecoveryInput && (
             <Link
               href="/recovery"
-              className="text-blue-600 hover:underline w-fit"
+              className="text-blue-400 hover:text-mainBlue duration-100 w-fit"
             >
               Esqueci minha senha
             </Link>
@@ -88,7 +88,7 @@ export default function InputGroup({
             onChange;
             setIsFilled(e.target.value !== "");
           }}
-          className={`w-full p-[10px] pr-[65px] border-2 border-border-light text-text-light bg-background-lightA rounded-md outline-none hover:border-mainBlue focus:border-mainBlue duration-200 ${
+          className={`w-full p-[10px] pr-[65px] border-2 border-border-light text-text-light bg-background-lightA rounded-md outline-none hover:border-mainBlue focus:border-mainBlue duration-100 ${
             isFilled && "border-mainBlue"
           }`}
         />

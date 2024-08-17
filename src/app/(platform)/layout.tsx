@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body
-        className={`${inter.className} h-[100vh] overflow-hidden select-none bg-background-light`}
+        className={`${inter.className} h-[100vh] select-none bg-background-light`}
       >
         <SidebarProvider>
           <Navbar />

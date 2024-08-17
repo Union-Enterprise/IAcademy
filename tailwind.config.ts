@@ -14,8 +14,8 @@ const config: Config = {
         mainBlue: "#1865F2",
         background: {
           light: "#FFFFFF",
+          lightHover: "#F1F3F5",
           lightA: "#F9F9F9",
-          lightB: "#F1F3F5",
           lightC: "#D9D9D9",
           lightCard: "#FDFDFD",
         },
@@ -28,14 +28,12 @@ const config: Config = {
         },
         text: {
           light: "#080808",
-          lightSub: "#909090",
-        },
-        selected: {
-          light: "",
+          lightSub: "#71717A",
         },
         border: {
           light: "#F4F4F4",
           lightA: "#E4E4E7",
+          lightB: "#e5e7eb",
         },
       },
       backgroundImage: {

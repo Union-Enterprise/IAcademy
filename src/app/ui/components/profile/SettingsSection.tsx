@@ -13,14 +13,14 @@ export default function SettingsSection({
 }: SettingsSectionProps) {
   return (
     <div
-      className={`w-full h-fit p-6 bg-background-lightCard gap-5 shadow-sm border-border-light flex flex-col rounded-md ${
-        isPremium && "border-mainBlue"
-      }
+      className={` border-border-lightC w-full h-fit p-6 gap-5 flex flex-col 
       ${
         !isDeleteAccount
-          ? "border-2"
-          : "border-t-2 *:text-red-700 bg-background-light rounded-none shadow-none"
-      }`}
+          ? "border-[1px] rounded-xl shadow-sm"
+          : "border-t-2 *:text-red-700"
+      }
+      ${isPremium && "border-mainBlue border-[2px]"}
+      `}
     >
       {children}
     </div>

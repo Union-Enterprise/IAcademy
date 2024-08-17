@@ -29,7 +29,7 @@ export default function Register() {
   };
   return (
     <>
-      <h1 className="text-4xl font-bold text-mainBlue">Cadastrar</h1>
+      <h1 className="text-[24px] font-bold text-mainBlue">Cadastrar</h1>
       <form
         className="flex flex-col gap-5"
         onSubmit={(e) => {
@@ -45,28 +45,28 @@ export default function Register() {
         <InputGroup
           label="Nome"
           labelFor="name"
-          placeholder="Digite seu Nome"
+          placeholder="Seu Nome"
           onChange={(e) => setName(e.target.value)}
         />
         <InputGroup
           label="E-mail"
           labelFor="email"
           inputType="email"
-          placeholder="Digite seu E-mail"
+          placeholder="Seu e-mail"
           onChange={(e) => setEmail(e.target.value)}
         />
         <InputGroup
           label="Senha"
           labelFor="password"
           inputType="password"
-          placeholder="Digite sua senha"
+          placeholder="Deve ter no mínimo 7 caracteres"
           onChange={(e) => setPassword(e.target.value)}
         />
         <InputGroup
           label="Confirmação"
           labelFor="confirmation"
           inputType="password"
-          placeholder="Confirme sua senha"
+          placeholder="Deve ter no mínimo 7 caracteres"
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <SubmitButton text="Cadastrar" />
