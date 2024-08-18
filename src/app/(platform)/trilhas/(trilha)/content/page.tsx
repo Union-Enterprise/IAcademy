@@ -16,27 +16,19 @@ export default function TrilhaContent({ title = "" }) {
         <div className="mt-3">
           <Item
             title="Seno, Cosseno e Tangente"
-            text="Nos módulos de Fundamentos,
-            vamos explorar as bases essenciais do universo C#.
-            Vamos entender e conhecer a história dessa linguagem de programação;
-            as diferentes versões de IDEs disponíveis para nós desenvolvedores utilizarmos,
-            e claro, exploraremos a sintaxe e faremos nosso primeiro Hello World."
+            text="Seno, cosseno e tangente são funções trigonométricas que relacionam os ângulos de um triângulo retângulo com os comprimentos dos seus lados.
+             O seno é a razão entre o cateto oposto e a hipotenusa, o cosseno entre o cateto adjacente e a hipotenusa,
+              e a tangente entre o seno e o cosseno, relacionando o cateto oposto ao cateto adjacente.
+             Essas funções são fundamentais para resolver problemas trigonométricos e modelar fenômenos periódicos."
           />
         </div>
         <div className="mt-3">
           <Item
             title="Angulos"
-            text="Neste módulo prático, iremos criar a primeira API usando. 
-          NET Core: Desde a configuração do ambiente de desenvolvimento até a implementação de operações CRUD.
-          Ao final do módulo, teremos uma compreensão prática e sólida de como criar APIs funcionais e escaláveis, 
-          prontas para serem integradas em seus projetos."
-          />
-        </div>
-        <div className="mt-3">
-          <Item
-            title="Angulos"
-            text="Neste módulo, o objetivo é demonstrar que o projeto deve ser organizado em camadas distintas.
-           O projeto de API deve ser responsável exclusivamente por receber as requisições e fornecer as respostas correspondentes."
+            text="Seno, cosseno e tangente são funções trigonométricas que relacionam ângulos de um triângulo retângulo com os seus lados.
+             O seno é a razão entre o cateto oposto e a hipotenusa, o cosseno entre o cateto adjacente e a hipotenusa,
+              e a tangente entre o seno e o cosseno, relacionando o cateto oposto ao cateto adjacente.
+             Essas funções são usadas para resolver problemas de trigonometria e modelar fenômenos com ângulos."
           />
         </div>
       </div>
