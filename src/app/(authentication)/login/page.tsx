@@ -16,10 +16,14 @@ export default function Login() {
 
   const sendData = () => {
     axios
-      .post("http://localhost:5002/login", {
-        email,
-        password,
-      }, { withCredentials: true })
+      .post(
+        "http://localhost:5002/login",
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      )
       .then(function (response) {
         console.log(response.status); // cod da requisição
         console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
@@ -31,14 +35,11 @@ export default function Login() {
 
   return (
     <>
-      <h1 className="text-[24px] font-bold text-mainBlue">Entrar</h1>
+      <h1 className="text-2xl font-bold text-mainBlue">Entrar</h1>
       <form
         className="flex flex-col gap-5"
         onSubmit={(e) => {
           e.preventDefault();
-
-          console.log(name, email, password);
-
           sendData();
         }}
       >

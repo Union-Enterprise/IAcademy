@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import "../globals.css";
 import Navbar from "../ui/components/Navbar";
 import Sidebar from "../ui/components/Sidebar";
-import { SidebarProvider } from "../ui/components/context/SidebarContext";
+import { SidebarProvider } from "../context/SidebarContext";
+import { UserProvider } from "../context/UserContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,17 +21,19 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body
-        className={`${inter.className} h-[100vh] select-none bg-background-light`}
+        className={`${inter.className} h-[100vh] overflow-hidden select-none bg-background-light`}
       >
-        <SidebarProvider>
-          <Navbar />
-          <main className="flex w-full h-full">
-            <Sidebar />
-            <section className="gap-10 *:mb-[140px] flex flex-col overflow-auto w-full">
-              {children}
-            </section>
-          </main>
-        </SidebarProvider>
+        <UserProvider>
+          <SidebarProvider>
+            <Navbar />
+            <main className="flex w-full h-full">
+              <Sidebar />
+              <section className="gap-10 *:mb-[140px] flex flex-col overflow-auto w-full">
+                {children}
+              </section>
+            </main>
+          </SidebarProvider>
+        </UserProvider>
       </body>
     </html>
   );

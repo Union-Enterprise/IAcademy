@@ -1,19 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { useSidebar } from "./context/SidebarContext";
+import { useSidebar } from "../../context/SidebarContext";
 import Link from "next/link";
 import { Menu, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Searchbar, { SearchView } from "./Searchbar";
+import { useUser } from "@/app/context/UserContext";
 
 const Navbar = () => {
   const { toggleSidebar } = useSidebar();
-
   const [showSearchView, setShowSearchView] = useState(false);
+  const { user, isAuthenticated } = useUser();
 
   return (
-    <nav className="h-[72px] *:h-full bg-background-light px-5 py-3 flex justify-between items-center shadow-sm">
+    <nav className="h-20 bg-background-light px-5 flex justify-between items-center shadow-sm">
       <div className="flex gap-5 items-center">
         <Menu
           onClick={toggleSidebar}
@@ -30,28 +31,40 @@ const Navbar = () => {
         </Link>
       </div>
       <Searchbar setShowSearchView={setShowSearchView} />
-      <div className="flex gap-3 items-center *:h-full">
-        <Link
-          href="/login"
-          className="px-7 bg-white rounded-md flex items-center text-whiteText bg-opacity-80 border-2 hover:bg-background-lightA border-border-light hover:bg-opacity-100 duration-100"
-        >
-          <p className="font-semibold">Entrar</p>
-        </Link>
-        <Link
-          href="/register"
-          className="px-7 bg-mainBlue text-white bg-opacity-80 hover:bg-opacity-100 rounded-md flex items-center duration-100"
-        >
-          <p className="font-semibold">Cadastrar-se</p>
-        </Link>
-        <Link href="/profile">
-          <Image
-            src="/blueIcon.svg"
-            alt="Descrição da Imagem"
-            width={48}
-            height={48}
-            className="rounded-lg bg-blue-200 h-full w-full"
-          />
-        </Link>
+      <div className="flex gap-3 items-center">
+        {isAuthenticated ? (
+          <Link
+            href="/profile"
+            className="flex justify-center items-center bg-mainBlue opacity-80 hover:opacity-100 duration-100 text-white w-[52px] h-12 overflow-hidden rounded-[15px]"
+          >
+            {!user.avatar ? (
+              <p className="text-white text-2xl">{user.name.charAt(0)}</p>
+            ) : (
+              <Image
+                src="/whiteIcon.svg"
+                alt="Descrição da Imagem"
+                width={45}
+                height={45}
+                className="h-full w-full object-cover"
+              />
+            )}
+          </Link>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              className="px-6 py-[0.65rem] bg-white rounded-md flex items-center text-whiteText bg-opacity-80 border-2 hover:bg-background-lightA border-border-light hover:bg-opacity-100 duration-100"
+            >
+              <p className="font-bold">Entrar</p>
+            </Link>
+            <Link
+              href="/register"
+              className="px-6 py-[0.65rem] bg-mainBlue text-white bg-opacity-80 hover:bg-opacity-100 rounded-md flex items-center duration-100"
+            >
+              <p className="font-bold">Cadastrar-se</p>
+            </Link>
+          </>
+        )}
       </div>
       {showSearchView && <SearchView setShowSearchView={setShowSearchView} />}
     </nav>

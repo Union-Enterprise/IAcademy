@@ -14,11 +14,15 @@ export default function Register() {
 
   const sendData = () => {
     axios
-      .post("http://localhost:5002/signup", {
-        name,
-        email,
-        password,
-      }, { withCredentials: true })
+      .post(
+        "http://localhost:5002/signup",
+        {
+          name,
+          email,
+          password,
+        },
+        { withCredentials: true }
+      )
       .then(function (response) {
         console.log(response.status); // cod da requisição
         console.log(response.data); // mensagem de erro ou de sucesso (e.g usuario ja cadastrado)
@@ -29,14 +33,11 @@ export default function Register() {
   };
   return (
     <>
-      <h1 className="text-[24px] font-bold text-mainBlue">Cadastrar</h1>
+      <h1 className="text-2xl font-bold text-mainBlue">Cadastrar</h1>
       <form
         className="flex flex-col gap-5"
         onSubmit={(e) => {
           e.preventDefault();
-
-          console.log(name, email, password);
-
           {
             password === confirmPassword
               ? sendData()

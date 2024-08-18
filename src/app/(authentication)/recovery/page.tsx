@@ -9,11 +9,14 @@ import { ArrowLeft } from "lucide-react";
 
 export default function Recovery() {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(false);
 
   const sendData = () => {
     axios
       .post("http://localhost:5002/login", {
-        email: email,
+        password,
       })
       .then(function (response) {
         console.log(response.status);
@@ -26,24 +29,53 @@ export default function Recovery() {
 
   return (
     <>
-      <h1 className="text-[24px] font-bold text-mainBlue">
-        Esqueci minha senha
-      </h1>
+      <h1 className="text-2xl font-bold text-mainBlue">Esqueci minha senha</h1>
       <form
         className="flex flex-col gap-5"
         onSubmit={(e) => {
           e.preventDefault();
-          sendData();
+
+          // verificar no banco se o email existe
+          setIsEmailValid(email === "joaoKleber@gmail.com");
+
+          // se o email for válido e a senha também (7 caracter, simbolo, etc) então redefinir a senha
+          {
+            isEmailValid && password !== "" && sendData();
+          }
         }}
       >
-        <InputGroup
-          label="E-mail"
-          labelFor="email"
-          inputType="email"
-          placeholder="Digite o e-mail registrado"
-          onChange={(e) => setEmail(e.target.value)}
+        {isEmailValid ? (
+          <>
+            <InputGroup
+              label="Nova senha"
+              labelFor="password"
+              inputType="password"
+              placeholder="Precisa ter no mínimo 7 caracteres"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <InputGroup
+              label="Confirme sua nova senha"
+              labelFor="confirm"
+              inputType="password"
+              placeholder="Precisa ter no mínimo 7 caracteres"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </>
+        ) : (
+          <InputGroup
+            label="E-mail"
+            labelFor="email"
+            inputType="email"
+            placeholder="Digite o e-mail registrado"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        )}
+
+        <SubmitButton
+          text={isEmailValid ? "Redefinir senha" : "Recuperar minha senha"}
         />
-        <SubmitButton text="Recuperar minha senha" />
+
         <Link
           href="/login"
           className="flex gap-5 items-center justify-center p-[10px] *:text-text-lightSub group *:duration-100"

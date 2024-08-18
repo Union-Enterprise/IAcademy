@@ -1,19 +1,30 @@
+import { Home } from "lucide-react";
+
 export default function TrilhaGeneral() {
   return (
     <>
       <div className="">
-        <h1 className="text-2xl font-bold mb-4">
-          Sobre a trilha de Geometria plana
-        </h1>
-        <p className="mb-4">
-          A geometria plana é um ramo fundamental da matemática que lida com as
-          propriedades e relações de figuras em um plano bidimensional.
-          Compreender a geometria plana é essencial não apenas para a matemática
-          pura, mas também para a resolução de problemas práticos em diversas
-          áreas, como arquitetura, engenharia e design. Aqui estão os principais
-          conceitos e tópicos que nós vamos abordar sobre geometria plana:
-        </p>
+        <div className="border-[1px] border-border-lightB shadow-md rounded-md *:px-8 *:py-5">
+          <h3 className="text-title-light border-b-[1px] border-border-lightB text-xl font-bold">
+            Detalhes da Trilha
+          </h3>
+          <div className="bg-blue-200 grid grid-cols-2">
+            <DetailItem />
+          </div>
+        </div>
       </div>
     </>
+  );
+}
+
+function DetailItem() {
+  return (
+    <div className="flex gap-5 col-span-1">
+      <Home size={32} />
+      <div>
+        <p className="text-xs text-text-lightSub">Nível de aprendizado</p>
+        <h4 className="text-sm text-text-light font-semibold">Intermediário</h4>
+      </div>
+    </div>
   );
 }

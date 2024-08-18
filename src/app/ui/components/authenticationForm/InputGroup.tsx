@@ -41,7 +41,7 @@ export default function InputGroup({
             onChange?.(e);
             setIsFilled(e.target.value !== "");
           }}
-          className={`w-full p-[10px] pr-[45px] border-2 border-border-light text-text-light bg-background-lightA rounded-md outline-none group-hover/input:border-mainBlue focus:border-mainBlue duration-100 ${
+          className={`w-full p-[10px] pr-[45px] px-4 py-3 border-2 border-border-light text-text-light bg-background-lightA rounded-md outline-none group-hover/input:border-mainBlue focus:border-mainBlue duration-100 peer ${
             isFilled && "border-mainBlue"
           }`}
         />
@@ -51,7 +51,7 @@ export default function InputGroup({
             onClick={() => {
               setShowPassword(!showPassword);
             }}
-            className={`absolute right-[10px] border-none outline-none duration-100 group-hover/input:text-mainBlue group-hover/input:opacity-100 ${
+            className={`absolute right-[10px] border-none outline-none duration-100 group-hover/input:text-mainBlue peer-focus:text-mainBlue group-hover/input:opacity-100 peer-focus:opacity-100 ${
               isFilled
                 ? "text-mainBlue opacity-100"
                 : "text-text-lightSub opacity-40"

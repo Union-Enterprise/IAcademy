@@ -36,21 +36,7 @@ export default function Recovery() {
           sendData();
         }}
       >
-        <InputGroup
-          label="Senha antiga"
-          labelFor="password"
-          inputType="password"
-          placeholder="Digite sua senha antiga"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <InputGroup
-          label="Nova senha"
-          labelFor="password"
-          inputType="password"
-          placeholder="Digite sua nova senha"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        
 
         <Link href="/recuperedPassword" >
           <SubmitButton text="Recuperar minha senha" />

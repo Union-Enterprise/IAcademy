@@ -5,6 +5,7 @@ import Image from "next/image";
 import ProfileSidebar from "@/app/ui/components/profile/ProfileSidebar";
 import { useState } from "react";
 import SettingsImage from "@/app/ui/components/profile/SettingsImage";
+import { useUser } from "@/app/context/UserContext";
 
 export default function ProfileLayout({
   children,
@@ -12,6 +13,7 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }>) {
   const [showImageView, setShowImageView] = useState(false);
+  const { user, isAuthenticated } = useUser();
 
   return (
     <>
@@ -21,14 +23,17 @@ export default function ProfileLayout({
             <div className="absolute left-0 top-0 w-full h-[40%] bg-background-lightB p-3 flex justify-end">
               <PenLine className="h-[40px] w-[40px] bg-background-light text-title-light rounded-md p-2 cursor-pointer hover:bg-mainBlue hover:text-background-light duration-200" />
             </div>
-            <div className="relative z-10 overflow-hidden rounded-[70px] group cursor-pointer">
-              <Image
-                src="/blueIcon.svg"
-                alt="Profile Image"
-                width={60}
-                height={60}
-                className="bg-blue-200 w-[175px]"
-              />
+            <div className="relative z-10 overflow-hidden rounded-[70px] group cursor-pointer bg-mainBlue w-[175px] h-[160px] flex items-center justify-center">
+              {user.avatar ? (
+                <Image
+                  src="/blueIcon.svg"
+                  alt="Profile Image"
+                  width={120}
+                  height={120}
+                />
+              ) : (
+                <p className="text-white text-7xl">{user.name.charAt(0)}</p>
+              )}
               <button
                 className="bg-black opacity-0 duration-200 absolute left-0 top-0 w-full h-full *:text-white justify-center items-center flex group-hover:opacity-100 group-hover:bg-opacity-35"
                 onClick={() => setShowImageView(true)}
@@ -37,9 +42,9 @@ export default function ProfileLayout({
               </button>
             </div>
             <h1 className="text-2xl text-title-light font-bold mt-5">
-              Nome de exibição
+              {user.nickname}
             </h1>
-            <h2 className="text-gray-600 font-semibold">@nome-do-usuário</h2>
+            <h2 className="text-gray-600 font-semibold">{user.name}</h2>
             <p className="text-text-lightSub text-sm flex mt-12 py-5 border-t-2 border-border-light w-full justify-center">
               Aluno IAcademy desde 00/00/0000
             </p>

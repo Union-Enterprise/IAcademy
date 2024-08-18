@@ -9,7 +9,7 @@ import {
   UserRoundPlus,
 } from "lucide-react";
 import Link from "next/link";
-import { useSidebar } from "./context/SidebarContext";
+import { useSidebar } from "../../context/SidebarContext";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 

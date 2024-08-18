@@ -7,11 +7,7 @@ interface SearchProps {
   width?: string;
 }
 
-export default function Searchbar({
-  setShowSearchView,
-  height = "h-full",
-  width = "w-[400px]",
-}: SearchProps) {
+export default function Searchbar({ setShowSearchView }: SearchProps) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "/") {
@@ -28,7 +24,7 @@ export default function Searchbar({
 
   return (
     <button
-      className={`${width} ${height} px-4 border-2 border-border-light bg-background-lightCard rounded-md duration-200 cursor-pointer relative flex items-center hover:border-mainBlue group`}
+      className="w-[400px] h-12 px-4 border-2 border-border-light bg-background-lightCard rounded-md duration-200 cursor-pointer relative flex items-center hover:border-mainBlue group"
       onClick={() => setShowSearchView(true)}
     >
       <p className="text-gray-400">Pesquise aqui</p>

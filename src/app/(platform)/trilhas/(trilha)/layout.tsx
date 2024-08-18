@@ -57,7 +57,7 @@ export default function TrilhaLayout({
           </Link>
         </div>
       </div>
-      <div className="h-full mt-20 grid grid-cols-3 gap-10 px-[200px]">
+      <div className="h-full mt-12 grid grid-cols-3 gap-10 px-[200px]">
         <div className="w-full col-span-2">{children}</div>
         <div className="col-span-1 gap-5 flex flex-col relative">
           <div
