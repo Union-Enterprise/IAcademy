@@ -32,16 +32,16 @@ export default function PremiumLayout({
             Resumo
           </h2>
           <p className="text-zinc-600">Iacademy- Assinatura única anual</p>
-          <p className="text-zinc-600 text-xl font-semibold mt-2">R$ 1.997,00</p>
+          <p className="text-zinc-600 text-xl font-semibold mt-2">R$ 199,99</p>
         </div>
 
         <div className="border-t border-gray-700 pt-4">
           <p className="text-zinc-600 text-sm">
             Total{" "}
             <span className="block text-mainBlue font-semibold text-lg">
-              até 12x R$ 166,42
+              até 12x R$ 16,66 sem juros
             </span>
-            <span className="block text-sm mt-1">ou R$ 1.997,00 à vista</span>
+            <span className="block text-sm mt-1">ou R$ 199,99 à vista</span>
           </p>
         </div>
       </div>

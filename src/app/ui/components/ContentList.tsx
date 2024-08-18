@@ -10,9 +10,36 @@ export default function ContentList({ title = "" }) {
         </button>
       </div>
       <div className="grid grid-cols-3 gap-5">
-        <Item />
-        <Item />
-        <Item />
+            <Item
+              title="Geometria"
+              href="/trilhas/general"
+              description="A geometria plana é um ramo fundamental da matemática que lida com as
+              propriedades e relações de figuras em um plano bidimensional.
+              Compreender a geometria plana é essencial não apenas para a matemática
+              pura, mas também para a resolução de problemas práticos em diversas
+              áreas, como arquitetura, engenharia e design."
+            />
+
+          <Item title="Geometria plana"
+            href="/trilhas/general"
+            description="Geometria plana estuda figuras bidimensionais, 
+            como triângulos, quadriláteros e círculos.
+            Ela se baseia em conceitos de pontos, 
+            linhas e ângulos. Triângulos são classificados por lados e ângulos,
+            enquanto quadriláteros incluem formas como quadrados e retângulos.
+            Círculos envolvem conceitos de raio, diâmetro e área.
+            A geometria plana também abrange perímetro,
+            área e o Teorema de Pitágoras, que relaciona os lados de triângulos retângulos." />
+
+          <Item title="Geometria Analitica"
+            href="/trilhas/general"
+            description="Geometria analítica é o estudo das figuras geométricas usando um sistema de coordenadas,
+            como o plano cartesiano.
+            Ela combina álgebra e geometria para analisar pontos, retas, curvas e suas propriedades.
+            Com ferramentas como a equação da reta, a fórmula da distância entre dois pontos e a equação das cônicas (circunferências, parábolas, elipses e hipérboles),
+            a geometria analítica permite resolver problemas geométricos de forma precisa e algébrica.
+            É uma área fundamental para a matemática e para a compreensão de diversas aplicações científicas e tecnológicas." 
+          />
       </div>
     </section>
   );

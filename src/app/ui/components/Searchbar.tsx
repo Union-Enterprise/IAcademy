@@ -93,7 +93,7 @@ export function SearchView({ setShowSearchView }: SearchProps) {
 function SearchResult() {
   return (
     <div className="border-t-2 border-whiteBorder py-5 flex flex-col justify-center gap-2 relative hover:bg-mainBlue duration-200 *:duration-200 group cursor-pointer">
-      <p className="px-4 py-1 bg-whiteBorder border-2 border-transparent text-mainBlue rounded-md text-sm font-semibold w-fit group-hover:border-whiteBorder group-hover:bg-transparent group-hover:text-whiteBorder">
+      <p className="px-4 py-1 bg-whiteBorder border-2 border-transparent text-mainBlue rounded-md text-sm font-semibold w-fit group-hover:border-whiteBorder group-hover:bg-transparent group-hover:text-whiteBorder group-hover:text-background-lightHover transition-colors">
         Geometria
       </p>
       <p className="text-gray-500 group-hover:text-white">
