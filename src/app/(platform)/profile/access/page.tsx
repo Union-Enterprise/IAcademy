@@ -66,6 +66,7 @@ export default function Access() {
         <SettingsView closeView={() => setEmailView(false)}>
           <InputGroup
             label="Novo e-mail"
+            labelFor="email"
             inputType="email"
             placeholder="Digite seu novo e-mail"
           />
@@ -75,16 +76,19 @@ export default function Access() {
         <SettingsView closeView={() => setPasswordView(false)}>
           <InputGroup
             label="Senha"
+            labelFor="password"
             inputType="password"
             placeholder="Digite sua senha atual"
           />
           <InputGroup
             label="Nova senha"
+            labelFor="newPassword"
             inputType="password"
             placeholder="Digite sua nova senha"
           />
           <InputGroup
             label="Confirme a nova senha"
+            labelFor="confirmNewPassword"
             inputType="password"
             placeholder="Confirme sua nova senha"
           />

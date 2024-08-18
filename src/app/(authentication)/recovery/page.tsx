@@ -13,10 +13,11 @@ export default function Recovery() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(false);
 
+  // escrever código pra comparar com o email no bd
   const sendData = () => {
     axios
       .post("http://localhost:5002/login", {
-        password,
+        email,
       })
       .then(function (response) {
         console.log(response.status);
@@ -40,7 +41,10 @@ export default function Recovery() {
 
           // se o email for válido e a senha também (7 caracter, simbolo, etc) então redefinir a senha
           {
-            isEmailValid && password !== "" && sendData();
+            isEmailValid &&
+              password !== "" &&
+              password === confirmPassword &&
+              sendData();
           }
         }}
       >

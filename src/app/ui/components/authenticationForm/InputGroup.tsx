@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { EyeOff, Eye } from "lucide-react";
-import { ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, MouseEventHandler, useState } from "react";
 
 interface InputGroupProps {
   label: string;
   labelFor: string;
   inputType?: string;
   placeholder: string;
+  isRequired?: boolean;
   isRecoveryInput?: boolean;
+  isDisabled?: boolean;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
@@ -16,7 +19,10 @@ export default function InputGroup({
   labelFor,
   inputType = "text",
   placeholder = "Digite algo aqui",
+  isRequired = true,
   isRecoveryInput = false,
+  isDisabled = false,
+  onClick,
   onChange,
 }: InputGroupProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,10 +31,17 @@ export default function InputGroup({
   return (
     <div className="flex flex-col gap-[10px]">
       <label
-        className="text-title-light text-lg font-semibold"
+        className="text-title-light w-fit text-lg font-semibold"
         htmlFor={labelFor}
       >
         {label}
+        <span
+          className={`opacity-0 ml-1 text-red-400 font-normal pointer-events-none duration-100 ${
+            isRequired && !isFilled && !isDisabled && "opacity-100"
+          }`}
+        >
+          *
+        </span>
       </label>
 
       <div className="relative flex items-center overflow-hidden rounded-md group/input">
@@ -36,15 +49,30 @@ export default function InputGroup({
           id={labelFor}
           type={inputType === "password" && showPassword ? "text" : inputType}
           placeholder={placeholder}
-          required
+          required={isRequired}
+          disabled={isDisabled}
           onChange={(e) => {
             onChange?.(e);
             setIsFilled(e.target.value !== "");
           }}
-          className={`w-full p-[10px] pr-[45px] px-4 py-3 border-2 border-border-light text-text-light bg-background-lightA rounded-md outline-none group-hover/input:border-mainBlue focus:border-mainBlue duration-100 peer ${
-            isFilled && "border-mainBlue"
-          }`}
+          className={`w-full pr-[45px] px-4 py-3 border-2 border-border-light text-text-light rounded-md outline-none duration-100 peer
+            ${
+              !isDisabled &&
+              "group-hover/input:border-mainBlue focus:border-mainBlue bg-background-light"
+            }
+            ${isFilled && "border-mainBlue"}
+          `}
         />
+
+        {isDisabled && (
+          <button
+            className="text-mainBlue text-sm absolute right-0 px-[10px] h-full"
+            onClick={onClick}
+          >
+            Alterar
+          </button>
+        )}
+
         {inputType === "password" && (
           <button
             type="button"

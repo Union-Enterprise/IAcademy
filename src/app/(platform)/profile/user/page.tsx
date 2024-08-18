@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronLeft, KeyRound, UsersRound } from "lucide-react";
+import {
+  ChevronLeft,
+  UsersRound,
+  CreditCard,
+  Home,
+  ArrowDown,
+  ChevronDown,
+} from "lucide-react";
 import SettingsSection from "@/app/ui/components/profile/SettingsSection";
 import { useState } from "react";
 import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
@@ -11,6 +18,7 @@ import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 export default function User() {
   const [showView, setShowView] = useState(false);
   const [pagamentView, setPagamentView] = useState(false);
+  const [hasPaymentMethod, setHasPaymentMethod] = useState(false);
 
   return (
     <>
@@ -27,231 +35,180 @@ export default function User() {
           <h3 className="font-bold text-xl">Dados do Usuário</h3>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-3 gap-y-5">
-          <div className="flex flex-col">
-            <label className="text-whiteText mb-3">Nome de exibição</label>
-            <div className="relative flex items-center overflow-hidden rounded-md">
-              <input
-                type="text"
-                placeholder="Nome do exibição"
-                className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue hover:border-mainBlue peer duration-100"
-              />
-            </div>
-          </div>
+        <form className="grid grid-cols-2 gap-x-3 gap-y-5">
+          <InputGroup
+            label="Nome de exibição"
+            labelFor="nickname"
+            placeholder="Nome de exibição"
+          />
+          <InputGroup
+            label="Nome do usuario"
+            labelFor="username"
+            placeholder="Nome do usuário"
+          />
+          <div className="col-span-2 grid grid-cols-3 gap-3">
+            <InputGroup
+              label="Data de Nascimento"
+              labelFor="date"
+              placeholder="00/00/0000"
+            />
 
-          <div className="flex flex-col">
-            <label className="text-whiteText mb-3">Nome do usuário</label>
-            <div className="relative flex items-center overflow-hidden rounded-md">
-              <input
-                type="text"
-                placeholder="Nome de usuário"
-                className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue peer duration-100"
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-whiteText mb-3">CPF</label>
-            <div className="relative flex items-center overflow-hidden rounded-md">
-              <input
-                type="text"
-                disabled
-                placeholder="___.___.___-__"
-                className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue peer duration-100"
-              />
-              <button
-                className="text-mainBlue text-sm absolute right-0 px-[10px] h-full"
-                onClick={() => setShowView(true)}
+            <div className="flex flex-col gap-[10px]">
+              <label
+                className="text-title-light w-fit text-lg font-semibold"
+                htmlFor="gender"
               >
-                Alterar
-              </button>
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <label className="text-whiteText mb-3">Forma de pagamento</label>
-            <div className="relative flex items-center overflow-hidden rounded-md">
-              <input
-                type="text"
-                disabled
-                placeholder="coloque a forma de pagamento"
-                className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue peer duration-100"
-              />
-              <button
-                className="text-mainBlue text-sm absolute right-0 px-[10px] h-full"
-                onClick={() => setPagamentView(true)}
-              >
-                Alterar
-              </button>
-            </div>
-          </div>
-
-          <div className="col-span-2 grid grid-cols-3 gap-x-3 grid-rows-1">
-            <div className="flex flex-col">
-              <label className="text-whiteText mb-3">Data de Nascimento</label>
-              <div className="relative flex items-center overflow-hidden rounded-md">
-                <input
-                  type="text"
-                  placeholder="99/99/9999"
-                  className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue hover:border-mainBlue peer duration-100"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <label className="text-whiteText mb-3">Gênero</label>
-              <div className="relative flex items-center overflow-hidden rounded-md">
-                <select className="w-full p-[10px] border-2 rounded-md focus:outline-none focus:border-mainBlue hover:border-mainBlue peer duration-100 bg-white text-black appearance-none">
+                Gênero
+              </label>
+              <div className="relative flex items-center overflow-hidden rounded-md *:text-text-lightSub group/select">
+                <select
+                  id="gender"
+                  className="w-full py-[12px] p-[10px] border-2 border-border-light rounded-md focus:outline-none focus:border-mainBlue group-hover/select:border-mainBlue peer duration-100 bg-background-light appearance-none"
+                >
                   <option value="" selected>
                     Selecione uma opção
                   </option>
                   <option value="machoAlpha">Masculino</option>
                   <option value="femea">Feminino</option>
                 </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                  <svg
-                    className="w-5 h-5 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <label className="text-whiteText mb-3">Telefone</label>
-              <div className="relative flex items-center overflow-hidden rounded-md">
-                <input
-                  type="text"
-                  placeholder="(99) 99999-9999"
-                  className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue hover:border-mainBlue peer duration-100"
+                <ChevronDown
+                  className="absolute right-[10px] pointer-events-none"
+                  size={20}
                 />
               </div>
             </div>
+            <InputGroup
+              label="Telefone"
+              labelFor="tel"
+              placeholder="(99) 99999-9999"
+            />
           </div>
-          <div className="col-span-2 grid grid-cols-3 gap-x-3 grid-rows-1">
-            <div className="flex flex-col">
-              <label className="text-whiteText mb-3">CEP</label>
-              <div className="relative flex items-center overflow-hidden rounded-md">
-                <input
-                  type="text"
-                  placeholder="00000-000"
-                  className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue hover:border-mainBlue peer duration-100"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <label className="text-whiteText mb-3">Bairro</label>
-              <div className="relative flex items-center overflow-hidden rounded-md">
-              <div className="relative flex items-center overflow-hidden rounded-md">
-                <input
-                  type="text"
-                  placeholder="Digite seu bairro"
-                  className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue hover:border-mainBlue peer duration-100"
-                />
-              </div>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <label className="text-whiteText mb-3">Cidade</label>
-              <div className="relative flex items-center overflow-hidden rounded-md">
-                <input
-                  type="text"
-                  placeholder="Digite sua cidade"
-                  className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue hover:border-mainBlue peer duration-100"
-                />
-              </div>
-            </div>
+          <div className="col-span-2">
+            <SubmitButton text="Enviar" />
           </div>
-          <div className="col-span-2 grid grid-cols-3 gap-x-3 grid-rows-1">
-            <div className="flex flex-col">
-              <label className="text-whiteText mb-3">Numero</label>
-              <div className="relative flex items-center overflow-hidden rounded-md">
-                <input
-                  type="text"
-                  placeholder="Digite o numero"
-                  className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue hover:border-mainBlue peer duration-100"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <label className="text-whiteText mb-3">Complemento</label>
-              <div className="relative flex items-center overflow-hidden rounded-md">
-              <div className="relative flex items-center overflow-hidden rounded-md">
-                <input
-                  type="text"
-                  placeholder="Digite o complemento"
-                  className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue hover:border-mainBlue peer duration-100"
-                />
-              </div>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <label className="text-whiteText mb-3">Estado</label>
-              <div className="relative flex items-center overflow-hidden rounded-md">
-                <input
-                  type="text"
-                  placeholder="Digite seu estado"
-                  className="w-full p-[10px] pr-[65px] border-2 rounded-md focus:outline-none focus:border-mainBlue hover:border-mainBlue peer duration-100"
-                />
-              </div>
-            </div>
-          </div>
-          <SubmitButton text="Slavar"/>
+        </form>
+      </SettingsSection>
+      <SettingsSection>
+        <div className="flex items-center gap-5">
+          <CreditCard />
+          <h3 className="font-bold text-xl">Métodos de pagamento</h3>
         </div>
+        {!hasPaymentMethod ? (
+          <div className="col-span-2 gap-5 grid grid-cols-2">
+            <InputGroup
+              label="CPF"
+              labelFor="cpf"
+              placeholder="000_000_000-00"
+              isDisabled={true}
+              onClick={() => setShowView(true)}
+            />
+            <InputGroup
+              label="Número"
+              labelFor="cardNumber"
+              inputType="text"
+              placeholder="Número do cartão"
+              isDisabled={true}
+              onClick={() => setShowView(true)}
+            />
+            <InputGroup
+              label="Nome"
+              labelFor="cardName"
+              inputType="text"
+              placeholder="Nome impresso no cartão"
+              isDisabled={true}
+              onClick={() => setShowView(true)}
+            />
+            <InputGroup
+              label="Validade"
+              labelFor="date"
+              inputType="text"
+              placeholder="00/00"
+              isDisabled={true}
+              onClick={() => setShowView(true)}
+            />
+            <InputGroup
+              label="Código de segurança"
+              labelFor="cvv"
+              inputType="text"
+              placeholder="CVV"
+              isDisabled={true}
+              onClick={() => setShowView(true)}
+            />
+            <button className="h-[52px] text-white font-bold rounded-md bg-mainBlue opacity-80 hover:opacity-100 duration-100 self-end flex items-center justify-center gap-3">
+              <CreditCard />
+              <p>Nova forma de pagamento</p>
+            </button>
+          </div>
+        ) : (
+          <p>
+            Parece que você não possui nenhuma assinatura ativa ainda.
+            <Link
+              className="text-mainBlue opacity-80 hover:opacity-100 duration-100 mx-1"
+              href={"/premium"}
+            >
+              Clique aqui
+            </Link>
+            e conheça as opções.
+          </p>
+        )}
+      </SettingsSection>
+
+      <SettingsSection>
+        <div className="flex items-center gap-5">
+          <Home />
+          <h3 className="font-bold text-xl">Endereço</h3>
+        </div>
+        <form className="grid grid-cols-3 gap-5">
+          <InputGroup
+            label="CEP"
+            labelFor="cep"
+            inputType="text"
+            placeholder="00000-00"
+          />
+          <InputGroup
+            label="Bairro"
+            labelFor="bairro"
+            inputType="text"
+            placeholder="Seu bairro"
+          />
+          <InputGroup
+            label="Cidade"
+            labelFor="city"
+            inputType="text"
+            placeholder="Sua cidade"
+          />
+          <InputGroup
+            label="Número"
+            labelFor="number"
+            inputType="text"
+            placeholder="Número da casa"
+          />
+          <InputGroup
+            label="Complemento"
+            labelFor="complement"
+            inputType="text"
+            placeholder="Complemento"
+            isRequired={false}
+          />
+          <InputGroup
+            label="Estado"
+            labelFor="state"
+            inputType="text"
+            placeholder="Estado"
+          />
+          <div className="col-span-3">
+            <SubmitButton text="Enviar" />
+          </div>
+        </form>
       </SettingsSection>
       {showView && (
         <SettingsView closeView={() => setShowView(false)}>
           <InputGroup
             label="Novo CPF"
+            labelFor="cpf"
             inputType="text"
             placeholder="Digite seu novo CPF"
           />
-        </SettingsView>
-      )}
-      {pagamentView && (
-        <SettingsView closeView={() => setPagamentView(false)}>
-          <InputGroup
-            label="Numero do cartão"
-            inputType="text"
-            placeholder="Digite o numero do cartão"
-          />
-          <InputGroup
-            label="Nome do cartão"
-            inputType="text"
-            placeholder="Digite o nome do cartão"
-          />
-          <InputGroup
-            label="Data de validade"
-            inputType="text"
-            placeholder="99/99"
-          />
-          <InputGroup
-            label="Codigo de segurança"
-            inputType="text"
-            placeholder="Digite o codigo do cartão"
-          />
-          <InputGroup
-            label="CPF/CNPJ"
-            inputType="text"
-            placeholder="___.___.___-__"
-          />
-          
-
         </SettingsView>
       )}
     </>

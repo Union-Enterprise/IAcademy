@@ -34,8 +34,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const router = useRouter();
-
   useEffect(() => {
     axios
       .get("http://localhost:5002/profile", { withCredentials: true })
@@ -49,7 +47,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [router]);
+  });
 
   return (
     <UserContext.Provider value={{ user, isAuthenticated, loading }}>

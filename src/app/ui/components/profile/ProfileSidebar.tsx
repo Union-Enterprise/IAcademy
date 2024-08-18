@@ -29,10 +29,10 @@ const ProfileSidebar = () => {
       />
       <Item
         title="Assinaturas"
-        href="/profile/signatures"
+        href="/profile/purchases"
         iconId={1}
-        isSelected={selectedItem.includes("/signatures")}
-        onClick={() => setSelectedItem("/signatures")}
+        isSelected={selectedItem.includes("/purchases")}
+        onClick={() => setSelectedItem("/purchases")}
       />
       <Item
         title="Dados de acesso"
@@ -80,7 +80,7 @@ function Item({
       onClick={onClick}
       className={`${
         isSelected &&
-        "opacity-100 border-l-mainBlue *:text-mainBlue *:font-bold bg-background-lightA"
+        "opacity-100 border-l-mainBlue *:text-mainBlue *:font-semibold bg-background-lightA"
       } items-center px-5 h-[50px] flex border-l-4 border-transparent justify-between hover:bg-background-lightA duration-200`}
     >
       <div className="flex gap-5">

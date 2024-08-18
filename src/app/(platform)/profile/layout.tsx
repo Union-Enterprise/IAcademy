@@ -13,7 +13,7 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }>) {
   const [showImageView, setShowImageView] = useState(false);
-  const { user, isAuthenticated } = useUser();
+  const { user } = useUser();
 
   return (
     <>
@@ -42,9 +42,13 @@ export default function ProfileLayout({
               </button>
             </div>
             <h1 className="text-2xl text-title-light font-bold mt-5">
-              {user.nickname}
+              {/* {user.nickname} */}
+              Nome de exibição
             </h1>
-            <h2 className="text-gray-600 font-semibold">{user.name}</h2>
+            <h2 className="text-gray-600 font-semibold">
+              {/* {user.name} */}
+              @nome-do-usuario
+            </h2>
             <p className="text-text-lightSub text-sm flex mt-12 py-5 border-t-2 border-border-light w-full justify-center">
               Aluno IAcademy desde 00/00/0000
             </p>

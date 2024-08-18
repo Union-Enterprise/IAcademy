@@ -47,7 +47,7 @@ export default function Login() {
           label="E-mail"
           labelFor="email"
           inputType="email"
-          placeholder="Digite seu E-mail"
+          placeholder="Digite seu e-mail"
           onChange={(e) => setEmail(e.target.value)}
         />
         <InputGroup

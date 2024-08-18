@@ -109,7 +109,7 @@ function Item({
           isSelected
             ? isPremium
               ? "opacity-100"
-              : "opacity-100 bg-cyan-100 *:text-mainBlue"
+              : "opacity-100 bg-cyan-100 *:text-mainBlue *:font-semibold"
             : "opacity-50"
         }
 
