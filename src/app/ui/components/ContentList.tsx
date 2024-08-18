@@ -12,7 +12,7 @@ export default function ContentList({ title = "" }) {
       <div className="grid grid-cols-3 gap-5">
         <Item
           title="Geometria"
-          href="/trilhas/general"
+          href="/trilhas/overview"
           description="A geometria plana é um ramo fundamental da matemática que lida com as
               propriedades e relações de figuras em um plano bidimensional.
               Compreender a geometria plana é essencial não apenas para a matemática
@@ -22,7 +22,7 @@ export default function ContentList({ title = "" }) {
 
         <Item
           title="Geometria plana"
-          href="/trilhas/general"
+          href="/trilhas/overview"
           description="Geometria plana estuda figuras bidimensionais, 
             como triângulos, quadriláteros e círculos.
             Ela se baseia em conceitos de pontos, 
@@ -35,7 +35,7 @@ export default function ContentList({ title = "" }) {
 
         <Item
           title="Geometria Analitica"
-          href="/trilhas/general"
+          href="/trilhas/overview"
           description="Geometria analítica é o estudo das figuras geométricas usando um sistema de coordenadas,
             como o plano cartesiano.
             Ela combina álgebra e geometria para analisar pontos, retas, curvas e suas propriedades.

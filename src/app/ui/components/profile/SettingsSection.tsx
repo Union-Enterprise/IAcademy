@@ -13,7 +13,7 @@ export default function SettingsSection({
 }: SettingsSectionProps) {
   return (
     <div
-      className={` border-border-lightC w-full h-fit p-6 gap-5 flex flex-col 
+      className={`border-border-lightC w-full h-fit p-6 gap-5 flex flex-col 
       ${
         !isDeleteAccount
           ? "border-[1px] rounded-xl shadow-sm"

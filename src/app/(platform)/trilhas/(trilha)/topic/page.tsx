@@ -1,20 +1,16 @@
 import Link from "next/link";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-//fiz só a parte do texto sobre o plano premiun pq n sabia como fazer a parte de trilhas do plano premiun😭😭😭😭
-// na paz irmao tamo junto !111!
+import { ArrowLeft } from "lucide-react";
 
-export default function TrilhaContent() {
+export default function Topic() {
   return (
     <>
-       <Link
-            //eu n estou conseguin fazer ele voltar para o conteudo
-            href="/trilhas"
-            className="*:text-blue-500 opacity-50 hover:opacity-100 flex gap-2 items-center duration-100 w-fit mb-3"
-          >
-            <FontAwesomeIcon icon={faArrowLeft} className="w-5 h-5" />
-            <p className="text-lg">Voltar</p>
-          </Link>
+      <Link
+        href="/trilhas/contents"
+        className="text-mainBlue opacity-60 hover:opacity-100 flex gap-2 items-center duration-100 w-fit mb-3"
+      >
+        <ArrowLeft />
+        <p className="text-lg">Voltar</p>
+      </Link>
       <div className="">
         <h1 className="text-2xl font-bold mb-4">Geometria Espacial</h1>
         <p className="mb-4">
