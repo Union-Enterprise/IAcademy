@@ -19,7 +19,7 @@ export default function Login() {
       .post("http://localhost:5002/login", {
         email,
         password,
-      })
+      }, { withCredentials: true })
       .then(function (response) {
         console.log(response.status); // cod da requisição
         console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)

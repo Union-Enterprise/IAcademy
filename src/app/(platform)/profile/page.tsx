@@ -12,10 +12,39 @@ import {
   Skull,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useRouter } from 'next/navigation';
 
 export default function Profile() {
   const [showRemoveView, setShowRemoveView] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    axios.get("http://localhost:5002/profile", { withCredentials: true })
+      .then((response) => {
+        setIsAuthenticated(true);
+        setUser(response.data);
+      })
+      .catch((err) => {
+        router.push('/login');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [router]);
+
+  if (loading) {
+    return <p>Carregando...</p>;
+  }
+
+  if (!isAuthenticated) {
+    return <p>Você não está autenticado.</p>;
+  }
 
   return (
     <>
@@ -53,7 +82,7 @@ export default function Profile() {
         <div className="flex flex-col gap-2 text-whiteText">
           <div className="flex gap-2 items-center">
             <Mail className="w-[20px] h-[20px]" />
-            <p>emaildousuario@email.com</p>
+            <p>{user?.email}</p>
           </div>
           <div className="flex gap-2 items-center">
             <RectangleEllipsis className="w-[20px] h-[20px]" />
@@ -75,7 +104,7 @@ export default function Profile() {
         <div className="flex flex-col gap-2 text-whiteText">
           <div className="flex gap-2 items-center">
             <UserRoundPen className="w-[20px] h-[20px]" />
-            <p>Nome do usuário</p>
+            <p>{user?.name}</p>
           </div>
         </div>
       </SettingsSection>

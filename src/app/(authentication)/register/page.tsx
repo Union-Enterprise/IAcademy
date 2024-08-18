@@ -18,7 +18,7 @@ export default function Register() {
         name,
         email,
         password,
-      })
+      }, { withCredentials: true })
       .then(function (response) {
         console.log(response.status); // cod da requisição
         console.log(response.data); // mensagem de erro ou de sucesso (e.g usuario ja cadastrado)
