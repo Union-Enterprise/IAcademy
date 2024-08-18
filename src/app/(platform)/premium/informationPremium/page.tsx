@@ -51,7 +51,7 @@ export default function CheckoutForm() {
 
             
               <div>
-                <label className="block text-sm font-medium text-gray-400">Endereço</label>
+                <label className="block text-sm font-medium text-gray-600">Endereço</label>
                 <div className="mt-2">
                   <input
                     type="text"
