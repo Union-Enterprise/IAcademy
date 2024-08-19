@@ -36,7 +36,7 @@ export function ContentsSection({
       </span>
       <div>
         <h3 className="text-title-light text-lg font-bold mb-2">{title}</h3>
-        <p className="text-text-lightSub text-sm">{children}</p>
+        <div className="text-text-lightSub text-sm">{children}</div>
       </div>
     </Link>
   );

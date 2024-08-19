@@ -9,6 +9,8 @@ import Link from "next/link";
 export default function Home() {
   const { user, isAuthenticated } = useUser();
 
+  console.log(user);
+
   return (
     <div className="mx-[32px] mt-[40px]">
       <div className="flex flex-col gap-[40px]">

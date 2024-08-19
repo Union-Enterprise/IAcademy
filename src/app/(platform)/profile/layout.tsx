@@ -24,9 +24,9 @@ export default function ProfileLayout({
               <PenLine className="h-[40px] w-[40px] bg-background-light text-title-light rounded-md p-2 cursor-pointer hover:bg-mainBlue hover:text-background-light duration-200" />
             </div>
             <div className="relative z-10 overflow-hidden rounded-[70px] group cursor-pointer bg-mainBlue w-[175px] h-[160px] flex items-center justify-center">
-              {user.avatar ? (
+              {user.img ? (
                 <Image
-                  src="/blueIcon.svg"
+                  src={`${user.img}`}
                   alt="Profile Image"
                   width={120}
                   height={120}

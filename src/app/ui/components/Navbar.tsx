@@ -24,7 +24,7 @@ const Navbar = () => {
         <Link href="/">
           <Image
             src="/blueLogo.svg"
-            alt="Descrição da Imagem"
+            alt="Logo IAcademy"
             width={150}
             height={30}
           />
@@ -37,12 +37,12 @@ const Navbar = () => {
             href="/profile"
             className="flex justify-center items-center bg-mainBlue opacity-80 hover:opacity-100 duration-100 text-white w-[52px] h-12 overflow-hidden rounded-[15px]"
           >
-            {!user.avatar ? (
+            {!user.img ? (
               <p className="text-white text-2xl">{user.name.charAt(0)}</p>
             ) : (
               <Image
-                src="/whiteIcon.svg"
-                alt="Descrição da Imagem"
+                src={`${user.img}`}
+                alt="Avatar do usuário"
                 width={45}
                 height={45}
                 className="h-full w-full object-cover"
