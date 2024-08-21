@@ -1,14 +1,38 @@
 import { X } from "lucide-react";
 import SubmitButton from "../authenticationForm/SubmitButton";
 
+import axios from "axios";
+
+
 export default function SettingsRemove({
   closeView,
 }: {
   closeView: () => void;
 }) {
+
+  const sendData = () => {
+    axios
+      .delete(
+        "http://localhost:5002/delete",
+        { withCredentials: true }
+      )
+      .then(function (response) {
+        console.log(response.status); // cod da requisição
+        console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
   return (
     <div className="bg-black bg-opacity-60 absolute m-auto w-full h-full top-0 left-0 z-20 flex items-center justify-center">
-      <form className="w-[500px] p-6 gap-5 flex flex-col border-2 rounded-md bg-white relative pt-14 text-gray-800">
+      <form className="w-[500px] p-6 gap-5 flex flex-col border-2 rounded-md bg-white relative pt-14 text-gray-800"
+      
+          onSubmit={(e) => {
+          e.preventDefault();
+          sendData();
+        }}>
         <X
           className="cursor-pointer opacity-40 hover:text-red-600 hover:opacity-100 duration-200 w-[30px] h-[30px] absolute right-6 top-6"
           onClick={closeView}

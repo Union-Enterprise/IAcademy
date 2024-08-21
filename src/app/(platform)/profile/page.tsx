@@ -58,8 +58,8 @@ export default function Profile() {
           <div className="flex gap-2 items-center">
             <Mail className="w-[20px] h-[20px]" />
             <p>
-              {/* {user.email} */}
-              emaildousuario@email.com
+              {user.email}
+              {/* emaildousuario@email.com */}
             </p>
           </div>
           <div className="flex gap-2 items-center">
@@ -83,8 +83,8 @@ export default function Profile() {
           <div className="flex gap-2 items-center">
             <UserRoundPen className="w-[20px] h-[20px]" />
             <p>
-              {/* {user.name} */}
-              nome-do-usuario
+              @{user.nickname}
+              {/* nome-do-usuario */}
             </p>
           </div>
         </div>

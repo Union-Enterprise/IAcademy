@@ -42,12 +42,12 @@ export default function ProfileLayout({
               </button>
             </div>
             <h1 className="text-2xl text-title-light font-bold mt-5">
-              {/* {user.nickname} */}
-              Nome de exibição
+              {user.name}
+              {/* Nome de exibição */}
             </h1>
             <h2 className="text-gray-600 font-semibold">
-              {/* {user.name} */}
-              @nome-do-usuario
+              @{user.nickname}
+              {/* @nome-do-usuario */}
             </h2>
             <p className="text-text-lightSub text-sm flex mt-12 py-5 border-t-2 border-border-light w-full justify-center">
               Aluno IAcademy desde 00/00/0000
