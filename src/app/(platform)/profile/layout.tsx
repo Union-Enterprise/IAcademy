@@ -32,7 +32,9 @@ export default function ProfileLayout({
                   height={120}
                 />
               ) : (
-                <p className="text-white text-7xl">{user.name.charAt(0)}</p>
+                <p className="text-white text-7xl uppercase">
+                  {user.name.charAt(0)}
+                </p>
               )}
               <button
                 className="bg-black opacity-0 duration-200 absolute left-0 top-0 w-full h-full *:text-white justify-center items-center flex group-hover:opacity-100 group-hover:bg-opacity-35"
@@ -42,15 +44,13 @@ export default function ProfileLayout({
               </button>
             </div>
             <h1 className="text-2xl text-title-light font-bold mt-5">
-              {user.name}
-              {/* Nome de exibição */}
+              {user.nickname}
             </h1>
-            <h2 className="text-gray-600 font-semibold">
-              @{user.nickname}
-              {/* @nome-do-usuario */}
-            </h2>
+            <h2 className="text-gray-600 font-semibold">@{user.name}</h2>
             <p className="text-text-lightSub text-sm flex mt-12 py-5 border-t-2 border-border-light w-full justify-center">
-              Aluno IAcademy desde 00/00/0000
+              Aluno IAcademy desde
+              <span className="ml-1">{user.since}</span>
+              {/* Data de cadastro na plataforma*/}
             </p>
           </div>
           <ProfileSidebar />

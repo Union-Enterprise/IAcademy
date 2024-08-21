@@ -24,13 +24,14 @@ export default function Register() {
         { withCredentials: true }
       )
       .then(function (response) {
-        console.log(response.status); // cod da requisição
-        console.log(response.data); // mensagem de erro ou de sucesso (e.g usuario ja cadastrado)
+        console.log(response.status);
+        console.log(response.data);
       })
       .catch(function (error) {
         console.error(error);
       });
   };
+  
   return (
     <>
       <h1 className="text-2xl font-bold text-mainBlue">Cadastrar</h1>

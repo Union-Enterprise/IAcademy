@@ -38,7 +38,9 @@ const Navbar = () => {
             className="flex justify-center items-center bg-mainBlue opacity-80 hover:opacity-100 duration-100 text-white w-[52px] h-12 overflow-hidden rounded-[15px]"
           >
             {!user.img ? (
-              <p className="text-white text-2xl">{user.name.charAt(0)}</p>
+              <p className="text-white text-2xl uppercase">
+                {user.name.charAt(0)}
+              </p>
             ) : (
               <Image
                 src={`${user.img}`}

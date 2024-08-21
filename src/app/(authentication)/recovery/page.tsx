@@ -13,21 +13,6 @@ export default function Recovery() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(false);
 
-  // escrever código pra comparar com o email no bd
-  const sendData = () => {
-    axios
-      .post("http://localhost:5002/login", {
-        email,
-      })
-      .then(function (response) {
-        console.log(response.status);
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  };
-
   return (
     <>
       <h1 className="text-2xl font-bold text-mainBlue">Esqueci minha senha</h1>
@@ -36,10 +21,13 @@ export default function Recovery() {
         onSubmit={(e) => {
           e.preventDefault();
 
-          // verificar no banco se o email existe
-          setIsEmailValid(email === "joaoKleber@gmail.com");
+          // escrever código pra comparar com o email no bd
+          const sendData = () => {};
 
-          // se o email for válido e a senha também (7 caracter, simbolo, etc) então redefinir a senha
+          // verificar no banco se o email existe
+          setIsEmailValid(email === "email registrado no banco de dados");
+
+          // se o email for válido e a senha também (7 caracteres, Aa, etc) então redefinir a senha
           {
             isEmailValid &&
               password !== "" &&

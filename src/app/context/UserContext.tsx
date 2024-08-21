@@ -10,10 +10,16 @@ import {
 import axios from "axios";
 
 interface User {
-  email?: string;
+  email: string;
   name: string;
   nickname?: string;
+  password: string;
   img?: string;
+  phone?: string;
+  birth?: string;
+  cpf?: string;
+  isPremium: false;
+  since: string;
 }
 
 interface UserContextType {
@@ -23,13 +29,27 @@ interface UserContextType {
 }
 
 const UserContext = createContext<UserContextType>({
-  user: { name: "Visitante" },
+  user: {
+    nickname: "",
+    name: "",
+    email: "",
+    password: "",
+    isPremium: false,
+    since: "00/00/000",
+  },
   isAuthenticated: false,
   loading: true,
 });
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User>({ name: "Visitante" });
+  const [user, setUser] = useState<User>({
+    nickname: "Visitante",
+    name: "visitante-0421032312",
+    email: "email@email.com",
+    password: "123456",
+    isPremium: false,
+    since: "00/00/0000",
+  });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 

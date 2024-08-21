@@ -16,7 +16,8 @@ export default function Home() {
       <div className="flex flex-col gap-[40px]">
         <div>
           <h1 className="text-title-light text-4xl">
-            Bem-vindo <span className="font-semibold">{user.name}</span>.
+            Bem-vindo{" "}
+            <span className="font-semibold capitalize">{user.name}</span>.
           </h1>
           {!isAuthenticated && (
             <p className="text-text-lightSub mt-2">

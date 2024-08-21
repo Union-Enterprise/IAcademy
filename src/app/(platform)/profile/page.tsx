@@ -32,7 +32,7 @@ export default function Profile() {
           </Link>
         </div>
 
-        <p className="text-whiteText">
+        <p className="text-text-lightSub">
           Parece que você não possui nenhuma assinatura ativa ainda.
           <Link
             href="/premium"
@@ -54,17 +54,14 @@ export default function Profile() {
             </p>
           </Link>
         </div>
-        <div className="flex flex-col gap-2 text-whiteText">
+        <div className="flex flex-col gap-2 text-text-lightSub">
           <div className="flex gap-2 items-center">
             <Mail className="w-[20px] h-[20px]" />
-            <p>
-              {user.email}
-              {/* emaildousuario@email.com */}
-            </p>
+            <p>{user.email}</p>
           </div>
           <div className="flex gap-2 items-center">
             <RectangleEllipsis className="w-[20px] h-[20px]" />
-            <p>********************</p>
+            <p>{user.password}</p>
           </div>
         </div>
       </SettingsSection>
@@ -79,14 +76,23 @@ export default function Profile() {
             </p>
           </Link>
         </div>
-        <div className="flex flex-col gap-2 text-whiteText">
-          <div className="flex gap-2 items-center">
+        <div className="flex flex-col gap-2 text-text-lightSub">
+          <div className="flex gap-2 items-center capitalize">
             <UserRoundPen className="w-[20px] h-[20px]" />
-            <p>
-              @{user.nickname}
-              {/* nome-do-usuario */}
-            </p>
+            <p>{user.nickname}</p>
           </div>
+          {user.phone && (
+            <div className="flex gap-2 items-center capitalize">
+              <UserRoundPen className="w-[20px] h-[20px]" />
+              <p>{user.phone}</p>
+            </div>
+          )}
+          {user.birth && (
+            <div className="flex gap-2 items-center capitalize">
+              <UserRoundPen className="w-[20px] h-[20px]" />
+              <p>{user.birth}</p>
+            </div>
+          )}
         </div>
       </SettingsSection>
 
