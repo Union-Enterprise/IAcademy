@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { EyeOff, Eye } from "lucide-react";
-import { ChangeEventHandler, MouseEventHandler, useState } from "react";
+import { ChangeEventHandler, FocusEventHandler, MouseEventHandler, useState } from "react";
 
 interface InputGroupProps {
   label: string;
@@ -12,6 +12,8 @@ interface InputGroupProps {
   isDisabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  onBlur?: FocusEventHandler<HTMLInputElement>;
+  value?: string;
 }
 
 export default function InputGroup({
