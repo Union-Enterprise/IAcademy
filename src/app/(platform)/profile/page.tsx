@@ -61,7 +61,8 @@ export default function Profile() {
           </div>
           <div className="flex gap-2 items-center">
             <RectangleEllipsis className="w-[20px] h-[20px]" />
-            <p>{user.password}</p>
+            {/* <p>{user.password}</p> */}
+            <p>******************</p>
           </div>
         </div>
       </SettingsSection>
@@ -79,7 +80,7 @@ export default function Profile() {
         <div className="flex flex-col gap-2 text-text-lightSub">
           <div className="flex gap-2 items-center capitalize">
             <UserRoundPen className="w-[20px] h-[20px]" />
-            <p>{user.nickname}</p>
+            <p>{user.name}</p>
           </div>
           {user.phone && (
             <div className="flex gap-2 items-center capitalize">

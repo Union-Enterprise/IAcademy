@@ -36,6 +36,7 @@ const UserContext = createContext<UserContextType>({
     password: "",
     isPremium: false,
     since: "00/00/000",
+    img: ""
   },
   isAuthenticated: false,
   loading: true,
@@ -43,12 +44,13 @@ const UserContext = createContext<UserContextType>({
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>({
-    nickname: "Visitante",
-    name: "visitante-0421032312",
+    name: "Visitante",
+    nickname: "visitante-0421032312",
     email: "email@email.com",
     password: "123456",
     isPremium: false,
     since: "00/00/0000",
+    img: ""
   });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);

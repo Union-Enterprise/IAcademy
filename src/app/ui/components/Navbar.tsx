@@ -43,7 +43,7 @@ const Navbar = () => {
               </p>
             ) : (
               <Image
-                src={`${user.img}`}
+                src={`http://localhost:5002/files/${user.img}`}
                 alt="Avatar do usuário"
                 width={45}
                 height={45}

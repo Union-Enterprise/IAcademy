@@ -26,10 +26,11 @@ export default function ProfileLayout({
             <div className="relative z-10 overflow-hidden rounded-[70px] group cursor-pointer bg-mainBlue w-[175px] h-[160px] flex items-center justify-center">
               {user.img ? (
                 <Image
-                  src={`${user.img}`}
+                  src={`http://localhost:5002/files/${user.img}`}
                   alt="Profile Image"
                   width={120}
                   height={120}
+                  className="h-full w-full object-cover"
                 />
               ) : (
                 <p className="text-white text-7xl uppercase">
@@ -44,9 +45,9 @@ export default function ProfileLayout({
               </button>
             </div>
             <h1 className="text-2xl text-title-light font-bold mt-5">
-              {user.nickname}
+              {user.name}
             </h1>
-            <h2 className="text-gray-600 font-semibold">@{user.name}</h2>
+            <h2 className="text-gray-600 font-semibold">@{user.nickname}</h2>
             <p className="text-text-lightSub text-sm flex mt-12 py-5 border-t-2 border-border-light w-full justify-center">
               Aluno IAcademy desde
               <span className="ml-1">{user.since}</span>
