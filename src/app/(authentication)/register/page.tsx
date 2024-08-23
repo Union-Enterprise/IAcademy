@@ -4,7 +4,8 @@ import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
 import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 import RedirectLink from "@/app/ui/components/authenticationForm/RedirectLink";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -12,6 +13,23 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    axios.get("http://localhost:5002/profile", { withCredentials: true })
+      .then((res) => {
+        if (res.status !== 401) {
+          router.push('/profile');
+        } else {
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, [router]);
 
   const validatePassword = (password: string) => {
     const lower = /[a-z]/.test(password);
@@ -41,11 +59,16 @@ export default function Register() {
       .then(function (response) {
         console.log(response.status);
         console.log(response.data);
+        router.push('/profile');
       })
       .catch(function (error) {
         console.error(error);
       });
   };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>

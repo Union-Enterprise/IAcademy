@@ -8,11 +8,28 @@ import SocialOptions, {
 } from "@/app/ui/components/authenticationForm/SocialsOptions";
 import RedirectLink from "@/app/ui/components/authenticationForm/RedirectLink";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    axios.get("http://localhost:5002/profile", { withCredentials: true })
+      .then((res) => {
+        if (res.status !== 401) {
+          router.push('/profile'); 
+        } else {
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  }, [router]);
 
   const sendData = () => {
     axios
@@ -27,11 +44,19 @@ export default function Login() {
       .then(function (response) {
         console.log(response.status); // cod da requisição
         console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
+
+        if(response.status === 200){
+          router.push('/profile');
+        }
       })
       .catch(function (error) {
-        console.error(error);
+        console.log(error);
       });
   };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
