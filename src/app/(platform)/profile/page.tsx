@@ -12,16 +12,29 @@ import {
   Skull,
 } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useUser } from "@/app/context/UserContext";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
   const [showRemoveView, setShowRemoveView] = useState(false);
-  const { user } = useUser();
+  const { user, isAuthenticated, loading } = useUser();
+  const router = useRouter();
+
+  // Redireciona para a página de login se não estiver autenticado e o carregamento terminou
+  if (!loading && !isAuthenticated) {
+    router.push('/login');
+    return null;
+  }
+
+  // Exibe um estado de carregamento enquanto os dados do usuário estão sendo carregados
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
-      <SettingsSection isPremium={true}>
+      <SettingsSection isPremium={user.isPremium}>
         <div className="flex gap-2 items-center">
           <BadgeCheck className="w-[30px] h-[30px] text-mainBlue" />
           <h3 className="text-lg font-semibold">IAcademy Premium</h3>
@@ -61,7 +74,6 @@ export default function Profile() {
           </div>
           <div className="flex gap-2 items-center">
             <RectangleEllipsis className="w-[20px] h-[20px]" />
-            {/* <p>{user.password}</p> */}
             <p>******************</p>
           </div>
         </div>
@@ -83,13 +95,13 @@ export default function Profile() {
             <p>{user.name}</p>
           </div>
           {user.phone && (
-            <div className="flex gap-2 items-center capitalize">
+            <div className="flex gap-2 items-center">
               <UserRoundPen className="w-[20px] h-[20px]" />
               <p>{user.phone}</p>
             </div>
           )}
           {user.birth && (
-            <div className="flex gap-2 items-center capitalize">
+            <div className="flex gap-2 items-center">
               <UserRoundPen className="w-[20px] h-[20px]" />
               <p>{user.birth}</p>
             </div>

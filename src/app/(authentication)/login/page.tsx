@@ -10,12 +10,14 @@ import RedirectLink from "@/app/ui/components/authenticationForm/RedirectLink";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/app/context/UserContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { setAuth } = useUser();
 
   useEffect(() => {
     axios.get("http://localhost:5002/profile", { withCredentials: true })
@@ -42,10 +44,8 @@ export default function Login() {
         { withCredentials: true }
       )
       .then(function (response) {
-        console.log(response.status); // cod da requisição
-        console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
-
         if(response.status === 200){
+          setAuth(true, response.data);
           router.push('/profile');
         }
       })
