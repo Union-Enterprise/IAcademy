@@ -5,8 +5,6 @@ import {
   ChevronLeft,
   UsersRound,
   CreditCard,
-  Home,
-  ChevronDown,
 } from "lucide-react";
 import SettingsSection from "@/app/ui/components/profile/SettingsSection";
 import { useState } from "react";
@@ -68,7 +66,6 @@ export default function User() {
   const [birthError, setBirthError] = useState("");
   const [genderError, setGenderError] = useState("");
   const [phoneError, setPhoneError] = useState("");
-  const [formError, setFormError] = useState("");
 
   // Mensagens de erro para dados de endereço
   const [cepError, setCepError] = useState("");
@@ -92,8 +89,8 @@ export default function User() {
     }
   };
 
-  // Função para verificar se todos os campos obrigatórios estão preenchidos
-  const validateForm = (): boolean => {
+  // Função para verificar se todos os campos obrigatórios do formulário de dados do usuário estão preenchidos
+  const validateUserForm = (): boolean => {
     let isValid = true;
 
     if (!nickname) {
@@ -117,20 +114,6 @@ export default function User() {
       setBirthError("");
     }
 
-    if (!gender || gender === "nulo") {
-      setGenderError("Gênero é obrigatório.");
-      isValid = false;
-    } else {
-      setGenderError("");
-    }
-
-    if (!phone) {
-      setPhoneError("Telefone é obrigatório.");
-      isValid = false;
-    } else {
-      setPhoneError("");
-    }
-
     if (!cpf) {
       setCpfError("CPF é obrigatório.");
       isValid = false;
@@ -141,7 +124,13 @@ export default function User() {
       setCpfError("");
     }
 
-    // Verificar campos de endereço
+    return isValid;
+  };
+
+  // Função para verificar se todos os campos obrigatórios do formulário de endereço estão preenchidos
+  const validateAddressForm = (): boolean => {
+    let isValid = true;
+
     if (!CEP) {
       setCepError("CEP é obrigatório.");
       isValid = false;
@@ -180,12 +169,20 @@ export default function User() {
     return isValid;
   };
 
-  // Função para enviar dados do formulário
+  // Função para enviar dados do formulário de dados do usuário
   const handleSubmitUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // Limpar mensagens de erro do formulário de endereço
+    setCepError("");
+    setBairroError("");
+    setCityError("");
+    setHouseNumberError("");
+    setCompError("");
+    setStateError("");
+
     // Verificar se todos os campos estão preenchidos
-    if (!validateForm()) {
+    if (!validateUserForm()) {
       return;
     }
 
@@ -200,12 +197,20 @@ export default function User() {
     });
   };
 
-  // Função para enviar dados do endereço
+  // Função para enviar dados do formulário de endereço
   const handleSubmitAddress = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // Limpar mensagens de erro do formulário de dados do usuário
+    setNicknameError("");
+    setUsernameError("");
+    setBirthError("");
+    setGenderError("");
+    setPhoneError("");
+    setCpfError("");
+
     // Verificar se todos os campos obrigatórios estão preenchidos
-    if (!validateForm()) {
+    if (!validateAddressForm()) {
       return;
     }
 
@@ -244,7 +249,7 @@ export default function User() {
               label="Nome de exibição"
               labelFor="nickname"
               placeholder="Nome de exibição"
-              isRequired={false}
+              isRequired
               onChange={(e) => setNickName(e.target.value)}
             />
             {nicknameError && (
@@ -259,7 +264,7 @@ export default function User() {
               label="Nome do usuário"
               labelFor="username"
               placeholder="Nome do usuário"
-              isRequired={false}
+              isRequired
               onChange={(e) => setUsername(e.target.value)}
             />
             {usernameError && (
@@ -274,7 +279,7 @@ export default function User() {
               label="Data de Nascimento"
               labelFor="date"
               placeholder={user.birth || "00/00/0000"}
-              isRequired={false}
+              isRequired
               onChange={(e) => setBirth(e.target.value)}
             />
             {birthError && (
@@ -292,11 +297,6 @@ export default function User() {
               isRequired={false}
               onChange={(e) => setGender(e.target.value)}
             />
-            {genderError && (
-              <p className="text-red-500 text-sm mt-3">
-                {genderError}
-              </p>
-            )}
           </div>
 
           <div className="mt-3">
@@ -307,11 +307,6 @@ export default function User() {
               isRequired={false}
               onChange={(e) => setPhone(e.target.value)}
             />
-            {phoneError && (
-              <p className="text-red-500 text-sm mt-3">
-                {phoneError}
-              </p>
-            )}
           </div>
 
           <div className="mt-3">
@@ -319,7 +314,7 @@ export default function User() {
               label="CPF"
               labelFor="cpf"
               placeholder="CPF"
-              isRequired={false}
+              isRequired
               onChange={handleCpfChange}
             />
             {cpfError && (
@@ -349,7 +344,7 @@ export default function User() {
                 label="CEP"
                 labelFor="cep"
                 placeholder="CEP"
-                isRequired={false}
+                isRequired
                 onChange={(e) => setCEP(e.target.value)}
               />
               {cepError && (
@@ -364,7 +359,7 @@ export default function User() {
                 label="Bairro"
                 labelFor="bairro"
                 placeholder="Bairro"
-                isRequired={false}
+                isRequired
                 onChange={(e) => setBairro(e.target.value)}
               />
               {bairroError && (
@@ -379,7 +374,7 @@ export default function User() {
                 label="Cidade"
                 labelFor="city"
                 placeholder="Cidade"
-                isRequired={false}
+                isRequired
                 onChange={(e) => setCity(e.target.value)}
               />
               {cityError && (
@@ -394,7 +389,7 @@ export default function User() {
                 label="Número"
                 labelFor="houseNumber"
                 placeholder="Número"
-                isRequired={false}
+                isRequired
                 onChange={(e) => setHouseNumber(e.target.value)}
               />
               {houseNumberError && (
@@ -412,11 +407,6 @@ export default function User() {
                 isRequired={false}
                 onChange={(e) => setComp(e.target.value)}
               />
-              {compError && (
-                <p className="text-red-500 text-sm mt-3">
-                  {compError}
-                </p>
-              )}
             </div>
 
             <div className="mt-3">
@@ -424,7 +414,7 @@ export default function User() {
                 label="Estado"
                 labelFor="state"
                 placeholder="Estado"
-                isRequired={false}
+                isRequired
                 onChange={(e) => setState(e.target.value)}
               />
               {stateError && (
