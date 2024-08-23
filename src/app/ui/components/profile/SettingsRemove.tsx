@@ -2,11 +2,15 @@ import { X } from "lucide-react";
 import axios from "axios";
 import Link from "next/link";
 
+import { useRouter } from "next/navigation";
+
+
 export default function SettingsRemove({
   closeView,
 }: {
   closeView: () => void;
 }) {
+  const router = useRouter();
   const sendData = () => {
     axios
       .delete("http://localhost:5002/delete", { withCredentials: true })
@@ -17,6 +21,8 @@ export default function SettingsRemove({
       .catch(function (error) {
         console.error(error);
       });
+
+      router.push('/login')
   };
 
   return (

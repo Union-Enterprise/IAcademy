@@ -21,13 +21,11 @@ export default function Profile() {
   const { user, isAuthenticated, loading } = useUser();
   const router = useRouter();
 
-  // Redireciona para a página de login se não estiver autenticado e o carregamento terminou
   if (!loading && !isAuthenticated) {
     router.push('/login');
     return null;
   }
 
-  // Exibe um estado de carregamento enquanto os dados do usuário estão sendo carregados
   if (loading) {
     return <p>Loading...</p>;
   }
