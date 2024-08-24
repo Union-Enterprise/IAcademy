@@ -9,11 +9,16 @@ import {
   LayoutGrid,
   ChevronRight,
   UsersRound,
+  DoorOpen,
 } from "lucide-react";
+import { useUser } from "@/app/context/UserContext";
+import { useRouter } from "next/navigation";
 
 const ProfileSidebar = () => {
   const pathname = usePathname();
   const [selectedItem, setSelectedItem] = useState(pathname);
+  const { setAuth } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     setSelectedItem(pathname);
@@ -48,6 +53,23 @@ const ProfileSidebar = () => {
         isSelected={selectedItem.includes("/user")}
         onClick={() => setSelectedItem("/user")}
       />
+      <Item
+        title="Sair da conta"
+        href="#"
+        iconId={4}
+        onClick={() => {
+          setAuth(false, {
+            name: "Visitante",
+            nickname: "visitante-0421032312",
+            email: "email@email.com",
+            password: "123456",
+            isPremium: false,
+            since: "00/00/0000",
+            img: "",
+          });
+          router.push("/login");
+        }}
+      />
     </section>
   );
 };
@@ -57,7 +79,7 @@ interface ItemProps {
   href: string;
   iconId?: number;
   isSelected?: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 function Item({
@@ -72,6 +94,7 @@ function Item({
     <BadgeCheck />,
     <KeyRound />,
     <UsersRound />,
+    <DoorOpen />,
   ];
 
   return (

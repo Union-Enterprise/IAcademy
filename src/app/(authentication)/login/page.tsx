@@ -15,23 +15,11 @@ import { useUser } from "@/app/context/UserContext";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { setAuth } = useUser();
-
-  useEffect(() => {
-    axios.get("http://localhost:5002/profile", { withCredentials: true })
-      .then((res) => {
-        if (res.status !== 401) {
-          router.push('/profile'); 
-        } else {
-          setLoading(false);
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-      });
-  }, [router]);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const sendData = () => {
     axios
@@ -43,20 +31,21 @@ export default function Login() {
         },
         { withCredentials: true }
       )
-      .then(function (response) {
-        if(response.status === 200){
+      .then((response) => {
+        if (response.status === 200) {
           setAuth(true, response.data);
-          router.push('/profile');
+          router.push("/profile");
         }
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((error) => {
+        if (error.response && error.response.status === 401) {
+          setErrorMessage("E-mail ou senha incorretos, tente novamente.");
+        }
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <>
@@ -65,16 +54,22 @@ export default function Login() {
         className="flex flex-col gap-5"
         onSubmit={(e) => {
           e.preventDefault();
+          setIsSubmitting(true);
           sendData();
         }}
       >
-        <InputGroup
-          label="E-mail"
-          labelFor="email"
-          inputType="email"
-          placeholder="Digite seu e-mail"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <div>
+          {errorMessage && (
+            <p className="text-red-500 text-sm mb-2">{errorMessage}</p>
+          )}
+          <InputGroup
+            label="E-mail"
+            labelFor="email"
+            inputType="email"
+            placeholder="Digite seu e-mail"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
         <InputGroup
           label="Senha"
           labelFor="password"
@@ -83,7 +78,7 @@ export default function Login() {
           isRecoveryInput={true}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <SubmitButton text="Entrar" />
+        <SubmitButton text="Entrar" loading={isSubmitting} />
       </form>
       <SocialOptions>
         <Option />

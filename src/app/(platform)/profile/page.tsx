@@ -14,21 +14,11 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import { useUser } from "@/app/context/UserContext";
-import { useRouter } from "next/navigation";
 
 export default function Profile() {
   const [showRemoveView, setShowRemoveView] = useState(false);
-  const { user, isAuthenticated, loading } = useUser();
-  const router = useRouter();
+  const { user } = useUser();
 
-  if (!loading && !isAuthenticated) {
-    router.push('/login');
-    return null;
-  }
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <>

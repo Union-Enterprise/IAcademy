@@ -24,10 +24,10 @@ export default function Searchbar({ setShowSearchView }: SearchProps) {
 
   return (
     <button
-      className="w-[400px] h-12 px-4 border-2 border-border-light bg-background-lightCard rounded-md duration-200 cursor-pointer relative flex items-center hover:border-mainBlue group"
+      className="w-[450px] mx-auto h-12 px-4 border-2 border-border-light bg-background-lightCard rounded-md duration-200 cursor-pointer relative flex items-center hover:border-mainBlue group"
       onClick={() => setShowSearchView(true)}
     >
-      <p className="text-gray-400">Pesquise aqui</p>
+      <p className="text-gray-400">Busque por matéria, tópicos e conteúdos</p>
       <span className="absolute right-2 opacity-80 bg-mainBlue pointer-events-none h-fit py-1 px-5 text-sm rounded-md flex items-center justify-center text-white font-bold duration-200">
         /
       </span>

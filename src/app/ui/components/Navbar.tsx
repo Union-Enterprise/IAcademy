@@ -14,7 +14,7 @@ const Navbar = () => {
   const { user, isAuthenticated } = useUser();
 
   return (
-    <nav className="h-20 bg-background-light px-5 flex justify-between items-center shadow-sm">
+    <nav className="h-20 bg-background-light px-5 grid grid-cols-3 items-center shadow-sm">
       <div className="flex gap-5 items-center">
         <Menu
           onClick={toggleSidebar}
@@ -31,7 +31,7 @@ const Navbar = () => {
         </Link>
       </div>
       <Searchbar setShowSearchView={setShowSearchView} />
-      <div className="flex gap-3 items-center">
+      <div className="flex gap-3 items-center justify-end">
         {isAuthenticated ? (
           <Link
             href="/profile"

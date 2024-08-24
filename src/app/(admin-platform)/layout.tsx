@@ -8,7 +8,7 @@ import { SidebarProvider } from "../context/SidebarContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Dashboard IAcademy",
+  title: "Dashboard | IAcademy",
   description: "Dashboard",
 };
 
@@ -19,6 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
+      <head>
+        <link rel="icon" href="/whiteIcon.svg" />
+      </head>
       <body
         className={`${inter.className} h-[100vh] overflow-hidden select-none`}
       >
@@ -26,7 +29,7 @@ export default function RootLayout({
           <Navbar />
           <main className="flex w-full h-full">
             <Sidebar isUserLayout={false} />
-            <section className="gap-10 *:mx-[200px] *:mt-[70px] flex flex-col overflow-auto w-full">
+            <section className="gap-10 *:mx-[160px] *:mt-[40px] flex flex-col overflow-auto w-full">
               {children}
             </section>
           </main>

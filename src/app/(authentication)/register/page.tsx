@@ -8,123 +8,133 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Register() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [errors, setErrors] = useState({
+    passwordError: "",
+    confirmPasswordError: "",
+  });
+
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    axios.get("http://localhost:5002/profile", { withCredentials: true })
-      .then((res) => {
-        if (res.status !== 401) {
-          router.push('/profile');
-        } else {
-          setLoading(false);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, [router]);
 
-  const validatePassword = (password: string) => {
+  const validatePassword = (password: string, confirmPassword: string) => {
     const lower = /[a-z]/.test(password);
     const upper = /[A-Z]/.test(password);
     const number = /\d/.test(password);
 
+    let passwordError = "";
+    let confirmPasswordError = "";
+
     if (password.length <= 7 || !lower || !upper || !number) {
-      setPasswordError('Insira uma senha com mais de 8 caracteres, incluindo letras minúsculas, maiúsculas e números');
-      return false;
-    } else {
-      setPasswordError('');
-      return true;
+      passwordError =
+        "A senha deve ter no mínimo 8 caracteres, incluindo letras minúsculas, maiúsculas e números.";
+    }
+
+    if (password !== confirmPassword) {
+      confirmPasswordError = "As senhas não coincidem.";
+    }
+
+    setErrors({ passwordError, confirmPasswordError });
+
+    return !passwordError && !confirmPasswordError;
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+
+    setFormData((prev) => {
+      const updatedFormData = { ...prev, [id]: value };
+
+      if (id === "password" || id === "confirmPassword") {
+        validatePassword(
+          updatedFormData.password,
+          updatedFormData.confirmPassword
+        );
+      }
+
+      return updatedFormData;
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validatePassword(formData.password, formData.confirmPassword)) {
+      setIsSubmitting(true);
+      sendData();
     }
   };
 
   const sendData = () => {
+    const { name, email, password } = formData;
     axios
       .post(
         "http://localhost:5002/signup",
-        {
-          name,
-          email,
-          password,
-        },
+        { name, email, password },
         { withCredentials: true }
       )
-      .then(function (response) {
-        console.log(response.status);
-        console.log(response.data);
-        router.push('/profile');
+      .then((response) => {
+        router.push("/profile");
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.error(error);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <>
       <h1 className="text-2xl font-bold text-mainBlue">Cadastrar</h1>
-      <form
-        className="flex flex-col gap-5"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const isPasswordValid = validatePassword(password);
-          const isPasswordMatch = password === confirmPassword;
-
-          if (isPasswordValid && isPasswordMatch) {
-            sendData();
-          } else if (!isPasswordMatch) {
-            console.log("Senhas não coincidem");
-          }
-        }}
-      >
+      <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
         <InputGroup
           label="Nome"
           labelFor="name"
           placeholder="Seu Nome"
-          onChange={(e) => setName(e.target.value)}
+          onChange={handleChange}
         />
         <InputGroup
           label="E-mail"
           labelFor="email"
           inputType="email"
           placeholder="Seu e-mail"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleChange}
         />
-        <div className="">
+        <div>
           <InputGroup
             label="Senha"
             labelFor="password"
             inputType="password"
             placeholder="Deve ter no mínimo 8 caracteres"
-            onChange={(e) => {
-              setPassword(e.target.value);
-              validatePassword(e.target.value);
-            }}
+            onChange={handleChange}
           />
-          {passwordError && (
+          {errors.passwordError && (
+            <p className="text-red-500 text-sm mt-3">{errors.passwordError}</p>
+          )}
+        </div>
+        <div>
+          <InputGroup
+            label="Confirmação"
+            labelFor="confirmPassword"
+            inputType="password"
+            placeholder="Confirme sua senha"
+            onChange={handleChange}
+          />
+          {errors.confirmPasswordError && (
             <p className="text-red-500 text-sm mt-3">
-              {passwordError}
+              {errors.confirmPasswordError}
             </p>
           )}
         </div>
-        <InputGroup
-          label="Confirmação"
-          labelFor="confirmation"
-          inputType="password"
-          placeholder="Deve ter no mínimo 8 caracteres"
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <SubmitButton text="Cadastrar" />
+        <SubmitButton text="Cadastrar" loading={isSubmitting} />
       </form>
       <RedirectLink
         message="Já tem uma conta?"

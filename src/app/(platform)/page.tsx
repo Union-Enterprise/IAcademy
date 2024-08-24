@@ -9,15 +9,13 @@ import Link from "next/link";
 export default function Home() {
   const { user, isAuthenticated } = useUser();
 
-  console.log(user);
-
   return (
-    <div className="mx-[32px] mt-[40px]">
+    <div className="mx-[100px] mt-[40px] mb-[140px]">
       <div className="flex flex-col gap-[40px]">
         <div>
           <h1 className="text-title-light text-4xl">
-            Bem-vindo{" "}
-            <span className="font-semibold capitalize">{user.name}</span>.
+            Bem-vindo
+            <span className="ml-1 font-semibold capitalize">{user.name}</span>.
           </h1>
           {!isAuthenticated && (
             <p className="text-text-lightSub mt-2">

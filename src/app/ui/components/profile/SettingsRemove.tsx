@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 
-
 export default function SettingsRemove({
   closeView,
 }: {
@@ -22,7 +21,7 @@ export default function SettingsRemove({
         console.error(error);
       });
 
-      router.push('/login')
+    router.push("/login");
   };
 
   return (

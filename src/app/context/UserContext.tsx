@@ -37,7 +37,7 @@ const UserContext = createContext<UserContextType>({
     password: "",
     isPremium: false,
     since: "00/00/000",
-    img: ""
+    img: "",
   },
   isAuthenticated: false,
   loading: true,
@@ -52,7 +52,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     password: "123456",
     isPremium: false,
     since: "00/00/0000",
-    img: ""
+    img: "",
   });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);

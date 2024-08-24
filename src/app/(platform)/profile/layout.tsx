@@ -6,6 +6,7 @@ import ProfileSidebar from "@/app/ui/components/profile/ProfileSidebar";
 import { useState } from "react";
 import SettingsImage from "@/app/ui/components/profile/SettingsImage";
 import { useUser } from "@/app/context/UserContext";
+import { useRouter } from "next/navigation";
 
 export default function ProfileLayout({
   children,
@@ -13,7 +14,27 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }>) {
   const [showImageView, setShowImageView] = useState(false);
-  const { user } = useUser();
+  const { user, loading, isAuthenticated } = useUser();
+  const router = useRouter();
+
+  if (!loading && !isAuthenticated) {
+    router.push("/login");
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <Image
+          src="/blueIcon.svg"
+          alt="IAcademy Logo"
+          width={150}
+          height={150}
+          className="animate-bounce duration-500"
+        />
+      </div>
+    );
+  }
 
   return (
     <>
