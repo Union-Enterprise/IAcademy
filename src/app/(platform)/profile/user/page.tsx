@@ -81,7 +81,7 @@ export default function User() {
     setCpf(cpfInput);
 
     if (!cpfInput) {
-      setCpfError("CPF é obrigatório.");
+ 
     } else if (!validarCPF(cpfInput)) {
       setCpfError("CPF inválido! Por favor, verifique e tente novamente.");
     } else {
@@ -107,15 +107,8 @@ export default function User() {
       setUsernameError("");
     }
 
-    if (!birth) {
-      setBirthError("Data de nascimento é obrigatória.");
-      isValid = false;
-    } else {
-      setBirthError("");
-    }
 
     if (!cpf) {
-      setCpfError("CPF é obrigatório.");
       isValid = false;
     } else if (!validarCPF(cpf)) {
       setCpfError("CPF inválido! Por favor, verifique e tente novamente.");
@@ -249,7 +242,7 @@ export default function User() {
               label="Nome de exibição"
               labelFor="nickname"
               placeholder="Nome de exibição"
-              isRequired
+             isRequired={false}
               onChange={(e) => setNickName(e.target.value)}
             />
             {nicknameError && (
@@ -264,7 +257,7 @@ export default function User() {
               label="Nome do usuário"
               labelFor="username"
               placeholder="Nome do usuário"
-              isRequired
+              isRequired={false}
               onChange={(e) => setUsername(e.target.value)}
             />
             {usernameError && (
@@ -279,7 +272,7 @@ export default function User() {
               label="Data de Nascimento"
               labelFor="date"
               placeholder={user.birth || "00/00/0000"}
-              isRequired
+              isRequired={false}
               onChange={(e) => setBirth(e.target.value)}
             />
             {birthError && (
@@ -314,7 +307,7 @@ export default function User() {
               label="CPF"
               labelFor="cpf"
               placeholder="CPF"
-              isRequired
+                isRequired={false}
               onChange={handleCpfChange}
             />
             {cpfError && (
