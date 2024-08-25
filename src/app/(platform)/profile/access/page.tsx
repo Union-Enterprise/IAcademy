@@ -32,7 +32,7 @@ export default function Access() {
 
     try {
       if (modalType === "password") {
-        if (oldPassword === user.password && password === confirmPassword) {
+        if ( password === confirmPassword) {
           sendData();
         }
       } else {
