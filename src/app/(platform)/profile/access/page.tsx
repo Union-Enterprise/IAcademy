@@ -33,16 +33,51 @@ export default function Access() {
     try {
       if (modalType === "password") {
         if (oldPassword === user.password && password === confirmPassword) {
-          // Código de post no axios que muda a senha atual pelo da const "password"
+          sendData();
         }
       } else {
-        // Código de post no axios que muda o email atual pelo da const "email"
+          sendEmail();
       }
     } catch (error) {
       console.error(error);
     } finally {
       handleModalClose();
     }
+  };
+
+  const sendData = () => {
+
+    axios
+      .put(
+        "http://localhost:5002/compare",
+        {password},
+        { withCredentials: true,
+          headers: {
+            'oldPass': oldPassword
+          }
+         },
+      )
+      .then(function (response) {
+        console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+  
+  const sendEmail = () => {
+    axios
+      .put(
+        "http://localhost:5002/update_email",
+        {email},
+        {withCredentials: true}
+      )
+      .then(function (response) {
+        console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
   };
 
   return (
