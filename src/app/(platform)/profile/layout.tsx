@@ -30,22 +30,22 @@ export default function ProfileLayout({
     return <LoadingFrame />;
   }
 
-  // com certeza, não otimizado!
-  useEffect(() => {
-    setTitle(
-      `${
-        pathname.includes("/access")
-          ? "Dados de Acesso"
-          : pathname.includes("/user")
-          ? "Dados Pessoais"
-          : pathname.includes("purchases")
-          ? "Assinaturas"
-          : "Minha Conta"
-      } | IAcademy`
-    );
+  // // com certeza, não otimizado!
+  // useEffect(() => {
+  //   setTitle(
+  //     `${
+  //       pathname.includes("/access")
+  //         ? "Dados de Acesso"
+  //         : pathname.includes("/user")
+  //         ? "Dados Pessoais"
+  //         : pathname.includes("purchases")
+  //         ? "Assinaturas"
+  //         : "Minha Conta"
+  //     } | IAcademy`
+  //   );
 
-    document.title = title;
-  });
+  //   document.title = title;
+  // });
 
   return (
     <>

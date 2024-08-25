@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useUser } from "@/app/context/UserContext";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const ProfileSidebar = () => {
   const pathname = usePathname();
@@ -23,6 +24,22 @@ const ProfileSidebar = () => {
   useEffect(() => {
     setSelectedItem(pathname);
   }, [pathname]);
+
+  const exitAccount = () => {
+
+    axios
+      .delete(
+        "http://localhost:5002/exit",
+        { withCredentials: true,
+         },
+      )
+      .then(function (response) {
+        console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
 
   return (
     <section className="border-border-light border-2 rounded-xl">
@@ -59,16 +76,8 @@ const ProfileSidebar = () => {
         iconId={4}
         onClick={() => {
           // ajustar a lógica para apenas encerrar o usuário
-          setAuth(false, {
-            name: "Visitante",
-            nickname: "visitante-0421032312",
-            email: "email@email.com",
-            password: "123456",
-            isPremium: false,
-            since: "00/00/0000",
-            img: "",
-          });
-          console.log("cliquei");
+          
+          exitAccount();
         }}
         classname="*:text-red-600 opacity-70"
       />
