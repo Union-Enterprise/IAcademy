@@ -9,7 +9,7 @@ import {
   LayoutGrid,
   ChevronRight,
   UsersRound,
-  DoorOpen,
+  LogOut,
 } from "lucide-react";
 import { useUser } from "@/app/context/UserContext";
 import { useRouter } from "next/navigation";
@@ -25,7 +25,7 @@ const ProfileSidebar = () => {
   }, [pathname]);
 
   return (
-    <section className="border-border-light py-5 border-2 rounded-md">
+    <section className="border-border-light border-2 rounded-xl">
       <Item
         title="Visão Geral"
         href="/profile"
@@ -47,7 +47,7 @@ const ProfileSidebar = () => {
         onClick={() => setSelectedItem("/access")}
       />
       <Item
-        title="Dados do usuário"
+        title="Dados pessoais"
         href="/profile/user"
         iconId={3}
         isSelected={selectedItem.includes("/user")}
@@ -55,9 +55,10 @@ const ProfileSidebar = () => {
       />
       <Item
         title="Sair da conta"
-        href="#"
+        href="/login"
         iconId={4}
         onClick={() => {
+          // ajustar a lógica para apenas encerrar o usuário
           setAuth(false, {
             name: "Visitante",
             nickname: "visitante-0421032312",
@@ -67,8 +68,9 @@ const ProfileSidebar = () => {
             since: "00/00/0000",
             img: "",
           });
-          router.push("/login");
+          console.log("cliquei");
         }}
+        classname="*:text-red-600 opacity-70"
       />
     </section>
   );
@@ -78,6 +80,7 @@ interface ItemProps {
   title: string;
   href: string;
   iconId?: number;
+  classname?: string;
   isSelected?: boolean;
   onClick?: () => void;
 }
@@ -87,6 +90,7 @@ function Item({
   href = "",
   iconId = 0,
   isSelected = false,
+  classname,
   onClick,
 }: ItemProps) {
   const iconsList = [
@@ -94,17 +98,17 @@ function Item({
     <BadgeCheck />,
     <KeyRound />,
     <UsersRound />,
-    <DoorOpen />,
+    <LogOut />,
   ];
 
   return (
     <Link
       href={href}
       onClick={onClick}
-      className={`${
+      className={`${classname} ${
         isSelected &&
         "opacity-100 border-l-mainBlue *:text-mainBlue *:font-semibold bg-background-lightA"
-      } text-text-lightSub items-center px-5 h-[50px] flex border-l-4 border-transparent justify-between hover:bg-background-lightA duration-200`}
+      } text-text-lightSub items-center px-5 h-[60px] flex border-l-4 border-transparent justify-between hover:bg-background-lightA duration-200`}
     >
       <div className="flex gap-5">
         {iconsList[iconId]}

@@ -43,7 +43,13 @@ export default function RootLayout({
 
   useEffect(() => {
     setTitle(
-      `${pathname.includes("/login") ? "Login" : "Cadastro"} | IAcademy`
+      `${
+        pathname.includes("/login")
+          ? "Login"
+          : pathname.includes("/register")
+          ? "Cadastro"
+          : "Recuperação de senha"
+      } | IAcademy`
     );
 
     document.title = title;
@@ -52,7 +58,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <head>
-        <link rel="icon" href="/whiteIcon.svg" />
+        <link rel="icon" href="/favicon.svg" />
       </head>
       <body
         className={`${inter.className} h-[100vh] overflow-hidden select-none grid grid-cols-3`}

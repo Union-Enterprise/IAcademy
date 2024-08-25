@@ -37,6 +37,7 @@ export default function RootLayout({
     return () => clearInterval(interval);
   }, []);
 
+  // com certeza, não otimizado!
   useEffect(() => {
     setTitle(
       `${
@@ -44,6 +45,8 @@ export default function RootLayout({
           ? "Trilhas"
           : pathname.includes("/premium")
           ? "Premium"
+          : pathname.startsWith("/profile")
+          ? "Minha Conta"
           : "Home"
       } | IAcademy`
     );
@@ -54,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <head>
-        <link rel="icon" href="/whiteIcon.svg" />
+        <link rel="icon" href="/favicon.svg" />
       </head>
       <body
         className={`${inter.className} h-[100vh] select-none bg-background-light overflow-hidden`}

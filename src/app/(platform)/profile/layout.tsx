@@ -3,10 +3,12 @@
 import { PenLine, Camera } from "lucide-react";
 import Image from "next/image";
 import ProfileSidebar from "@/app/ui/components/profile/ProfileSidebar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SettingsImage from "@/app/ui/components/profile/SettingsImage";
 import { useUser } from "@/app/context/UserContext";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import LoadingFrame from "@/app/ui/components/LoadingFrame";
 
 export default function ProfileLayout({
   children,
@@ -15,6 +17,8 @@ export default function ProfileLayout({
 }>) {
   const [showImageView, setShowImageView] = useState(false);
   const { user, loading, isAuthenticated } = useUser();
+  const [title, setTitle] = useState("");
+  const pathname = usePathname();
   const router = useRouter();
 
   if (!loading && !isAuthenticated) {
@@ -23,25 +27,32 @@ export default function ProfileLayout({
   }
 
   if (loading) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <Image
-          src="/blueIcon.svg"
-          alt="IAcademy Logo"
-          width={150}
-          height={150}
-          className="animate-bounce duration-500"
-        />
-      </div>
-    );
+    return <LoadingFrame />;
   }
+
+  // com certeza, não otimizado!
+  useEffect(() => {
+    setTitle(
+      `${
+        pathname.includes("/access")
+          ? "Dados de Acesso"
+          : pathname.includes("/user")
+          ? "Dados Pessoais"
+          : pathname.includes("purchases")
+          ? "Assinaturas"
+          : "Minha Conta"
+      } | IAcademy`
+    );
+
+    document.title = title;
+  });
 
   return (
     <>
-      <div className=" grid grid-cols-3 gap-5 px-[200px] pt-[70px]">
+      <div className=" grid grid-cols-3 gap-5 px-[200px] pt-[70px] pb-[150px]">
         <div className="col-span-1 flex flex-col gap-5">
           <div className="border-2 flex flex-col items-center pt-[70px] border-border-light bg-background-lightCard rounded-md relative">
-            <div className="absolute left-0 top-0 w-full h-[40%] bg-background-lightB p-3 flex justify-end">
+            <div className="absolute left-0 top-0 w-full h-[40%] bg-background-lightA p-3 flex justify-end">
               <PenLine className="h-[40px] w-[40px] bg-background-light text-title-light rounded-md p-2 cursor-pointer hover:bg-mainBlue hover:text-background-light duration-200" />
             </div>
             <div className="relative z-10 overflow-hidden rounded-[70px] group cursor-pointer bg-mainBlue w-[175px] h-[160px] flex items-center justify-center">

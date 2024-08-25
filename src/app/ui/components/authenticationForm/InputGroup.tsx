@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { EyeOff, Eye } from "lucide-react";
-import { ChangeEventHandler, FocusEventHandler, MouseEventHandler, useState } from "react";
+import {
+  ChangeEventHandler,
+  FocusEventHandler,
+  MouseEventHandler,
+  useState,
+} from "react";
 
 interface InputGroupProps {
   label: string;
@@ -14,6 +19,8 @@ interface InputGroupProps {
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
   value?: string;
+  cols?: string;
+  error?: string;
 }
 
 export default function InputGroup({
@@ -24,16 +31,18 @@ export default function InputGroup({
   isRequired = true,
   isRecoveryInput = false,
   isDisabled = false,
+  error,
   onClick,
   onChange,
+  cols,
 }: InputGroupProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
 
   return (
-    <div className="flex flex-col gap-[10px]">
+    <div className={`${cols} flex flex-col gap-[10px]`}>
       <label
-        className="text-title-light w-fit text-lg font-semibold"
+        className="text-title-light w-fit font-semibold"
         htmlFor={labelFor}
       >
         {label}
@@ -63,6 +72,7 @@ export default function InputGroup({
               "group-hover/input:border-mainBlue focus:border-mainBlue bg-background-light"
             }
             ${isFilled && "border-mainBlue"}
+            ${error && "border-red-400"}
           `}
         />
 
@@ -91,6 +101,7 @@ export default function InputGroup({
           </button>
         )}
       </div>
+      {error && <p className="text-red-400">{error}</p>}
 
       {isRecoveryInput && (
         <Link

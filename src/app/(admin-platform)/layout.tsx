@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <head>
-        <link rel="icon" href="/whiteIcon.svg" />
+        <link rel="icon" href="/favicon.svg" />
       </head>
       <body
         className={`${inter.className} h-[100vh] overflow-hidden select-none`}

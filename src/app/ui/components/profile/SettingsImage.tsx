@@ -83,7 +83,7 @@ export default function SettingsCPF({ closeView }: { closeView: () => void }) {
           <p className="mt-2 text-sm text-gray-500">Enviar imagem</p>
         </div>
 
-        <SubmitButton text="Mudar foto de perfil"/>
+        <SubmitButton text="Mudar foto de perfil" classname="w-full"/>
       </form>
     </div>
   );
