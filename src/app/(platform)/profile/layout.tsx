@@ -82,7 +82,7 @@ export default function ProfileLayout({
             <h2 className="text-gray-600 font-semibold">@{user.nickname}</h2>
             <p className="text-text-lightSub text-sm flex mt-12 py-5 border-t-2 border-border-light w-full justify-center">
               Aluno IAcademy desde
-              <span className="ml-1">{user.since}</span>
+              <span className="ml-1">{user.createdAt}</span>
               {/* Data de cadastro na plataforma*/}
             </p>
           </div>

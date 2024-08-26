@@ -19,7 +19,7 @@ interface User {
   birth?: string;
   cpf?: string;
   isPremium: false;
-  since: string;
+  createdAt: string;
 }
 
 interface UserContextType {
@@ -36,7 +36,7 @@ const UserContext = createContext<UserContextType>({
     email: "",
     password: "",
     isPremium: false,
-    since: "00/00/000",
+    createdAt: "00/00/000",
     img: "",
   },
   isAuthenticated: false,
@@ -51,11 +51,24 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     email: "email@email.com",
     password: "123456",
     isPremium: false,
-    since: "00/00/0000",
+    createdAt: "00/00/0000",
     img: "",
   });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+
+    const options: Intl.DateTimeFormatOptions = {
+      timeZone: "America/Sao_Paulo",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    };
+
+    return date.toLocaleDateString("pt-BR", options);
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -65,7 +78,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         });
 
         setIsAuthenticated(true);
-        setUser(response.data);
+
+        const formattedUser = {
+          ...response.data,
+          createdAt: formatDate(response.data.createdAt),
+        };
+
+        setUser(formattedUser);
       } catch (error) {
         console.log("Erro ao buscar usuário:", error);
         setIsAuthenticated(false);
@@ -79,7 +98,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const setAuth = (isAuthenticated: boolean, userData: User) => {
     setIsAuthenticated(isAuthenticated);
-    setUser(userData);
+    const formattedUser = {
+      ...userData,
+      createdAt: formatDate(userData.createdAt),
+    };
+    setUser(formattedUser);
   };
 
   return (
