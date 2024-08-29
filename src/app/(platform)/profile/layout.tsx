@@ -3,11 +3,10 @@
 import { PenLine, Camera } from "lucide-react";
 import Image from "next/image";
 import ProfileSidebar from "@/app/ui/components/profile/ProfileSidebar";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import SettingsImage from "@/app/ui/components/profile/SettingsImage";
 import { useUser } from "@/app/context/UserContext";
 import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
 import LoadingFrame from "@/app/ui/components/LoadingFrame";
 
 export default function ProfileLayout({
@@ -17,8 +16,6 @@ export default function ProfileLayout({
 }>) {
   const [showImageView, setShowImageView] = useState(false);
   const { user, loading, isAuthenticated } = useUser();
-  const [title, setTitle] = useState("");
-  const pathname = usePathname();
   const router = useRouter();
 
   if (!loading && !isAuthenticated) {
@@ -29,23 +26,6 @@ export default function ProfileLayout({
   if (loading) {
     return <LoadingFrame />;
   }
-
-  // // com certeza, não otimizado!
-  // useEffect(() => {
-  //   setTitle(
-  //     `${
-  //       pathname.includes("/access")
-  //         ? "Dados de Acesso"
-  //         : pathname.includes("/user")
-  //         ? "Dados Pessoais"
-  //         : pathname.includes("purchases")
-  //         ? "Assinaturas"
-  //         : "Minha Conta"
-  //     } | IAcademy`
-  //   );
-
-  //   document.title = title;
-  // });
 
   return (
     <>

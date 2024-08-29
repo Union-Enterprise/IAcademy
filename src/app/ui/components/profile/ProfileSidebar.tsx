@@ -26,18 +26,17 @@ const ProfileSidebar = () => {
   }, [pathname]);
 
   const exitAccount = () => {
-
     axios
-      .delete(
-        "http://localhost:5002/exit",
-        { withCredentials: true,
-         },
-      )
+      .delete("http://localhost:5002/exit", { withCredentials: true })
       .then(function (response) {
         console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
       })
       .catch(function (error) {
         console.error(error);
+      })
+      .finally(() => {
+        console.log("puxando...");
+        router.push("/login");
       });
   };
 
@@ -72,11 +71,8 @@ const ProfileSidebar = () => {
       />
       <Item
         title="Sair da conta"
-        href="/login"
         iconId={4}
         onClick={() => {
-          // ajustar a lógica para apenas encerrar o usuário
-          
           exitAccount();
         }}
         classname="*:text-red-600 opacity-70"
@@ -87,7 +83,7 @@ const ProfileSidebar = () => {
 
 interface ItemProps {
   title: string;
-  href: string;
+  href?: string;
   iconId?: number;
   classname?: string;
   isSelected?: boolean;

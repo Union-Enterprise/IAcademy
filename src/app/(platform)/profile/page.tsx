@@ -19,7 +19,6 @@ export default function Profile() {
   const [showRemoveView, setShowRemoveView] = useState(false);
   const { user } = useUser();
 
-
   return (
     <>
       <SettingsSection isPremium={user.isPremium}>
@@ -62,7 +61,7 @@ export default function Profile() {
           </div>
           <div className="flex gap-2 items-center">
             <RectangleEllipsis className="w-[20px] h-[20px]" />
-            <p>******************</p>
+            <p>{"*".repeat(user.password.length)}</p>
           </div>
         </div>
       </SettingsSection>

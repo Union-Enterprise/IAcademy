@@ -15,6 +15,7 @@ interface InputGroupProps {
   isRequired?: boolean;
   isRecoveryInput?: boolean;
   isDisabled?: boolean;
+  maxLength?: number;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
@@ -29,15 +30,17 @@ export default function InputGroup({
   inputType = "text",
   placeholder = "Digite algo aqui",
   isRequired = true,
+  value,
   isRecoveryInput = false,
   isDisabled = false,
+  maxLength,  
   error,
   onClick,
   onChange,
+  onBlur,
   cols,
 }: InputGroupProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const [isFilled, setIsFilled] = useState(false);
 
   return (
     <div className={`${cols} flex flex-col gap-[10px]`}>
@@ -48,7 +51,7 @@ export default function InputGroup({
         {label}
         <span
           className={`opacity-0 ml-1 text-red-400 font-normal pointer-events-none duration-100 ${
-            isRequired && !isFilled && !isDisabled && "opacity-100"
+            isRequired && !isDisabled && "opacity-100"
           }`}
         >
           *
@@ -58,20 +61,20 @@ export default function InputGroup({
       <div className="relative flex items-center overflow-hidden rounded-md group/input">
         <input
           id={labelFor}
+          maxLength={maxLength}
+          value={value}
           type={inputType === "password" && showPassword ? "text" : inputType}
           placeholder={placeholder}
           required={isRequired}
           disabled={isDisabled}
-          onChange={(e) => {
-            onChange?.(e);
-            setIsFilled(e.target.value !== "");
-          }}
-          className={`w-full pr-[45px] px-4 py-3 border-2 border-border-light text-text-light rounded-md outline-none duration-100 peer
+          onChange={(e) => onChange?.(e)}
+          onBlur={onBlur}
+          className={`w-full px-4 py-3 border-2 border-border-light text-text-light rounded-md outline-none duration-100 peer
             ${
               !isDisabled &&
               "group-hover/input:border-mainBlue focus:border-mainBlue bg-background-light"
             }
-            ${isFilled && "border-mainBlue"}
+            ${inputType === "password" && "pr-[45px]"}
             ${error && "border-red-400"}
           `}
         />
@@ -91,11 +94,7 @@ export default function InputGroup({
             onClick={() => {
               setShowPassword(!showPassword);
             }}
-            className={`absolute right-[10px] border-none outline-none duration-100 group-hover/input:text-mainBlue peer-focus:text-mainBlue group-hover/input:opacity-100 peer-focus:opacity-100 ${
-              isFilled
-                ? "text-mainBlue opacity-100"
-                : "text-text-lightSub opacity-40"
-            }`}
+            className={`absolute right-[10px] opacity-30 border-none outline-none duration-100 group-hover/input:text-mainBlue peer-focus:text-mainBlue group-hover/input:opacity-100 peer-focus:opacity-100`}
           >
             {showPassword ? <Eye /> : <EyeOff />}
           </button>

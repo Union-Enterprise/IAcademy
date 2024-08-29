@@ -9,41 +9,47 @@ import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 import { useUser } from "@/app/context/UserContext";
 import RestrictInput from "@/app/ui/components/profile/RestrictInput";
 import Modal from "@/app/ui/components/profile/Modal";
+import axios from "axios";
+import { cpf } from "cpf-cnpj-validator";
 
-// Função para validar CPF
-const validarCPF = (cpf: string): boolean => {
-  cpf = cpf.replace(/[^\d]/g, "");
-  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
-    return false;
+const formatDate = (value: string) => {
+  const cleanValue = value.replace(/\D/g, "");
+
+  if (cleanValue.length <= 2) {
+    return cleanValue;
   }
-  let soma = 0;
-  for (let i = 0; i < 9; i++) {
-    soma += parseInt(cpf.charAt(i)) * (10 - i);
-  }
-  let primeiroDigitoVerificador = 11 - (soma % 11);
-  if (primeiroDigitoVerificador >= 10) primeiroDigitoVerificador = 0;
-  if (primeiroDigitoVerificador != parseInt(cpf.charAt(9))) {
-    return false;
-  }
-  soma = 0;
-  for (let i = 0; i < 10; i++) {
-    soma += parseInt(cpf.charAt(i)) * (11 - i);
-  }
-  let segundoDigitoVerificador = 11 - (soma % 11);
-  if (segundoDigitoVerificador >= 10) segundoDigitoVerificador = 0;
-  if (segundoDigitoVerificador != parseInt(cpf.charAt(10))) {
-    return false;
-  }
-  return true;
+
+  return cleanValue.replace(/^(\d{2})(\d{0,4})$/, "$1/$2");
 };
 
-// Estado inicial
+const formatPhone = (value: string) => {
+  const cleanValue = value.replace(/\D/g, "");
+
+  if (cleanValue.length <= 5) {
+    return cleanValue;
+  }
+
+  return cleanValue.replace(/^(\d{2})(\d{0,5})(\d{0,4})$/, "($1) $2-$3");
+};
+
+const formatCep = (value: string) => {
+  const cleanValue = value.replace(/\D/g, "");
+
+  if (cleanValue.length <= 5) {
+    return cleanValue;
+  }
+
+  return cleanValue.replace(/^(\d{5})(\d{0,3})$/, "$1-$2");
+};
+
 const initialState = {
-  formData: {
+  userFormData: {
     username: "",
     birth: "",
     gender: "",
     phone: "",
+  },
+  addressFormData: {
     cep: "",
     street: "",
     houseNumber: "",
@@ -69,17 +75,30 @@ const initialState = {
 
 // Tipos de ações para o reducer
 type ActionType =
-  | { type: "SET_FIELD"; field: string; value: string }
+  | { type: "SET_USER_FIELD"; field: string; value: string }
+  | { type: "SET_ADDRESS_FIELD"; field: string; value: string }
   | { type: "SET_ERROR"; field: string; error: string };
 
 // Função reducer para gerenciar os tipos de estados
 function formReducer(state: typeof initialState, action: ActionType) {
   switch (action.type) {
-    case "SET_FIELD":
+    case "SET_USER_FIELD":
       return {
         ...state,
-        formData: {
-          ...state.formData,
+        userFormData: {
+          ...state.userFormData,
+          [action.field]: action.value,
+        },
+        formErrors: {
+          ...state.formErrors,
+          [action.field]: "", // Limpa a mensagem de erro ao alterar o campo
+        },
+      };
+    case "SET_ADDRESS_FIELD":
+      return {
+        ...state,
+        addressFormData: {
+          ...state.addressFormData,
           [action.field]: action.value,
         },
         formErrors: {
@@ -100,11 +119,24 @@ function formReducer(state: typeof initialState, action: ActionType) {
   }
 }
 
+const fetchAddress = async (cep: string) => {
+  try {
+    const response = await axios.get(`https://viacep.com.br/ws/${cep}/json`);
+    if (response.data.erro) {
+      return null;
+    }
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar o endereço:", error);
+    return null;
+  }
+};
+
 export default function User() {
   const { user } = useUser();
   const [modalType, setModalType] = useState<"cpf" | null>(null);
   const [visible, setVisible] = useState(false);
-  const [cpf, setCpf] = useState(user.cpf || "");
+  const [userCpf, setUserCpf] = useState(user.cpf || "");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleModalClose = () => {
@@ -116,70 +148,34 @@ export default function User() {
   const [state, dispatch] = useReducer(formReducer, initialState);
 
   // Função para mostrar ou esconder o erro de acordo com a mudança nos inputs
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUserInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    dispatch({ type: "SET_FIELD", field: id, value });
+    let formattedValue = value;
+    if (id === "birth") {
+      formattedValue = formatDate(value);
+    } else if (id === "phone") {
+      formattedValue = formatPhone(value);
+    }
+
+    dispatch({ type: "SET_USER_FIELD", field: id, value: formattedValue });
   };
 
-  // Função para lidar com a mudança no campo CPF
-  // const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const cpfInput = e.target.value;
-  //   dispatch({ type: "SET_FIELD", field: "cpf", value: cpfInput });
+  const handleAddressInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
 
-  //   if (!cpfInput) {
-  //     dispatch({ type: "SET_ERROR", field: "cpf", error: "" });
-  //   } else if (!validarCPF(cpfInput)) {
-  //     dispatch({
-  //       type: "SET_ERROR",
-  //       field: "cpf",
-  //       error: "CPF inválido! Por favor, verifique e tente novamente.",
-  //     });
-  //   } else {
-  //     dispatch({ type: "SET_ERROR", field: "cpf", error: "" });
-  //   }
-  // };
+    let formattedValue = value;
 
-  // Função para verificar se todos os campos obrigatórios do formulário estão preenchidos
-  const validateUserForm = (): boolean => {
+    if (id === "cep") {
+      formattedValue = formatCep(value);
+    }
+
+    dispatch({ type: "SET_ADDRESS_FIELD", field: id, value: formattedValue });
+  };
+
+  const validateAddressForm = (): boolean => {
     let isValid = true;
 
-    if (!state.formData.username) {
-      dispatch({
-        type: "SET_ERROR",
-        field: "username",
-        error: "Nome é obrigatório.",
-      });
-      isValid = false;
-    }
-
-    if (!state.formData.birth) {
-      dispatch({
-        type: "SET_ERROR",
-        field: "birth",
-        error: "Nascimento é obrigatório.",
-      });
-      isValid = false;
-    }
-
-    if (!state.formData.gender) {
-      dispatch({
-        type: "SET_ERROR",
-        field: "gender",
-        error: "Gênero é obrigatório.",
-      });
-      isValid = false;
-    }
-
-    if (!state.formData.phone) {
-      dispatch({
-        type: "SET_ERROR",
-        field: "phone",
-        error: "Telefone é obrigatório.",
-      });
-      isValid = false;
-    }
-
-    if (!state.formData.cep) {
+    if (!state.addressFormData.cep) {
       dispatch({
         type: "SET_ERROR",
         field: "cep",
@@ -188,7 +184,7 @@ export default function User() {
       isValid = false;
     }
 
-    if (!state.formData.street) {
+    if (!state.addressFormData.street) {
       dispatch({
         type: "SET_ERROR",
         field: "street",
@@ -197,7 +193,7 @@ export default function User() {
       isValid = false;
     }
 
-    if (!state.formData.houseNumber) {
+    if (!state.addressFormData.houseNumber) {
       dispatch({
         type: "SET_ERROR",
         field: "houseNumber",
@@ -206,7 +202,7 @@ export default function User() {
       isValid = false;
     }
 
-    if (!state.formData.bairro) {
+    if (!state.addressFormData.bairro) {
       dispatch({
         type: "SET_ERROR",
         field: "bairro",
@@ -215,16 +211,7 @@ export default function User() {
       isValid = false;
     }
 
-    if (!state.formData.city) {
-      dispatch({
-        type: "SET_ERROR",
-        field: "city",
-        error: "Cidade é obrigatória.",
-      });
-      isValid = false;
-    }
-
-    if (!state.formData.state) {
+    if (!state.addressFormData.state) {
       dispatch({
         type: "SET_ERROR",
         field: "state",
@@ -236,16 +223,83 @@ export default function User() {
     return isValid;
   };
 
+  // Função para verificar se todos os campos obrigatórios do formulário estão preenchidos
+  const validateUserForm = (): boolean => {
+    let isValid = true;
+
+    if (!state.userFormData.username) {
+      dispatch({
+        type: "SET_ERROR",
+        field: "username",
+        error: "Nome é obrigatório.",
+      });
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
   // Função para enviar dados do formulário
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!validateUserForm()) {
+    let formId = e.currentTarget.id;
+
+    if (formId === "user" && validateUserForm()) {
+      // Código para enviar os dados de usuário para o banco
+      console.log("dados de usuario enviado com sucesso");
+      console.log(state.userFormData);
       return;
     }
 
-    // Código para enviar os dados para o banco
-    console.log(state.formData);
+    if (formId === "address" && validateAddressForm()) {
+      // Código para enviar os dados de endereço para o banco
+      console.log("dados de endereço enviado com sucesso");
+      console.log(state.addressFormData);
+      handleCepBlur();
+      return;
+    }
+  };
+
+  const handleCepBlur = async () => {
+    const cep = state.addressFormData.cep;
+    if (cep.length === 9) {
+      const addressData = await fetchAddress(cep);
+      if (addressData) {
+        dispatch({
+          type: "SET_ADDRESS_FIELD",
+          field: "street",
+          value: addressData.logradouro,
+        });
+        dispatch({
+          type: "SET_ADDRESS_FIELD",
+          field: "bairro",
+          value: addressData.bairro,
+        });
+        dispatch({
+          type: "SET_ADDRESS_FIELD",
+          field: "city",
+          value: addressData.localidade,
+        });
+        dispatch({
+          type: "SET_ADDRESS_FIELD",
+          field: "state",
+          value: addressData.uf,
+        });
+        return;
+      }
+      dispatch({
+        type: "SET_ERROR",
+        field: "cep",
+        error: "CEP não encontrado.",
+      });
+    } else {
+      dispatch({
+        type: "SET_ERROR",
+        field: "cep",
+        error: "O CEP deve conter 8 dígitos.",
+      });
+    }
   };
 
   return (
@@ -261,75 +315,84 @@ export default function User() {
         <UsersRound />
         <h3 className="font-bold text-xl">Dados pessoais</h3>
       </div>
-      <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-        <SettingsSection>
-          <div className="grid grid-cols-6 gap-5">
-            <InputGroup
-              label="Nome"
-              labelFor="username"
-              placeholder="Nome do usuário"
-              isRequired={false}
-              onChange={handleInputChange}
-              cols="col-span-4"
-              error={state.formErrors.username}
-            />
-            <RestrictInput
-              label="CPF"
-              value={user.cpf || "999.999.999-99"}
-              onChangeClick={() => setModalType("cpf")}
-              cols="col-span-2"
-            />
-            <InputGroup
-              label="Nascimento"
-              labelFor="birth"
-              placeholder={user.birth || "00/00/0000"}
-              isRequired={false}
-              onChange={handleInputChange}
-              error={state.formErrors.birth}
-              cols="col-span-1"
-            />
-            <InputGroup
-              label="Gênero"
-              labelFor="gender"
-              placeholder="Gênero"
-              isRequired={false}
-              onChange={handleInputChange}
-              error={state.formErrors.gender}
-              cols="col-span-3"
-            />
-            <InputGroup
-              label="Telefone"
-              labelFor="phone"
-              placeholder={user.phone || "(99) 99999-9999"}
-              isRequired={false}
-              onChange={handleInputChange}
-              error={state.formErrors.phone}
-              cols="col-span-2"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5" id="user">
+        <SettingsSection style="grid grid-cols-6 gap-5">
+          <InputGroup
+            label="Nome"
+            labelFor="username"
+            placeholder="Nome do usuário"
+            isRequired={false}
+            onChange={handleUserInputChange}
+            cols="col-span-4"
+            error={state.formErrors.username}
+          />
+          <RestrictInput
+            label="CPF"
+            value={user.cpf || "999.999.999-99"}
+            onChangeClick={() => setModalType("cpf")}
+            cols="col-span-2"
+          />
+          <InputGroup
+            label="Nascimento"
+            labelFor="birth"
+            value={state.userFormData.birth}
+            placeholder={"00/0000"}
+            maxLength={7}
+            isRequired={false}
+            onChange={handleUserInputChange}
+            error={state.formErrors.birth}
+            cols="col-span-1"
+          />
+          <InputGroup
+            label="Gênero"
+            labelFor="gender"
+            placeholder="Gênero"
+            isRequired={false}
+            onChange={handleUserInputChange}
+            error={state.formErrors.gender}
+            cols="col-span-3"
+          />
+          <InputGroup
+            label="Telefone"
+            labelFor="phone"
+            value={state.userFormData.phone}
+            placeholder={"(99) 99999-9999"}
+            maxLength={15}
+            isRequired={false}
+            onChange={handleUserInputChange}
+            error={state.formErrors.phone}
+            cols="col-span-2"
+          />
         </SettingsSection>
+        <SubmitButton text="Salvar" classname="self-end" />
+      </form>
 
-        <SettingsSection>
-          <div className="border-b-2 border-border-lightC pb-2 flex items-center gap-3">
-            <CreditCard />
-            <h4 className="text-lg font-semibold">Informações de Pagamento</h4>
-          </div>
-          {user.isPremium ? (
-            ""
-          ) : (
-            <p className="text-text-lightSub">
-              Parece que você ainda não possui nenhuma assinatura ativa.
-              <Link
-                href="/premium"
-                className="mx-1 text-mainBlue opacity-80 hover:opacity-100"
-              >
-                <span>Clique aqui</span>
-              </Link>
-              e conheça as opções.
-            </p>
-          )}
-        </SettingsSection>
+      <SettingsSection>
+        <div className="border-b-2 border-border-lightC pb-2 flex items-center gap-3">
+          <CreditCard />
+          <h4 className="text-lg font-semibold">Informações de Pagamento</h4>
+        </div>
+        {user.isPremium ? (
+          ""
+        ) : (
+          <p className="text-text-lightSub">
+            Parece que você ainda não possui nenhuma assinatura ativa.
+            <Link
+              href="/premium"
+              className="mx-1 text-mainBlue opacity-80 hover:opacity-100"
+            >
+              <span>Clique aqui</span>
+            </Link>
+            e conheça as opções.
+          </p>
+        )}
+      </SettingsSection>
 
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-5"
+        id="address"
+      >
         <SettingsSection>
           <div className="border-b-2 border-border-lightC pb-2 flex items-center gap-3">
             <Building2 />
@@ -340,8 +403,11 @@ export default function User() {
               label="CEP"
               labelFor="cep"
               placeholder="CEP"
+              value={state.addressFormData.cep}
+              maxLength={9}
               isRequired={false}
-              onChange={handleInputChange}
+              onChange={handleAddressInputChange}
+              onBlur={handleCepBlur}
               error={state.formErrors.cep}
               cols="col-span-2"
             />
@@ -350,17 +416,20 @@ export default function User() {
               labelFor="street"
               placeholder="Nome da rua"
               isRequired={false}
-              onChange={handleInputChange}
+              onChange={handleAddressInputChange}
               error={state.formErrors.street}
+              value={state.addressFormData.street}
               cols="col-span-5"
             />
             <InputGroup
               label="Número"
               labelFor="houseNumber"
-              placeholder="000"
+              placeholder="0000"
+              maxLength={4}
               isRequired={false}
-              onChange={handleInputChange}
+              onChange={handleAddressInputChange}
               error={state.formErrors.houseNumber}
+              value={state.addressFormData.houseNumber}
               cols="col-span-2"
             />
             <InputGroup
@@ -368,7 +437,7 @@ export default function User() {
               labelFor="comp"
               placeholder="Casa, Apto..."
               isRequired={false}
-              onChange={handleInputChange}
+              onChange={handleAddressInputChange}
               cols="col-span-5"
             />
             <InputGroup
@@ -376,8 +445,9 @@ export default function User() {
               labelFor="bairro"
               placeholder="Bairro"
               isRequired={false}
-              onChange={handleInputChange}
+              onChange={handleAddressInputChange}
               error={state.formErrors.bairro}
+              value={state.addressFormData.bairro}
               cols="col-span-3"
             />
             <InputGroup
@@ -385,17 +455,20 @@ export default function User() {
               labelFor="city"
               placeholder="Cidade"
               isRequired={false}
-              onChange={handleInputChange}
+              onChange={handleAddressInputChange}
               error={state.formErrors.city}
+              value={state.addressFormData.city}
               cols="col-span-3"
             />
             <InputGroup
               label="UF"
               labelFor="state"
               placeholder="XX"
+              maxLength={2}
               isRequired={false}
-              onChange={handleInputChange}
+              onChange={handleAddressInputChange}
               error={state.formErrors.state}
+              value={state.addressFormData.state}
               cols="col-span-1"
             />
           </div>
@@ -404,11 +477,11 @@ export default function User() {
       </form>
       {modalType && (
         <Modal
+          isDisabled={!cpf.isValid(userCpf)}
           title="CPF"
           onClose={handleModalClose}
           onSubmit={() => {
-            console.log(cpf);
-            if (validarCPF(cpf) && user.password === confirmPassword) {
+            if (cpf.isValid(userCpf) && user.password === confirmPassword) {
               // requisição no banco que altera o cpf
             }
           }}
@@ -421,7 +494,12 @@ export default function User() {
               labelFor="cpf"
               inputType="text"
               placeholder="Digite seu novo CPF"
-              onChange={(e) => setCpf(e.target.value)}
+              maxLength={11}
+              value={cpf.format(userCpf)}
+              onChange={(e) => {
+                setUserCpf(e.target.value);
+              }}
+              error={!cpf.isValid(userCpf) ? "CPF inválido" : ""}
             />
             <InputGroup
               label="Senha"

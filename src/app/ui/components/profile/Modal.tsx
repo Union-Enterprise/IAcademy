@@ -9,15 +9,16 @@ export default function Modal({
   visible,
   setVisible,
   children,
+  isDisabled,
 }: {
   title: string;
   onClose: () => void;
   onSubmit: (e: React.FormEvent) => void;
   visible: boolean;
+  isDisabled?: boolean;
   setVisible: (visible: boolean) => void;
   children: React.ReactNode;
 }) {
-
   useEffect(() => {
     setVisible(true);
   }, []);
@@ -54,7 +55,11 @@ export default function Modal({
         </div>
         <div className="p-6 flex flex-col gap-5">
           {children}
-          <SubmitButton text="Alterar" classname="w-full" />
+          <SubmitButton
+            text="Alterar"
+            classname="w-full"
+            isDisabled={isDisabled}
+          />
         </div>
       </form>
     </div>
