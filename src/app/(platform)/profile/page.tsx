@@ -61,7 +61,7 @@ export default function Profile() {
           </div>
           <div className="flex gap-2 items-center">
             <RectangleEllipsis className="w-[20px] h-[20px]" />
-            <p>{"*".repeat(user.password.length)}</p>
+            <p>******************</p>
           </div>
         </div>
       </SettingsSection>

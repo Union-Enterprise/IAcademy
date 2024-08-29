@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
 import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
@@ -6,6 +6,7 @@ import Link from "next/link";
 import axios from "axios";
 import React, { useState, useRef } from "react";
 import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Recovery() {
   const [email, setEmail] = useState("kleberbanban@gmail.com");
@@ -14,33 +15,56 @@ export default function Recovery() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isCodeValid, setIsCodeValid] = useState(false);
+  const [tokenRequested, setTokenRequested] = useState(false);
+
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!tokenRequested) {
+      axios.post("http://localhost:5002/forgot_password", { email })
+        .then(() => {
+          setIsEmailValid(true);
+          setTokenRequested(true);
+        })
+        .catch((err) => {
+          setIsEmailValid(false);
+          console.log(err);
+          return;
+        });
+    }
+
+    axios.post("http://localhost:5002/verify_token", { email, token: code })
+      .then(() => {
+        setIsCodeValid(true);
+      })
+      .catch((err) => {
+        setIsCodeValid(false);
+        console.log(err);
+        return; 
+      });
+
+    if (isCodeValid && password && password === confirmPassword) {
+      axios.post("http://localhost:5002/reset_password", { email, token: code, password })
+        .then((data) => {
+          if(data.status == 200){
+            router.push("/login");
+          }else{
+            // erro ao trocar a senha
+            console.log(data)
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   return (
     <>
       <h1 className="text-2xl font-bold text-mainBlue">Esqueci minha senha</h1>
-      <form
-        className="flex flex-col gap-5"
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log(code);
-
-          if (!isEmailValid) {
-            // escrever código pra comparar "email" com o email no bd e definir "isEmailValid"
-            console.log("Não passa daqui pois nao informou o email ainda");
-            return;
-          }
-
-          if (!isCodeValid) {
-            // escrever código pra comparar "code" com o código enviado no email do caba
-            console.log("Não passa daqui pois nao informou o email ainda");
-            return;
-          }
-
-          // se email e code validos então redefinir senha
-          const sendData = () => {};
-          password !== "" && password === confirmPassword && sendData();
-        }}
-      >
+      <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
         {isEmailValid ? (
           <>
             <h2 className="text-title-light text-xl font-bold">
@@ -48,9 +72,7 @@ export default function Recovery() {
             </h2>
             <p className="text-text-lightSub">
               Nós enviamos um email para
-              <span className="mx-1 font-semibold text-text-light">
-                {email}
-              </span>
+              <span className="mx-1 font-semibold text-text-light">{email}</span>
               contendo um código de 6 dígitos. Digite o código abaixo para
               prosseguir com a recuperação da sua senha.
             </p>
@@ -63,7 +85,6 @@ export default function Recovery() {
                   placeholder="Precisa ter no mínimo 7 caracteres"
                   onChange={(e) => setPassword(e.target.value)}
                 />
-
                 <InputGroup
                   label="Confirme sua nova senha"
                   labelFor="confirm"
@@ -115,11 +136,7 @@ export default function Recovery() {
   );
 }
 
-function CodeInput({
-  setCode,
-}: {
-  setCode: React.Dispatch<React.SetStateAction<string>>;
-}) {
+function CodeInput({ setCode }:any) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
