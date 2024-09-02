@@ -38,7 +38,7 @@ export default function ProfileLayout({
             <div className="relative z-10 overflow-hidden rounded-[70px] group cursor-pointer bg-mainBlue w-[175px] h-[160px] flex items-center justify-center">
               {user.img ? (
                 <Image
-                  src={`http://localhost:5002/files/${user.img}`}
+                  src={`${user.img}`}
                   alt="Profile Image"
                   width={120}
                   height={120}

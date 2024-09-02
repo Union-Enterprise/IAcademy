@@ -1,5 +1,6 @@
 import { faApple } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 export default function SocialOptions({
   children,
@@ -19,9 +20,19 @@ export default function SocialOptions({
   );
 }
 
-export function Option({ icon = faApple, brandName = "Apple" }) {
+
+interface OptionProps {
+  icon?: IconDefinition;
+  brandName?: string;
+  onClick: () => void;
+}
+
+export function Option({ icon = faApple, brandName = "Apple", onClick }: OptionProps) {
   return (
-    <div className=" w-full flex items-center justify-center h-[50px] gap-5 rounded-md border-2 border-whiteBorder hover:bg-mainBlue duration-100 group bg-opacity-50 cursor-pointer">
+    <div
+      className="w-full flex items-center justify-center h-[50px] gap-5 rounded-md border-2 border-whiteBorder hover:bg-mainBlue duration-100 group bg-opacity-50 cursor-pointer"
+      onClick={onClick} // Adicionando o onClick aqui
+    >
       <FontAwesomeIcon
         icon={icon}
         className="w-[25px] h-[25px] group-hover:text-white"

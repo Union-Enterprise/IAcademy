@@ -1,14 +1,12 @@
-"use client";
+"use client"
 
 import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
 import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
 import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
-import SocialOptions, {
-  Option,
-} from "@/app/ui/components/authenticationForm/SocialsOptions";
+import SocialOptions, { Option } from "@/app/ui/components/authenticationForm/SocialsOptions";
 import RedirectLink from "@/app/ui/components/authenticationForm/RedirectLink";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
 
@@ -16,19 +14,15 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
   const { setAuth } = useUser();
-  const [errorMessage, setErrorMessage] = useState("");
 
   const sendData = () => {
     axios
       .post(
         "http://localhost:5002/login",
-        {
-          email,
-          password,
-        },
+        { email, password },
         { withCredentials: true }
       )
       .then((response) => {
@@ -45,6 +39,10 @@ export default function Login() {
       .finally(() => {
         setIsSubmitting(false);
       });
+  };
+
+  const loginWithGoogle = () => {
+    window.location.href = "http://localhost:5002/google"; // URL do backend para o Google login
   };
 
   return (
@@ -81,9 +79,9 @@ export default function Login() {
         <SubmitButton text="Entrar" loading={isSubmitting} />
       </form>
       <SocialOptions>
-        <Option />
-        <Option icon={faGoogle} brandName="Google" />
-        <Option icon={faFacebook} brandName="Facebook" />
+        <Option onClick={() => {}} />
+        <Option icon={faGoogle} brandName="Google" onClick={loginWithGoogle} />
+        <Option icon={faFacebook} brandName="Facebook" onClick={() => {}} />
       </SocialOptions>
       <RedirectLink
         message="Ainda não tem uma conta?"
