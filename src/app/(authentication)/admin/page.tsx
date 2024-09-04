@@ -5,19 +5,28 @@ import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 import axios from "axios";
 import { useState } from "react";
 
+import { useRouter } from "next/navigation";
+import { useUser } from "@/app/context/UserContext";
+
 export default function Admin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // não sei se vai ter conexão com o bd
+  const router = useRouter();
+  const { setAuth } = useUser();
+
   const sendData = () => {
     axios
-      .post("http://localhost:5002/admin", {
+      .post("http://localhost:5002/login_adm", {
         email: email,
         password: password,
-      })
+      },
+      { withCredentials: true })
       .then(function (response) {
-        console.log(response);
+        if (response.status === 200) {
+          setAuth(true, response.data);
+          router.push("/dashboard");
+        }
       })
       .catch(function (error) {
         console.error(error);
