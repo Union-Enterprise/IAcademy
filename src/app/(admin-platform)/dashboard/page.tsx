@@ -9,10 +9,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
-  const [recentUsers, setRecentUsers] = useState([]); // Estado para armazenar os usuários recentes
+  const [recentUsers, setRecentUsers] = useState([]);
+  const [totalUsers, setTotalUsers] = useState();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchData = async () => {
       try {
         const response = await axios.post(
           "http://localhost:5002/recent_users",
@@ -20,13 +21,23 @@ export default function Dashboard() {
           { withCredentials: true }
         );
 
-        setRecentUsers(response.data); // Atualiza o estado com os usuários da resposta
+        setRecentUsers(response.data); 
+      } catch (error) {
+        console.log("Erro ao buscar usuários", error);
+      }
+
+      try {
+        const response = await axios.get(
+          "http://localhost:5002/users_total",
+          { withCredentials: true }
+        );
+        setTotalUsers(response.data); 
       } catch (error) {
         console.log("Erro ao buscar usuários", error);
       }
     };
 
-    fetchUser();
+    fetchData();
   }, []);
 
   return (
@@ -45,7 +56,7 @@ export default function Dashboard() {
         <StatResume title="Assinaturas" value="+2" lucideIcon={CreditCard} />
         <StatResume
           title="Usuários na plataforma"
-          value="5"
+          value={totalUsers}
           lucideIcon={Users}
         />
         <StatResume
@@ -75,7 +86,7 @@ export default function Dashboard() {
                   key={index}
                   name={user.name}
                   email={user.email}
-                  avatarUrl={user.img || "/default_user.jpg"} // Exibe um avatar padrão se não houver URL
+                  avatarUrl={user.img || "/default_user.jpg"}
                 />
               ))
             ) : (
