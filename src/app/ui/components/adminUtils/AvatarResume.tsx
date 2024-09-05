@@ -1,12 +1,18 @@
 import Image from "next/image";
 
-export default function AvatarResume() {
+interface AvatarResumeProps {
+  name: string;
+  email: string;
+  avatarUrl: string;
+}
+
+export default function AvatarResume({ name, email, avatarUrl }: AvatarResumeProps) {
   return (
     <div className="flex items-center gap-3">
       <span className="flex shrink-0 overflow-hidden rounded-full h-9 w-9">
         <Image
-          src="/blueIcon.svg"
-          alt="Avatar"
+          src={avatarUrl}
+          alt={`Avatar of ${name}`}
           width={36}
           height={36}
           className="aspect-square w-full h-full"
@@ -14,10 +20,10 @@ export default function AvatarResume() {
       </span>
       <div>
         <p className="text-text-light leading-none text-sm font-medium">
-          Shaolin Matador de Porco
+          {name}
         </p>
         <p className="text-sm text-text-lightSub mt-[4px]">
-          oshaolinmataporco@email.com
+          {email}
         </p>
       </div>
       {/* <p className="ml-auto text-text-light font-medium">$1200</p> */}

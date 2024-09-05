@@ -4,8 +4,31 @@ import StatResume from "@/app/ui/components/adminUtils/StatResume";
 import { PiggyBank, Users, CreditCard, GitBranchPlus } from "lucide-react";
 import LineChartStepped from "@/app/ui/components/adminUtils/charts/LineChartStepped";
 import AvatarResume from "@/app/ui/components/adminUtils/AvatarResume";
+import axios from "axios";
+
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
+  const [recentUsers, setRecentUsers] = useState([]); // Estado para armazenar os usuários recentes
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5002/recent_users",
+          { qtd: 5 },
+          { withCredentials: true }
+        );
+
+        setRecentUsers(response.data); // Atualiza o estado com os usuários da resposta
+      } catch (error) {
+        console.log("Erro ao buscar usuários", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <div className="flex flex-col">
       <div className="flex justify-between mb-6">
@@ -33,9 +56,7 @@ export default function Dashboard() {
       </div>
       <div className="grid grid-cols-7 gap-4 mt-5">
         <div className="col-span-4 border-[1px] border-border-lightC rounded-xl shadow-md hover:-translate-y-1 duration-100 hover:shadow-lg">
-          <h3 className="text-title-light p-[24px] font-semibold">
-            Visão Geral
-          </h3>
+          <h3 className="text-title-light p-[24px] font-semibold">Visão Geral</h3>
           <div className="pl-[8px] p-[24px] *:w-[100%]">
             <LineChartStepped />
           </div>
@@ -44,15 +65,22 @@ export default function Dashboard() {
           <div className="p-[24px] pb-[12px] border-b-2 border-border-lightC border-opacity-10">
             <h3 className="text-title-light font-bold">Usuários Recentes</h3>
             <p className="text-text-lightSub text-sm mt-1">
-              5 novos usuários se registraram na plataforma esse mês.
+              Últimos 5 usuários cadastrados.
             </p>
           </div>
           <div className="flex flex-col pt-0 mt-[12px] p-[24px] gap-[32px]">
-            <AvatarResume />
-            <AvatarResume />
-            <AvatarResume />
-            <AvatarResume />
-            <AvatarResume />
+            {recentUsers.length > 0 ? (
+              recentUsers.map((user: any, index: number) => (
+                <AvatarResume
+                  key={index}
+                  name={user.name}
+                  email={user.email}
+                  avatarUrl={user.img || "/default_user.jpg"} // Exibe um avatar padrão se não houver URL
+                />
+              ))
+            ) : (
+              <p>Nenhum usuário recente encontrado.</p>
+            )}
           </div>
         </div>
       </div>
