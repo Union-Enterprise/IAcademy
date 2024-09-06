@@ -24,7 +24,6 @@ export default function Register() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-
   const validatePassword = (password: string, confirmPassword: string) => {
     const lower = /[a-z]/.test(password);
     const upper = /[A-Z]/.test(password);
@@ -67,12 +66,12 @@ export default function Register() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validatePassword(formData.password, formData.confirmPassword)) {
-      setIsSubmitting(true);
       sendData();
     }
   };
 
   const sendData = () => {
+    setIsSubmitting(true);
     const { name, email, password } = formData;
     axios
       .post(

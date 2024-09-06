@@ -18,7 +18,7 @@ export default function SubmitButton({
       type="submit"
       className={`
         
-        ${isDisabled && "pointer-events-none opacity-60"}
+        ${(isDisabled || loading) && "pointer-events-none opacity-60"}
         ${
           classname || "w-full"
         }  px-8 bg-mainBlue bg-opacity-90 h-[50px] rounded-md hover:bg-opacity-100 duration-100 text-white flex justify-center items-center gap-5 ${

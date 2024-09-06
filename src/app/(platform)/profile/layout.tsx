@@ -8,6 +8,7 @@ import SettingsImage from "@/app/ui/components/profile/SettingsImage";
 import { useUser } from "@/app/context/UserContext";
 import { useRouter } from "next/navigation";
 import LoadingFrame from "@/app/ui/components/LoadingFrame";
+import Modal from "@/app/ui/components/profile/Modal";
 
 export default function ProfileLayout({
   children,
@@ -17,15 +18,24 @@ export default function ProfileLayout({
   const [showImageView, setShowImageView] = useState(false);
   const { user, loading, isAuthenticated } = useUser();
   const router = useRouter();
+  const [modalType, setModalType] = useState<"image" | null>(null);
+  const [visible, setVisible] = useState(false);
 
-  if (!loading && !isAuthenticated) {
-    router.push("/login");
-    return null;
-  }
+  const handleModalClose = () => {
+    setVisible(false);
+    setTimeout(() => {
+      setModalType(null);
+    }, 300);
+  };
 
-  if (loading) {
-    return <LoadingFrame />;
-  }
+  // if (!loading && !isAuthenticated) {
+  //   router.push("/login");
+  //   return null;
+  // }
+
+  // if (loading) {
+  //   return <LoadingFrame />;
+  // }
 
   return (
     <>
@@ -51,7 +61,7 @@ export default function ProfileLayout({
               )}
               <button
                 className="bg-black opacity-0 duration-200 absolute left-0 top-0 w-full h-full *:text-white justify-center items-center flex group-hover:opacity-100 group-hover:bg-opacity-35"
-                onClick={() => setShowImageView(true)}
+                onClick={() => setModalType("image")}
               >
                 <Camera className="w-[50px] h-[50px]" />
               </button>
@@ -70,8 +80,17 @@ export default function ProfileLayout({
         </div>
         <div className="col-span-2 flex flex-col gap-5">{children}</div>
       </div>
-      {showImageView && (
-        <SettingsImage closeView={() => setShowImageView(false)} />
+      {modalType && (
+        <Modal
+          title="foto de perfil"
+          hasOwnSubmit={true}
+          onClose={handleModalClose}
+          visible={visible}
+          setVisible={setVisible}
+          onSubmit={() => console.log("executei")}
+        >
+          <SettingsImage />
+        </Modal>
       )}
     </>
   );

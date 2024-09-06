@@ -9,15 +9,19 @@ export default function Modal({
   visible,
   setVisible,
   children,
+  hasOwnSubmit,
   isDisabled,
+  loading,
 }: {
   title: string;
   onClose: () => void;
   onSubmit: (e: React.FormEvent) => void;
   visible: boolean;
   isDisabled?: boolean;
+  loading?: boolean;
   setVisible: (visible: boolean) => void;
   children: React.ReactNode;
+  hasOwnSubmit?: boolean;
 }) {
   useEffect(() => {
     setVisible(true);
@@ -34,7 +38,7 @@ export default function Modal({
       className={`bg-black bg-opacity-60 absolute m-auto w-full h-full top-0 left-0 z-20 flex items-center justify-center transition-opacity duration-300 ease-in-out ${
         visible ? "opacity-100" : "opacity-0"
       }`}
-      onClick={handleOutsideClick}
+      onDoubleClick={handleOutsideClick}
     >
       <form
         className={`w-[500px] flex flex-col border-2 border-border-light rounded-md bg-background-light relative transform transition-transform duration-300 ease-in-out ${
@@ -55,11 +59,14 @@ export default function Modal({
         </div>
         <div className="p-6 flex flex-col gap-5">
           {children}
-          <SubmitButton
-            text="Alterar"
-            classname="w-full"
-            isDisabled={isDisabled}
-          />
+          {!hasOwnSubmit && (
+            <SubmitButton
+              text="Alterar"
+              classname="w-full"
+              isDisabled={isDisabled}
+              loading={loading}
+            />
+          )}
         </div>
       </form>
     </div>

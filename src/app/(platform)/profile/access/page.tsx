@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
 import { useUser } from "@/app/context/UserContext";
 import axios from "axios";
-import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 import Modal from "@/app/ui/components/profile/Modal";
 import RestrictInput from "@/app/ui/components/profile/RestrictInput";
 
@@ -19,6 +18,50 @@ export default function Access() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const { user } = useUser();
   const [visible, setVisible] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [errors, setErrors] = useState({
+    oldPasswordError: "",
+    passwordError: "",
+    confirmPasswordError: "",
+  });
+
+  useEffect(() => {
+    validatePassword(password, confirmPassword);
+  }, [password, confirmPassword]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+
+    if (id === "newPassword") {
+      setPassword(value);
+    } else if (id === "confirmNewPassword") {
+      setConfirmPassword(value);
+    }
+  };
+
+  const validatePassword = (password: string, confirmPassword: string) => {
+    const lower = /[a-z]/.test(password);
+    const upper = /[A-Z]/.test(password);
+    const number = /\d/.test(password);
+
+    let passwordError = "";
+    let confirmPasswordError = "";
+
+    if (password.length > 0) {
+      if (password.length <= 8 || !lower || !upper || !number) {
+        passwordError =
+          "A senha deve ter no mínimo 8 caracteres, incluindo letras minúsculas, maiúsculas e números.";
+      }
+    }
+    if (password !== confirmPassword) {
+      confirmPasswordError = "As senhas não coincidem.";
+    }
+
+    setErrors((prev) => ({ ...prev, passwordError, confirmPasswordError }));
+
+    return !passwordError && !confirmPasswordError;
+  };
 
   const handleModalClose = () => {
     setVisible(false);
@@ -30,50 +73,57 @@ export default function Access() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    setIsSubmitting(true);
     try {
       if (modalType === "password") {
-        if ( password === confirmPassword) {
-          sendData();
+        if (validatePassword(password, confirmPassword)) {
+          sendPassword();
         }
-      } else {
-          sendEmail();
+      } else if (modalType === "email") {
+        sendEmail();
       }
     } catch (error) {
       console.error(error);
     } finally {
-      handleModalClose();
+      setIsSubmitting(false);
     }
   };
 
-  const sendData = () => {
-
+  const sendPassword = () => {
     axios
       .put(
         "http://localhost:5002/compare",
-        {password},
-        { withCredentials: true,
+        { password },
+        {
+          withCredentials: true,
           headers: {
-            'oldPass': oldPassword
-          }
-         },
+            oldPass: oldPassword,
+          },
+        }
       )
       .then(function (response) {
         console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
+        handleModalClose();
       })
       .catch(function (error) {
         console.error(error);
+        setErrors((prev) => ({
+          ...prev,
+          oldPasswordError: "Senha incorreta. Tente novamente. ",
+        }));
       });
   };
-  
+
   const sendEmail = () => {
     axios
       .put(
         "http://localhost:5002/update_email",
-        {email},
-        {withCredentials: true}
+        { email },
+        { withCredentials: true }
       )
       .then(function (response) {
         console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
+        handleModalClose();
       })
       .catch(function (error) {
         console.error(error);
@@ -114,6 +164,7 @@ export default function Access() {
           onSubmit={handleSubmit}
           visible={visible}
           setVisible={setVisible}
+          loading={isSubmitting}
         >
           {modalType === "email" ? (
             <InputGroup
@@ -121,31 +172,52 @@ export default function Access() {
               labelFor="email"
               inputType="email"
               placeholder="Digite seu novo e-mail"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleChange}
             />
           ) : (
             <>
-              <InputGroup
-                label="Senha"
-                labelFor="password"
-                inputType="password"
-                placeholder="Digite sua senha atual"
-                onChange={(e) => setOldPassword(e.target.value)}
-              />
-              <InputGroup
-                label="Nova senha"
-                labelFor="newPassword"
-                inputType="password"
-                placeholder="Digite sua nova senha"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <InputGroup
-                label="Confirme a nova senha"
-                labelFor="confirmNewPassword"
-                inputType="password"
-                placeholder="Confirme sua nova senha"
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
+              <div>
+                <InputGroup
+                  label="Senha"
+                  labelFor="oldPassword"
+                  inputType="password"
+                  placeholder="Digite sua senha atual"
+                  onChange={handleChange}
+                />
+                {errors.oldPasswordError && (
+                  <p className="text-red-500 text-sm mt-3">
+                    {errors.oldPasswordError}
+                  </p>
+                )}
+              </div>
+              <div>
+                <InputGroup
+                  label="Nova senha"
+                  labelFor="newPassword"
+                  inputType="password"
+                  placeholder="Digite sua nova senha"
+                  onChange={handleChange}
+                />
+                {errors.passwordError && (
+                  <p className="text-red-500 text-sm mt-3">
+                    {errors.passwordError}
+                  </p>
+                )}
+              </div>
+              <div>
+                <InputGroup
+                  label="Confirme a nova senha"
+                  labelFor="confirmNewPassword"
+                  inputType="password"
+                  placeholder="Confirme sua nova senha"
+                  onChange={handleChange}
+                />
+                {errors.confirmPasswordError && (
+                  <p className="text-red-500 text-sm mt-3">
+                    {errors.confirmPasswordError}
+                  </p>
+                )}
+              </div>
             </>
           )}
         </Modal>

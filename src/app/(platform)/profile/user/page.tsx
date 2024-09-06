@@ -4,7 +4,9 @@ import Link from "next/link";
 import { ChevronLeft, UsersRound, CreditCard, Building2 } from "lucide-react";
 import SettingsSection from "@/app/ui/components/profile/SettingsSection";
 import { useReducer, useState } from "react";
-import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
+import InputGroup, {
+  Select,
+} from "@/app/ui/components/authenticationForm/InputGroup";
 import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 import { useUser } from "@/app/context/UserContext";
 import RestrictInput from "@/app/ui/components/profile/RestrictInput";
@@ -12,21 +14,15 @@ import Modal from "@/app/ui/components/profile/Modal";
 import axios from "axios";
 import { cpf } from "cpf-cnpj-validator";
 
-const formatDate = (value: string) => {
+const formatPhone = (value: string) => {
   const cleanValue = value.replace(/\D/g, "");
 
   if (cleanValue.length <= 2) {
     return cleanValue;
   }
 
-  return cleanValue.replace(/^(\d{2})(\d{0,4})$/, "$1/$2");
-};
-
-const formatPhone = (value: string) => {
-  const cleanValue = value.replace(/\D/g, "");
-
-  if (cleanValue.length <= 5) {
-    return cleanValue;
+  if (cleanValue.length <= 7) {
+    return cleanValue.replace(/^(\d{2})(\d{0,5})(\d{0,4})$/, "($1) $2");
   }
 
   return cleanValue.replace(/^(\d{2})(\d{0,5})(\d{0,4})$/, "($1) $2-$3");
@@ -148,12 +144,18 @@ export default function User() {
   const [state, dispatch] = useReducer(formReducer, initialState);
 
   // Função para mostrar ou esconder o erro de acordo com a mudança nos inputs
-  const handleUserInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUserInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { id, value } = e.target;
-    let formattedValue = value;
     if (id === "birth") {
-      formattedValue = formatDate(value);
-    } else if (id === "phone") {
+      dispatch({ type: "SET_USER_FIELD", field: id, value });
+      return;
+    }
+
+    let formattedValue = value;
+
+    if (id === "phone") {
       formattedValue = formatPhone(value);
     }
 
@@ -335,22 +337,28 @@ export default function User() {
           <InputGroup
             label="Nascimento"
             labelFor="birth"
+            inputType="date"
             value={state.userFormData.birth}
-            placeholder={"00/0000"}
-            maxLength={7}
             isRequired={false}
             onChange={handleUserInputChange}
             error={state.formErrors.birth}
-            cols="col-span-1"
+            cols="col-span-2"
           />
-          <InputGroup
+          <Select
             label="Gênero"
             labelFor="gender"
-            placeholder="Gênero"
+            options={[
+              { value: "", label: "Selecione uma opção" },
+              { value: "masculino", label: "Masculino" },
+              { value: "feminino", label: "Feminino" },
+              { value: "nb", label: "Não-binário" },
+              { value: "outro", label: "Outro" },
+            ]}
             isRequired={false}
+            value={state.userFormData.gender}
             onChange={handleUserInputChange}
             error={state.formErrors.gender}
-            cols="col-span-3"
+            cols="col-span-2"
           />
           <InputGroup
             label="Telefone"
@@ -499,7 +507,9 @@ export default function User() {
               onChange={(e) => {
                 setUserCpf(e.target.value);
               }}
-              error={!cpf.isValid(userCpf) ? "CPF inválido" : ""}
+              error={
+                userCpf !== "" && !cpf.isValid(userCpf) ? "CPF inválido" : ""
+              }
             />
             <InputGroup
               label="Senha"
