@@ -1,10 +1,13 @@
 import { Eye, SquareX, X, ImagePlus } from "lucide-react";
 import SubmitButton from "../authenticationForm/SubmitButton";
 import { useState, useEffect } from "react";
+import { useUser } from "@/app/context/UserContext";
 import axios from "axios";
 
-export default function SettingsCPF() {
+export default function SetImage({ closeModal }: { closeModal: () => void }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { user, setAuth } = useUser();
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -12,17 +15,13 @@ export default function SettingsCPF() {
     }
   };
 
-  useEffect(() => {
-    if (selectedFile) {
-      console.log(selectedFile);
-    }
-  }, [selectedFile]);
-
-  const sendData = () => {
+  const sendData = async () => {
     if (!selectedFile) {
       console.error("Nenhum arquivo foi selecionado.");
       return;
     }
+
+    setLoading(true);
 
     const formData = new FormData();
     formData.append("file", selectedFile);
@@ -32,14 +31,18 @@ export default function SettingsCPF() {
         withCredentials: true,
       })
       .then(function (response) {
-        console.log(response.status); // cod da requisição
-        console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
+        const updatedUser = { ...user, img: response.data.user.img };
+        setAuth(true, updatedUser);
+        closeModal();
+
+        console.log("Imagem alterada com sucesso.");
       })
       .catch(function (error) {
-        console.error(error);
+        console.error("Erro ao alterar a imagem:", error);
+      })
+      .finally(function () {
+        setLoading(false);
       });
-
-    window.location.reload();
   };
 
   return (
@@ -76,7 +79,11 @@ export default function SettingsCPF() {
         </div>
       </div>
 
-      <SubmitButton text="Alterar foto" classname="w-full" />
+      <SubmitButton
+        text="Alterar foto"
+        classname="w-full"
+        isDisabled={loading || !selectedFile}
+      />
     </form>
   );
 }

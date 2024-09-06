@@ -488,15 +488,20 @@ export default function User() {
           isDisabled={!cpf.isValid(userCpf)}
           title="CPF"
           onClose={handleModalClose}
-          onSubmit={() => {
-            if (cpf.isValid(userCpf) && user.password === confirmPassword) {
-              // requisição no banco que altera o cpf
-            }
-          }}
           visible={visible}
           setVisible={setVisible}
         >
-          <>
+          <form
+            className="flex flex-col gap-5"
+            onSubmit={(e) => {
+              e.preventDefault();
+              // fazer comparação da "confirmPassword" com a senha no banco de dados
+              if (cpf.isValid(userCpf) && confirmPassword) {
+                //requisição que altera o cpf
+                handleModalClose();
+              }
+            }}
+          >
             <InputGroup
               label="CPF"
               labelFor="cpf"
@@ -518,7 +523,8 @@ export default function User() {
               placeholder="Para confirmar, digite sua senha"
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
-          </>
+            <SubmitButton text="Alterar" />
+          </form>
         </Modal>
       )}
     </>

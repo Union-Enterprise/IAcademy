@@ -18,7 +18,7 @@ interface User {
   phone?: string;
   birth?: string;
   cpf?: string;
-  isPremium: false;
+  is_premium: false;
   createdAt: string;
 }
 
@@ -35,7 +35,7 @@ const UserContext = createContext<UserContextType>({
     name: "",
     email: "",
     password: "",
-    isPremium: false,
+    is_premium: false,
     createdAt: "00/00/000",
     img: "",
   },
@@ -50,7 +50,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     nickname: "visitante-0421032312",
     email: "email@email.com",
     password: "123456",
-    isPremium: false,
+    is_premium: false,
     createdAt: "00/00/0000",
     img: "",
   });

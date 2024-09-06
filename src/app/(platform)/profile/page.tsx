@@ -14,14 +14,23 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import { useUser } from "@/app/context/UserContext";
+import Modal from "@/app/ui/components/profile/Modal";
 
 export default function Profile() {
-  const [showRemoveView, setShowRemoveView] = useState(false);
   const { user } = useUser();
+  const [modalType, setModalType] = useState<"delete" | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  const handleModalClose = () => {
+    setVisible(false);
+    setTimeout(() => {
+      setModalType(null);
+    }, 300);
+  };
 
   return (
     <>
-      <SettingsSection isPremium={user.isPremium}>
+      <SettingsSection isPremium={user.is_premium}>
         <div className="flex gap-2 items-center">
           <BadgeCheck className="w-[30px] h-[30px] text-mainBlue" />
           <h3 className="text-lg font-semibold">IAcademy Premium</h3>
@@ -107,14 +116,23 @@ export default function Profile() {
         </p>
         <button
           className="px-4 py-2 bg-red-400 hover:bg-red-600 duration-200 w-fit rounded-md"
-          onClick={() => setShowRemoveView(true)}
+          onClick={() => {
+            setModalType("delete");
+          }}
         >
           <p className="text-white text-sm">Excluir minha conta</p>
         </button>
       </SettingsSection>
 
-      {showRemoveView && (
-        <SettingsRemove closeView={() => setShowRemoveView(false)} />
+      {modalType && (
+        <Modal
+          title="Excluindo conta"
+          onClose={handleModalClose}
+          visible={visible}
+          setVisible={setVisible}
+        >
+          <SettingsRemove closeModal={handleModalClose} />
+        </Modal>
       )}
     </>
   );

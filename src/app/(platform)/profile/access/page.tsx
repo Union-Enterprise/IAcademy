@@ -9,6 +9,7 @@ import { useUser } from "@/app/context/UserContext";
 import axios from "axios";
 import Modal from "@/app/ui/components/profile/Modal";
 import RestrictInput from "@/app/ui/components/profile/RestrictInput";
+import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 
 export default function Access() {
   const [modalType, setModalType] = useState<"email" | "password" | null>(null);
@@ -16,7 +17,7 @@ export default function Access() {
   const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { user } = useUser();
+  const { user, setAuth } = useUser();
   const [visible, setVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -29,16 +30,6 @@ export default function Access() {
   useEffect(() => {
     validatePassword(password, confirmPassword);
   }, [password, confirmPassword]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-
-    if (id === "newPassword") {
-      setPassword(value);
-    } else if (id === "confirmNewPassword") {
-      setConfirmPassword(value);
-    }
-  };
 
   const validatePassword = (password: string, confirmPassword: string) => {
     const lower = /[a-z]/.test(password);
@@ -73,7 +64,6 @@ export default function Access() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    setIsSubmitting(true);
     try {
       if (modalType === "password") {
         if (validatePassword(password, confirmPassword)) {
@@ -84,8 +74,6 @@ export default function Access() {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -102,19 +90,23 @@ export default function Access() {
         }
       )
       .then(function (response) {
-        console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
-        handleModalClose();
+        if (response.data.message !== "Insira uma senha correta.") {
+          setErrors((prev) => ({ ...prev, oldPasswordError: "" }));
+          handleModalClose();
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            oldPasswordError: "Senha incorreta. Tente novamente.",
+          }));
+        }
       })
       .catch(function (error) {
         console.error(error);
-        setErrors((prev) => ({
-          ...prev,
-          oldPasswordError: "Senha incorreta. Tente novamente. ",
-        }));
       });
   };
 
   const sendEmail = () => {
+    console.log("o email é", email);
     axios
       .put(
         "http://localhost:5002/update_email",
@@ -122,8 +114,10 @@ export default function Access() {
         { withCredentials: true }
       )
       .then(function (response) {
-        console.log(response.data); // mensagem de sucesso / erro (e.g email ou senha incorreto)
-        handleModalClose();
+        // quando eu executo, está retornando: "Não é possivel alterar email que está vinculado a uma conta Google." - não sei arrumar isso
+        // Não loguei pelo google e usei esse email: kaua@gmail.com
+        console.log(response);
+        console.log(response.data[0]);
       })
       .catch(function (error) {
         console.error(error);
@@ -161,65 +155,73 @@ export default function Access() {
         <Modal
           title={modalType === "email" ? "e-mail" : "senha"}
           onClose={handleModalClose}
-          onSubmit={handleSubmit}
           visible={visible}
           setVisible={setVisible}
           loading={isSubmitting}
         >
-          {modalType === "email" ? (
-            <InputGroup
-              label="Novo e-mail"
-              labelFor="email"
-              inputType="email"
-              placeholder="Digite seu novo e-mail"
-              onChange={handleChange}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            {modalType === "email" ? (
+              <InputGroup
+                label="Novo e-mail"
+                labelFor="email"
+                inputType="email"
+                placeholder="Digite seu novo e-mail"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            ) : (
+              <>
+                <div>
+                  <InputGroup
+                    label="Senha"
+                    labelFor="oldPassword"
+                    inputType="password"
+                    placeholder="Digite sua senha atual"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                  />
+                  {errors.oldPasswordError && (
+                    <p className="text-red-500 text-sm mt-3">
+                      {errors.oldPasswordError}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <InputGroup
+                    label="Nova senha"
+                    labelFor="newPassword"
+                    inputType="password"
+                    placeholder="Digite sua nova senha"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  {errors.passwordError && (
+                    <p className="text-red-500 text-sm mt-3">
+                      {errors.passwordError}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <InputGroup
+                    label="Confirme a nova senha"
+                    labelFor="confirmNewPassword"
+                    inputType="password"
+                    placeholder="Confirme sua nova senha"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  {errors.confirmPasswordError && (
+                    <p className="text-red-500 text-sm mt-3">
+                      {errors.confirmPasswordError}
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
+            <SubmitButton
+              text={modalType === "email" ? "Alterar e-mail" : "Alterar senha"}
+              classname="w-full"
+              isDisabled={isSubmitting}
+              loading={isSubmitting}
             />
-          ) : (
-            <>
-              <div>
-                <InputGroup
-                  label="Senha"
-                  labelFor="oldPassword"
-                  inputType="password"
-                  placeholder="Digite sua senha atual"
-                  onChange={handleChange}
-                />
-                {errors.oldPasswordError && (
-                  <p className="text-red-500 text-sm mt-3">
-                    {errors.oldPasswordError}
-                  </p>
-                )}
-              </div>
-              <div>
-                <InputGroup
-                  label="Nova senha"
-                  labelFor="newPassword"
-                  inputType="password"
-                  placeholder="Digite sua nova senha"
-                  onChange={handleChange}
-                />
-                {errors.passwordError && (
-                  <p className="text-red-500 text-sm mt-3">
-                    {errors.passwordError}
-                  </p>
-                )}
-              </div>
-              <div>
-                <InputGroup
-                  label="Confirme a nova senha"
-                  labelFor="confirmNewPassword"
-                  inputType="password"
-                  placeholder="Confirme sua nova senha"
-                  onChange={handleChange}
-                />
-                {errors.confirmPasswordError && (
-                  <p className="text-red-500 text-sm mt-3">
-                    {errors.confirmPasswordError}
-                  </p>
-                )}
-              </div>
-            </>
-          )}
+          </form>
         </Modal>
       )}
     </>

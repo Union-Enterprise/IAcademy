@@ -28,14 +28,14 @@ export default function ProfileLayout({
     }, 300);
   };
 
-  // if (!loading && !isAuthenticated) {
-  //   router.push("/login");
-  //   return null;
-  // }
+  if (!loading && !isAuthenticated) {
+    router.push("/login");
+    return null;
+  }
 
-  // if (loading) {
-  //   return <LoadingFrame />;
-  // }
+  if (loading) {
+    return <LoadingFrame />;
+  }
 
   return (
     <>
@@ -73,7 +73,6 @@ export default function ProfileLayout({
             <p className="text-text-lightSub text-sm flex mt-12 py-5 border-t-2 border-border-light w-full justify-center">
               Aluno IAcademy desde
               <span className="ml-1">{user.createdAt}</span>
-              {/* Data de cadastro na plataforma*/}
             </p>
           </div>
           <ProfileSidebar />
@@ -83,13 +82,11 @@ export default function ProfileLayout({
       {modalType && (
         <Modal
           title="foto de perfil"
-          hasOwnSubmit={true}
           onClose={handleModalClose}
           visible={visible}
           setVisible={setVisible}
-          onSubmit={() => console.log("executei")}
         >
-          <SettingsImage />
+          <SettingsImage closeModal={handleModalClose} />
         </Modal>
       )}
     </>

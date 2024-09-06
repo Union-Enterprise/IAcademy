@@ -32,7 +32,7 @@ export default function Register() {
     let passwordError = "";
     let confirmPasswordError = "";
 
-    if (password.length <= 7 || !lower || !upper || !number) {
+    if (password.length <= 8 || !lower || !upper || !number) {
       passwordError =
         "A senha deve ter no mínimo 8 caracteres, incluindo letras minúsculas, maiúsculas e números.";
     }
@@ -80,7 +80,7 @@ export default function Register() {
         { withCredentials: true }
       )
       .then((response) => {
-        router.push("/profile");
+        router.push("/login");
       })
       .catch((error) => {
         console.error(error);
