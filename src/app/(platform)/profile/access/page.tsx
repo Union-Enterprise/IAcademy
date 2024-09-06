@@ -172,7 +172,7 @@ export default function Access() {
               labelFor="email"
               inputType="email"
               placeholder="Digite seu novo e-mail"
-              onChange={handleChange}
+              onChange={(e) => setEmail(e.target.value)}
             />
           ) : (
             <>
@@ -182,7 +182,7 @@ export default function Access() {
                   labelFor="oldPassword"
                   inputType="password"
                   placeholder="Digite sua senha atual"
-                  onChange={handleChange}
+                  onChange={(e) => setOldPassword(e.target.value)}
                 />
                 {errors.oldPasswordError && (
                   <p className="text-red-500 text-sm mt-3">
