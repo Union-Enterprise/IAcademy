@@ -20,6 +20,7 @@ interface User {
   cpf?: string;
   is_premium: false;
   createdAt: string;
+  googleId?: string;
 }
 
 interface UserContextType {

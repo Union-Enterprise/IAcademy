@@ -1,4 +1,7 @@
+import { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
+import axios from "axios";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,9 +11,8 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from "chart.js";
-
-ChartJS.defaults.font.family = "__Inter_36bd41";
 
 ChartJS.register(
   CategoryScale,
@@ -19,49 +21,91 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
-const data = {
-  labels: [
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro",
-  ],
-  datasets: [
-    {
-      label: "Usuários registrados",
-      data: [65, 59, 80, 81, 56, 55, 40, 15, 0, 0, 8, 10],
-      borderColor: "#1865F2",
-      backgroundColor: "#1865F2",
-      fill: false,
-      tension: 0.1,
-    },
-  ],
-};
+ChartJS.defaults.font.family = "__Inter_36bd41";
 
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-    title: {
-      display: true,
-      text: "Usuários registrados na plataforma - 2024",
-    },
-  },
-};
+export default function LineChartStepped() {
+  const [monthlyData, setMonthlyData] = useState<number[]>(Array(12).fill(0));
 
-export default function LineChart() {
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5002/users_by_month",
+          {
+            withCredentials: true,
+          }
+        );
+
+        const data = response.data;
+
+        const usersPerMonth = Array(12).fill(0);
+
+        data.forEach((item: { _id: { month: number }; count: number }) => {
+          usersPerMonth[item._id.month - 1] = item.count;
+        });
+
+        setMonthlyData(usersPerMonth);
+      } catch (error) {
+        console.error("Erro ao buscar dados de usuários por mês", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const data = {
+    labels: [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro",
+    ],
+    datasets: [
+      {
+        label: "Usuários registrados",
+        data: monthlyData,
+        borderColor: "#1865F2",
+        backgroundColor: "#1865F2",
+        fill: false,
+      },
+    ],
+  };
+
+  const options = {
+    maintainAspectRatio: false,
+    tension: 0.2,
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1,
+          callback: function (value: number | string) {
+            if (typeof value === "number" && Number.isInteger(value)) {
+              return value;
+            }
+            return "";
+          },
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        position: "bottom" as const,
+      },
+    },
+  };
+
   return <Line data={data} options={options} />;
 }

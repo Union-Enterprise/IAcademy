@@ -70,7 +70,6 @@ export default function Recovery() {
     setIsSubmitting(true);
 
     if (!tokenRequested) {
-      console.log("Executando uma vez");
       axios
         .post("http://localhost:5002/forgot_password", { email })
         .then(() => {

@@ -15,7 +15,6 @@ export default function ProfileLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [showImageView, setShowImageView] = useState(false);
   const { user, loading, isAuthenticated } = useUser();
   const router = useRouter();
   const [modalType, setModalType] = useState<"image" | null>(null);

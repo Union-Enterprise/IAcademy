@@ -12,7 +12,9 @@ import RestrictInput from "@/app/ui/components/profile/RestrictInput";
 import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 
 export default function Access() {
-  const [modalType, setModalType] = useState<"email" | "password" | null>(null);
+  const [modalType, setModalType] = useState<
+    "email" | "password" | "blocked" | null
+  >(null);
   const [email, setEmail] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
@@ -22,6 +24,7 @@ export default function Access() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [errors, setErrors] = useState({
+    emailError: "",
     oldPasswordError: "",
     passwordError: "",
     confirmPasswordError: "",
@@ -106,7 +109,6 @@ export default function Access() {
   };
 
   const sendEmail = () => {
-    console.log("o email é", email);
     axios
       .put(
         "http://localhost:5002/update_email",
@@ -114,10 +116,20 @@ export default function Access() {
         { withCredentials: true }
       )
       .then(function (response) {
-        // quando eu executo, está retornando: "Não é possivel alterar email que está vinculado a uma conta Google." - não sei arrumar isso
-        // Não loguei pelo google e usei esse email: kaua@gmail.com
-        console.log(response);
-        console.log(response.data[0]);
+        if (response.data[0] === "Esse email já está em uso") {
+          setErrors((prev) => ({
+            ...prev,
+            emailError: "E-mail já em uso.",
+          }));
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            emailError: "",
+          }));
+          const updatedUser = { ...user, email: response.data.user.email };
+          setAuth(true, updatedUser);
+          handleModalClose();
+        }
       })
       .catch(function (error) {
         console.error(error);
@@ -142,18 +154,24 @@ export default function Access() {
           <RestrictInput
             label="E-mail"
             value={user.email}
-            onChangeClick={() => setModalType("email")}
+            onChangeClick={() =>
+              setModalType(user.googleId !== "" ? "blocked" : "email")
+            }
           />
           <RestrictInput
             label="Senha"
-            value={user.password}
+            value={"*******"}
             onChangeClick={() => setModalType("password")}
           />
         </div>
       </SettingsSection>
       {modalType && (
         <Modal
-          title={modalType === "email" ? "e-mail" : "senha"}
+          title={
+            modalType === "email" || modalType === "blocked"
+              ? "Alterar e-mail"
+              : "Alterar senha"
+          }
           onClose={handleModalClose}
           visible={visible}
           setVisible={setVisible}
@@ -161,14 +179,21 @@ export default function Access() {
         >
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {modalType === "email" ? (
-              <InputGroup
-                label="Novo e-mail"
-                labelFor="email"
-                inputType="email"
-                placeholder="Digite seu novo e-mail"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            ) : (
+              <div>
+                <InputGroup
+                  label="Novo e-mail"
+                  labelFor="email"
+                  inputType="email"
+                  placeholder="Digite seu novo e-mail"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {errors.emailError && email !== "" && (
+                  <p className="text-red-500 text-sm mt-3">
+                    {errors.emailError}
+                  </p>
+                )}
+              </div>
+            ) : modalType === "password" ? (
               <>
                 <div>
                   <InputGroup
@@ -214,13 +239,25 @@ export default function Access() {
                   )}
                 </div>
               </>
+            ) : (
+              <>
+                {/* Trocar por um alert futuramente */}
+                <p>
+                  Parece que sua conta foi registrada via Google, Apple ou
+                  Facebook e isso impossibilita a alteração do seu e-mail.
+                </p>
+              </>
             )}
-            <SubmitButton
-              text={modalType === "email" ? "Alterar e-mail" : "Alterar senha"}
-              classname="w-full"
-              isDisabled={isSubmitting}
-              loading={isSubmitting}
-            />
+            {!user.googleId && (
+              <SubmitButton
+                text={
+                  modalType === "email" ? "Alterar e-mail" : "Alterar senha"
+                }
+                classname="w-full"
+                isDisabled={isSubmitting}
+                loading={isSubmitting}
+              />
+            )}
           </form>
         </Modal>
       )}

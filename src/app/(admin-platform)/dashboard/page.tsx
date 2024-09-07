@@ -1,8 +1,14 @@
 "use client";
 
 import StatResume from "@/app/ui/components/adminUtils/StatResume";
-import { PiggyBank, Users, CreditCard, GitBranchPlus } from "lucide-react";
-import LineChartStepped from "@/app/ui/components/adminUtils/charts/LineChartStepped";
+import {
+  PiggyBank,
+  Users,
+  CreditCard,
+  GitBranchPlus,
+  Download,
+} from "lucide-react";
+import LineChart from "@/app/ui/components/adminUtils/charts/LineChart";
 import AvatarResume from "@/app/ui/components/adminUtils/AvatarResume";
 import axios from "axios";
 
@@ -21,17 +27,16 @@ export default function Dashboard() {
           { withCredentials: true }
         );
 
-        setRecentUsers(response.data); 
+        setRecentUsers(response.data);
       } catch (error) {
         console.log("Erro ao buscar usuários", error);
       }
 
       try {
-        const response = await axios.get(
-          "http://localhost:5002/users_total",
-          { withCredentials: true }
-        );
-        setTotalUsers(response.data); 
+        const response = await axios.get("http://localhost:5002/users_total", {
+          withCredentials: true,
+        });
+        setTotalUsers(response.data);
       } catch (error) {
         console.log("Erro ao buscar usuários", error);
       }
@@ -41,35 +46,78 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="flex flex-col">
-      <div className="flex justify-between mb-6">
-        <h1 className="text-3xl font-bold text-title-light">Dashboard</h1>
-        <button
-          type="submit"
-          className="bg-mainBlue bg-opacity-90 px-4 py-2 rounded-md hover:bg-opacity-100 duration-100 *:text-white flex items-center gap-2"
-        >
-          <p className="font-semibold text-sm">Download</p>
-        </button>
+    <div className="grid grid-cols-7 gap-5 *:shadow-sm">
+      <div className="flex flex-col p-6 bg-background-light col-span-5 rounded-lg gap-10">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-title-light font-bold text-xl">
+              Resumo rápido
+            </h3>
+            <p className="text-text-lightSub text-sm mt-2">Visão geral</p>
+          </div>
+          <button
+            type="submit"
+            className="h-fit py-2 border-border-lightA border-2 px-4 rounded-lg hover:bg-background-lightHover hover:text-text-light duration-100 *:text-text-lightSub flex items-center gap-2"
+          >
+            <Download size={20} />
+            <p className="font-semibold text-sm">Exportar</p>
+          </button>
+        </div>
+        <div className=" grid grid-cols-4 gap-5 *:col-span-1">
+          <StatResume title="Receita" value="$1997,00" lucideIcon={PiggyBank} />
+          <StatResume title="Assinaturas" value="+2" lucideIcon={CreditCard} />
+          <StatResume
+            title="Usuários na plataforma"
+            value={`${totalUsers}`}
+            lucideIcon={Users}
+          />
+          <StatResume
+            title="Trilhas cadastradas"
+            value="1"
+            lucideIcon={GitBranchPlus}
+          />
+        </div>
       </div>
-      <div className="grid grid-cols-4 gap-4">
-        <StatResume title="Receita" value="$1997,00" lucideIcon={PiggyBank} />
-        <StatResume title="Assinaturas" value="+2" lucideIcon={CreditCard} />
-        <StatResume
-          title="Usuários na plataforma"
-          value={totalUsers}
-          lucideIcon={Users}
-        />
-        <StatResume
-          title="Trilhas cadastradas"
-          value="1"
-          lucideIcon={GitBranchPlus}
-        />
+      <div className="flex flex-col bg-background-light col-span-2 rounded-lg gap-5">
+        <div className="p-6 pb-3 border-b-2 border-border-lightA border-opacity-30">
+          <h3 className="text-title-light font-bold">Usuários Recentes</h3>
+          <p className="text-text-lightSub text-sm mt-1">
+            Últimos 5 usuários cadastrados.
+          </p>
+        </div>
+        <div className="flex flex-col px-6 gap-[32px]">
+          {recentUsers.length > 0 ? (
+            recentUsers.map((user: any, index: number) => (
+              <AvatarResume
+                key={index}
+                name={user.name}
+                email={user.email}
+                avatarUrl={user.img || "/default_user.jpg"}
+              />
+            ))
+          ) : (
+            <p>Nenhum usuário recente encontrado.</p>
+          )}
+        </div>
       </div>
+      <div className="p-6 pb-14 bg-background-light col-span-4 rounded-lg h-[350px] flex flex-col gap-5">
+        <h3 className="text-title-light text-xl font-bold">
+          Usuários registrados - 2024
+        </h3>
+        <LineChart />
+      </div>
+
+      {/* <div className="flex flex-col p-6 bg-background-light col-span-3 rounded-lg gap-10">
+        <LineChart />
+      </div> */}
+      {/* <div className="grid grid-cols-4 gap-4 bg-blue-400"></div>
       <div className="grid grid-cols-7 gap-4 mt-5">
         <div className="col-span-4 border-[1px] border-border-lightC rounded-xl shadow-md hover:-translate-y-1 duration-100 hover:shadow-lg">
-          <h3 className="text-title-light p-[24px] font-semibold">Visão Geral</h3>
-          <div className="pl-[8px] p-[24px] *:w-[100%]">
-            <LineChartStepped />
+          <h3 className="text-title-light p-[24px] font-semibold">
+            Visão Geral
+          </h3>
+          <div className="p-[24px]">
+            <LineChart />
           </div>
         </div>
         <div className="col-span-3 rounded-xl border-[1px] shadow-md border-border-lightC hover:-translate-y-1 duration-100 hover:shadow-lg">
@@ -94,7 +142,7 @@ export default function Dashboard() {
             )}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

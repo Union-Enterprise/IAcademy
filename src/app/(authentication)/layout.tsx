@@ -1,6 +1,5 @@
 "use client";
 
-// import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
 import Image from "next/image";
@@ -8,23 +7,20 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { usePathname } from "next/navigation";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 const inter = Inter({ subsets: ["latin"] });
-
-// export const metadata: Metadata = {
-//   title: "IAcademy",
-//   description: "Faça login para aproveitar a plataforma.",
-// };
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  usePageTitle();
+
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
-  const [title, setTitle] = useState("IAcademy");
 
   useEffect(() => {
     axios
@@ -40,20 +36,6 @@ export default function RootLayout({
         setLoading(false);
       });
   }, [router]);
-
-  useEffect(() => {
-    setTitle(
-      `${
-        pathname.includes("/login")
-          ? "Login"
-          : pathname.includes("/register")
-          ? "Cadastro"
-          : "Recuperação de senha"
-      } | IAcademy`
-    );
-
-    document.title = title;
-  });
 
   return (
     <html lang="pt-br">

@@ -3,10 +3,9 @@
 import {
   House,
   Compass,
-  Map,
   BadgeCheck,
-  PanelsTopLeft,
   UserRoundPlus,
+  ChartPie,
 } from "lucide-react";
 import Link from "next/link";
 import { useSidebar } from "../../context/SidebarContext";
@@ -61,7 +60,7 @@ const Sidebar = ({ isUserLayout = true }) => {
         <>
           <Item
             title="Dashboard"
-            lucideIcon={PanelsTopLeft}
+            lucideIcon={ChartPie}
             isOpen={isOpen}
             href="/dashboard"
             isSelected={selectedItem === "/dashboard"}
