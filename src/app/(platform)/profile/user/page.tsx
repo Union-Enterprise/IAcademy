@@ -321,6 +321,20 @@ export default function User() {
       });
   };
 
+  const sendCPF = () => {
+    axios
+      .put("http://localhost:5002/update_cpf", {
+        cpf: userCpf
+      },
+      { withCredentials: true })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
   return (
     <>
       <Link
@@ -515,6 +529,7 @@ export default function User() {
               // fazer comparação da "confirmPassword" com a senha no banco de dados
               if (cpf.isValid(userCpf) && confirmPassword) {
                 //requisição que altera o cpf
+                sendCPF();
                 handleModalClose();
               }
             }}
