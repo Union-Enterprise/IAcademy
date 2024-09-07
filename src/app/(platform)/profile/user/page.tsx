@@ -37,12 +37,11 @@ const formatCep = (value: string) => {
 
   return cleanValue.replace(/^(\d{5})(\d{0,3})$/, "$1-$2");
 };
-
 const initialState = {
   userFormData: {
     username: "",
     birth: "",
-    gender: "",
+    genero: "",
     phone: "",
   },
   addressFormData: {
@@ -57,7 +56,7 @@ const initialState = {
   formErrors: {
     username: "",
     birth: "",
-    gender: "",
+    genero: "",
     phone: "",
     cep: "",
     street: "",
@@ -142,7 +141,7 @@ export default function User() {
     }, 300);
   };
   const [state, dispatch] = useReducer(formReducer, initialState);
-
+  
   // Função para mostrar ou esconder o erro de acordo com a mudança nos inputs
   const handleUserInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -251,6 +250,7 @@ export default function User() {
       // Código para enviar os dados de usuário para o banco
       console.log("dados de usuario enviado com sucesso");
       console.log(state.userFormData);
+      sendProfileData();
       return;
     }
 
@@ -304,6 +304,23 @@ export default function User() {
     }
   };
 
+  const sendProfileData = () => {
+    axios
+      .put("http://localhost:5002/update_profile", {
+        name: state.userFormData.username,
+        nascimento: state.userFormData.birth,
+        genero: state.userFormData.genero,
+        telefone: state.userFormData.phone,
+      },
+      { withCredentials: true })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
   return (
     <>
       <Link
@@ -346,7 +363,7 @@ export default function User() {
           />
           <Select
             label="Gênero"
-            labelFor="gender"
+            labelFor="genero"
             options={[
               { value: "", label: "Selecione uma opção" },
               { value: "masculino", label: "Masculino" },
@@ -355,9 +372,9 @@ export default function User() {
               { value: "outro", label: "Outro" },
             ]}
             isRequired={false}
-            value={state.userFormData.gender}
+            value={state.userFormData.genero}
             onChange={handleUserInputChange}
-            error={state.formErrors.gender}
+            error={state.formErrors.genero}
             cols="col-span-2"
           />
           <InputGroup
