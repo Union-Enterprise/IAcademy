@@ -31,6 +31,7 @@ function Label({ label, labelFor, isRequired, isDisabled }: LabelProps) {
 
 interface InputProps {
   id?: string;
+  className?: string;
   inputType?: string;
   placeholder?: string;
   isRequired?: boolean;
@@ -43,8 +44,9 @@ interface InputProps {
   onBlur?: FocusEventHandler<HTMLInputElement>;
 }
 
-function Input({
+export function Input({
   id,
+  className = "h-[52px]",
   inputType = "text",
   placeholder = "Digite algo aqui",
   isRequired = true,
@@ -71,13 +73,14 @@ function Input({
         onChange={(e) => onChange?.(e)}
         onBlur={onBlur}
         className={`
+          ${className}
           ${
             !isDisabled &&
             "group-hover/input:border-mainBlue focus:border-mainBlue bg-background-light"
           }
           ${inputType === "password" && "pr-[45px]"}
           ${error && "border-red-400"}
-          w-full px-4 h-[52px] py-3 border-2 border-border-light text-text-light rounded-md outline-none duration-100 peer focus:text-text-light
+          w-full px-4 py-3 border-2 border-border-light text-text-light rounded-md outline-none duration-100 peer focus:text-text-light
         `}
       />
 

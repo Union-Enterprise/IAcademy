@@ -18,7 +18,8 @@ interface User {
   phone?: string;
   birth?: string;
   cpf?: string;
-  is_premium: false;
+  is_premium: boolean;
+  is_adm: boolean;
   createdAt: string;
   googleId?: string;
 }
@@ -37,7 +38,9 @@ const UserContext = createContext<UserContextType>({
     email: "",
     password: "",
     is_premium: false,
+    is_adm: false,
     createdAt: "00/00/000",
+
     img: "",
   },
   isAuthenticated: false,
@@ -54,6 +57,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     is_premium: false,
     createdAt: "00/00/0000",
     img: "",
+    is_adm: false,
   });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);

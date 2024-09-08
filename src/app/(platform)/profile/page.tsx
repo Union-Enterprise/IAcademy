@@ -30,28 +30,30 @@ export default function Profile() {
 
   return (
     <>
-      <SettingsSection isPremium={user.is_premium}>
-        <div className="flex gap-2 items-center">
-          <BadgeCheck className="w-[30px] h-[30px] text-mainBlue" />
-          <h3 className="text-lg font-semibold">IAcademy Premium</h3>
-          <Link href="/profile/signatures">
-            <p className="text-mainBlue opacity-80 hover:opacity-100 text-sm duration-100">
-              Ver Assinaturas
-            </p>
-          </Link>
-        </div>
+      {!user.is_adm && (
+        <SettingsSection isPremium={user.is_premium}>
+          <div className="flex gap-2 items-center">
+            <BadgeCheck className="w-[30px] h-[30px] text-mainBlue" />
+            <h3 className="text-lg font-semibold">IAcademy Premium</h3>
+            <Link href="/profile/signatures">
+              <p className="text-mainBlue opacity-80 hover:opacity-100 text-sm duration-100">
+                Ver Assinaturas
+              </p>
+            </Link>
+          </div>
 
-        <p className="text-text-lightSub">
-          Parece que você não possui nenhuma assinatura ativa ainda.
-          <Link
-            href="/premium"
-            className="text-mainBlue opacity-80 hover:opacity-100 duration-100 mx-1"
-          >
-            Clique aqui
-          </Link>
-          e conheça as opções.
-        </p>
-      </SettingsSection>
+          <p className="text-text-lightSub">
+            Parece que você não possui nenhuma assinatura ativa ainda.
+            <Link
+              href="/premium"
+              className="text-mainBlue opacity-80 hover:opacity-100 duration-100 mx-1"
+            >
+              Clique aqui
+            </Link>
+            e conheça as opções.
+          </p>
+        </SettingsSection>
+      )}
 
       <SettingsSection>
         <div className="flex gap-2 items-center">

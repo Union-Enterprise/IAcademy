@@ -18,8 +18,9 @@ import axios from "axios";
 const ProfileSidebar = () => {
   const pathname = usePathname();
   const [selectedItem, setSelectedItem] = useState(pathname);
-  const { setAuth } = useUser();
   const router = useRouter();
+
+  const { user } = useUser();
 
   useEffect(() => {
     setSelectedItem(pathname);
@@ -48,13 +49,15 @@ const ProfileSidebar = () => {
         isSelected={selectedItem === "/profile"}
         onClick={() => setSelectedItem("/profile")}
       />
-      <Item
-        title="Assinaturas"
-        href="/profile/purchases"
-        iconId={1}
-        isSelected={selectedItem.includes("/purchases")}
-        onClick={() => setSelectedItem("/purchases")}
-      />
+      {!user.is_adm && (
+        <Item
+          title="Assinaturas"
+          href="/profile/purchases"
+          iconId={1}
+          isSelected={selectedItem.includes("/purchases")}
+          onClick={() => setSelectedItem("/purchases")}
+        />
+      )}
       <Item
         title="Dados de acesso"
         href="/profile/access"
