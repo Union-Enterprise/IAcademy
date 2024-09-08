@@ -49,8 +49,8 @@ export default function ProfileLayout({
                 <Image
                   src={`${user.img}`}
                   alt="Profile Image"
-                  width={120}
-                  height={120}
+                  width={175}
+                  height={160}
                   className="h-full w-full object-cover"
                 />
               ) : (

@@ -42,8 +42,12 @@ export default function Login() {
   };
 
   const loginWithGoogle = () => {
-    window.location.href = "http://localhost:5002/google"; // URL do backend para o Google login
+    window.location.href = "http://localhost:5002/google";
   };
+
+  const loginWithFacebook = () => {
+    window.location.href = "http://localhost:5002/facebook";
+  }
 
   return (
     <>
@@ -80,8 +84,8 @@ export default function Login() {
       </form>
       <SocialOptions>
         <Option onClick={() => {}} />
-        <Option icon={faGoogle} brandName="Google" onClick={loginWithGoogle} />
-        <Option icon={faFacebook} brandName="Facebook" onClick={() => {}} />
+        <Option icon={faGoogle} brandName="Google" onClick={ loginWithGoogle } />
+        <Option icon={faFacebook} brandName="Facebook" onClick={ loginWithFacebook } />
       </SocialOptions>
       <RedirectLink
         message="Ainda não tem uma conta?"

@@ -45,8 +45,8 @@ const Navbar = () => {
               <Image
                 src={`${user.img}`}
                 alt="Avatar do usuário"
-                width={45}
-                height={45}
+                width={175}
+                height={160}
                 className="h-full w-full object-cover"
               />
             )}
