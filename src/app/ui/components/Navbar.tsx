@@ -7,14 +7,29 @@ import { Menu, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Searchbar, { SearchView } from "./Searchbar";
 import { useUser } from "@/app/context/UserContext";
+import Skeleton from "./Skeleton";
 
 const Navbar = () => {
   const { toggleSidebar } = useSidebar();
   const [showSearchView, setShowSearchView] = useState(false);
-  const { user, isAuthenticated } = useUser();
+  const { user, isAuthenticated, loading } = useUser();
+
+  if (loading) {
+    return (
+      <nav className="h-20 bg-background-light px-5 grid grid-cols-3 items-center shadow-sm">
+        <div className="flex gap-5 items-center">
+          <Skeleton className="h-[45px] w-[250px]" />
+        </div>
+        <Skeleton className="h-[45px] w-[450px]" />
+        <div className="flex gap-3 items-center justify-end">
+          <Skeleton className="h-[45px] w-[250px]" />
+        </div>
+      </nav>
+    );
+  }
 
   return (
-    <nav className="h-20 bg-background-light px-5 grid grid-cols-3 items-center shadow-sm">
+    <nav className="h-20 w-full bg-background-light px-5 grid grid-cols-3 items-center shadow-sm">
       <div className="flex gap-5 items-center">
         <Menu
           onClick={toggleSidebar}

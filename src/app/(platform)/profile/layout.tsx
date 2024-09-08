@@ -9,6 +9,7 @@ import { useUser } from "@/app/context/UserContext";
 import { useRouter } from "next/navigation";
 import LoadingFrame from "@/app/ui/components/LoadingFrame";
 import Modal from "@/app/ui/components/profile/Modal";
+import Skeleton from "@/app/ui/components/Skeleton";
 
 export default function ProfileLayout({
   children,
@@ -33,7 +34,20 @@ export default function ProfileLayout({
   }
 
   if (loading) {
-    return <LoadingFrame />;
+    return (
+      <LoadingFrame />
+      // <div className=" grid grid-cols-3 gap-5 px-[200px] pt-[70px] pb-[150px]">
+      //   <div className="col-span-1 flex flex-col gap-5">
+      //     <Skeleton className="h-[400px] border-2 flex flex-col items-center pt-[70px] border-border-light bg-background-lightCard rounded-md relative" />
+      //     <Skeleton className="h-[250px]" />
+      //   </div>
+      //   <div className="col-span-2 flex flex-col gap-5">
+      //     <Skeleton className="h-[100px]"/>
+      //     <Skeleton className="h-[100px]"/>
+      //     <Skeleton className="h-[100px]"/>
+      //   </div>
+      // </div>
+    );
   }
 
   return (
@@ -70,7 +84,7 @@ export default function ProfileLayout({
             </h1>
             <h2 className="text-gray-600 font-semibold">@{user.nickname}</h2>
             <p className="text-text-lightSub text-sm flex mt-12 py-5 border-t-2 border-border-light w-full justify-center">
-              Aluno IAcademy desde
+              {user.is_adm ? "Administrador" : "Aluno IAcademy"} desde
               <span className="ml-1">{user.createdAt}</span>
             </p>
           </div>

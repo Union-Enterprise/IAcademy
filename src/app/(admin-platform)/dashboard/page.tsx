@@ -13,6 +13,7 @@ import AvatarResume from "@/app/ui/components/adminUtils/AvatarResume";
 import axios from "axios";
 
 import { useEffect, useState } from "react";
+import ExportButton from "@/app/ui/components/adminUtils/ExportButton";
 
 export default function Dashboard() {
   const [recentUsers, setRecentUsers] = useState([]);
@@ -55,15 +56,9 @@ export default function Dashboard() {
             </h3>
             <p className="text-text-lightSub text-sm mt-2">Visão geral</p>
           </div>
-          <button
-            type="submit"
-            className="h-fit py-2 border-border-lightA border-2 px-4 rounded-lg hover:bg-background-lightHover hover:text-text-light duration-100 *:text-text-lightSub flex items-center gap-2"
-          >
-            <Download size={20} />
-            <p className="font-semibold text-sm">Exportar</p>
-          </button>
+          <ExportButton />
         </div>
-        <div className=" grid grid-cols-4 gap-5 *:col-span-1">
+        <div className=" grid grid-cols-1 gap-5 *:col-span-1 lg:grid-cols-2 2xl:grid-cols-4">
           <StatResume title="Receita" value="$1997,00" lucideIcon={PiggyBank} />
           <StatResume title="Assinaturas" value="+2" lucideIcon={CreditCard} />
           <StatResume

@@ -192,7 +192,7 @@ export default function Recovery() {
                   <CodeInput setCode={setCode} />
                   <CodeInput setCode={setCode} />
                 </div>
-                {errors.codeError && (
+                {errors.codeError && code !== "" && (
                   <p className="text-red-500 text-sm mt-3">
                     {errors.codeError}
                   </p>

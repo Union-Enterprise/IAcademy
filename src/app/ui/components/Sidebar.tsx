@@ -11,10 +11,13 @@ import Link from "next/link";
 import { useSidebar } from "../../context/SidebarContext";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useUser } from "@/app/context/UserContext";
+import Skeleton from "../components/Skeleton"; // Importa o componente Skeleton
 
 const Sidebar = ({ isUserLayout = true }) => {
   const { isOpen } = useSidebar();
   const pathname = usePathname();
+  const { user, loading } = useUser();
 
   const [selectedItem, setSelectedItem] = useState(pathname);
 
@@ -22,13 +25,27 @@ const Sidebar = ({ isUserLayout = true }) => {
     setSelectedItem(pathname);
   }, [pathname]);
 
+  if (loading) {
+    return (
+      <section
+        className={`h-full ${
+          isOpen ? "w-[300px]" : "w-[95px]"
+        } flex flex-col gap-2 px-5 py-6 duration-200`}
+      >
+        <Skeleton className="h-[50px] w-full" />
+        <Skeleton className="h-[50px] w-full" />
+        <Skeleton className="h-[50px] w-full" />
+      </section>
+    );
+  }
+
   return (
     <section
       className={`h-full ${
         isOpen ? "w-[300px]" : "w-[95px]"
       } flex flex-col gap-2 px-5 py-6 duration-200`}
     >
-      {isUserLayout ? (
+      {!user.is_adm ? (
         <>
           <Item
             title="Início"
@@ -73,6 +90,14 @@ const Sidebar = ({ isUserLayout = true }) => {
             href="/admins"
             isSelected={selectedItem === "/admins"}
             onClick={() => setSelectedItem("/admins")}
+          />
+          <Item
+            title="Usuários"
+            lucideIcon={UserRoundPlus}
+            isOpen={isOpen}
+            href="/users"
+            isSelected={selectedItem === "/users"}
+            onClick={() => setSelectedItem("/users")}
           />
         </>
       )}
