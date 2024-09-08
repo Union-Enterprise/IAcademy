@@ -258,6 +258,7 @@ export default function User() {
       // Código para enviar os dados de endereço para o banco
       console.log("dados de endereço enviado com sucesso");
       console.log(state.addressFormData);
+      sendAddress();
       handleCepBlur();
       return;
     }
@@ -311,6 +312,26 @@ export default function User() {
         nascimento: state.userFormData.birth,
         genero: state.userFormData.genero,
         telefone: state.userFormData.phone,
+      },
+      { withCredentials: true })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
+  const sendAddress = () => {
+    axios
+      .put("http://localhost:5002/update_address", {
+        cep: state.addressFormData.cep,
+        rua: state.addressFormData.street,
+        numero: state.addressFormData.houseNumber,
+        complemento: state.addressFormData.comp,
+        bairro: state.addressFormData.bairro,
+        cidade: state.addressFormData.city,
+        estado: state.addressFormData.state
       },
       { withCredentials: true })
       .then(function (response) {
