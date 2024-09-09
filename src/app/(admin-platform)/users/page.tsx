@@ -207,8 +207,8 @@ export default function Admins() {
                   id={`${index}`} 
                   name={user.name} 
                   categorie={user.is_adm ? "Administrador" : "Usuário"} 
-                  plan={user.is_premium ? "Premium" : "Grátis"}
-                  status={user.is_banned ? "Banido" : "Ativo"}
+                  plan={user.is_premium ? "Premium" : "Básico"}
+                  status={user.is_banned ? "Suspenso" : "Ativo"}
                   action="" />
               ))
             ) : (
