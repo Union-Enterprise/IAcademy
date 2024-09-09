@@ -36,17 +36,6 @@ export default function ProfileLayout({
   if (loading) {
     return (
       <LoadingFrame />
-      // <div className=" grid grid-cols-3 gap-5 px-[200px] pt-[70px] pb-[150px]">
-      //   <div className="col-span-1 flex flex-col gap-5">
-      //     <Skeleton className="h-[400px] border-2 flex flex-col items-center pt-[70px] border-border-light bg-background-lightCard rounded-md relative" />
-      //     <Skeleton className="h-[250px]" />
-      //   </div>
-      //   <div className="col-span-2 flex flex-col gap-5">
-      //     <Skeleton className="h-[100px]"/>
-      //     <Skeleton className="h-[100px]"/>
-      //     <Skeleton className="h-[100px]"/>
-      //   </div>
-      // </div>
     );
   }
 

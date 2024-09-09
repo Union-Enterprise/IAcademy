@@ -1,5 +1,5 @@
 import { Home, List, Clock } from "lucide-react";
-import { OverviewSection } from "@/app/ui/trilha/TrilhaSection";
+import { OverviewSection } from "@/app/ui/trilha/ContentsSection";
 
 export default function TrilhaGeneral() {
   return (

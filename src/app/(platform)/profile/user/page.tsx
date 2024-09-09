@@ -13,6 +13,7 @@ import RestrictInput from "@/app/ui/components/profile/RestrictInput";
 import Modal from "@/app/ui/components/profile/Modal";
 import axios from "axios";
 import { cpf } from "cpf-cnpj-validator";
+import { useToast } from "@/app/context/ToastContext";
 
 const formatPhone = (value: string) => {
   const cleanValue = value.replace(/\D/g, "");
@@ -133,6 +134,8 @@ export default function User() {
   const [visible, setVisible] = useState(false);
   const [userCpf, setUserCpf] = useState(user.cpf || "");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const addToast = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleModalClose = () => {
     setVisible(false);
@@ -244,24 +247,26 @@ export default function User() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setIsSubmitting(true);
+
     let formId = e.currentTarget.id;
 
     if (formId === "user" && validateUserForm()) {
-      // Código para enviar os dados de usuário para o banco
-      console.log("dados de usuario enviado com sucesso");
-      console.log(state.userFormData);
+      addToast("Dados de usuário enviados com sucesso!", "success");
       sendProfileData();
+      setIsSubmitting(false);
       return;
     }
 
     if (formId === "address" && validateAddressForm()) {
-      // Código para enviar os dados de endereço para o banco
-      console.log("dados de endereço enviado com sucesso");
-      console.log(state.addressFormData);
+      addToast("Dados de endereço enviados com sucesso!", "success");
       sendAddress();
       handleCepBlur();
+      setIsSubmitting(false);
       return;
     }
+
+    setIsSubmitting(false);
   };
 
   const handleCepBlur = async () => {
@@ -317,9 +322,7 @@ export default function User() {
         },
         { withCredentials: true }
       )
-      .then(function (response) {
-        console.log(response.data);
-      })
+      .then(function (response) {})
       .catch(function (error) {
         console.error(error);
       });
@@ -327,19 +330,20 @@ export default function User() {
 
   const sendAddress = () => {
     axios
-      .put("http://localhost:5002/update_address", {
-        cep: state.addressFormData.cep,
-        rua: state.addressFormData.street,
-        numero: state.addressFormData.houseNumber,
-        complemento: state.addressFormData.comp,
-        bairro: state.addressFormData.bairro,
-        cidade: state.addressFormData.city,
-        estado: state.addressFormData.state
-      },
-      { withCredentials: true })
-      .then(function (response) {
-        console.log(response.data);
-      })
+      .put(
+        "http://localhost:5002/update_address",
+        {
+          cep: state.addressFormData.cep,
+          rua: state.addressFormData.street,
+          numero: state.addressFormData.houseNumber,
+          complemento: state.addressFormData.comp,
+          bairro: state.addressFormData.bairro,
+          cidade: state.addressFormData.city,
+          estado: state.addressFormData.state,
+        },
+        { withCredentials: true }
+      )
+      .then(function (response) {})
       .catch(function (error) {
         console.error(error);
       });
@@ -354,9 +358,7 @@ export default function User() {
         },
         { withCredentials: true }
       )
-      .then(function (response) {
-        console.log(response.data);
-      })
+      .then(function (response) {})
       .catch(function (error) {
         console.error(error);
       });
@@ -430,7 +432,11 @@ export default function User() {
             cols="col-span-2"
           />
         </SettingsSection>
-        <SubmitButton text="Salvar" classname="self-end" />
+        <SubmitButton
+          text="Salvar"
+          classname="self-end"
+          loading={isSubmitting}
+        />
       </form>
 
       <SettingsSection>
@@ -539,7 +545,11 @@ export default function User() {
             />
           </div>
         </SettingsSection>
-        <SubmitButton text="Salvar" classname="self-end" />
+        <SubmitButton
+          text="Salvar"
+          classname="self-end"
+          loading={isSubmitting}
+        />
       </form>
       {modalType && (
         <Modal

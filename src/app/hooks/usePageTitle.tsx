@@ -30,6 +30,8 @@ export function usePageTitle() {
       pageTitle = "Admins";
     } else if (pathname.includes("/dashboard")) {
       pageTitle = "Dashboard";
+    } else if (pathname.includes("/users")) {
+      pageTitle = "Usuários";
     } else {
       pageTitle = "Home";
     }

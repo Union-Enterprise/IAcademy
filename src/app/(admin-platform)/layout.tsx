@@ -23,7 +23,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.svg" />
       </head>
       <body
-        className={`${inter.className} h-[100vh] overflow-hidden select-none`}
+        className={`${inter.className} relative h-[100vh] pt-20 select-none bg-background-light overflow-hidden`}
       >
         <UserProvider>
           <SidebarProvider>

@@ -6,6 +6,7 @@ import {
   useState,
   useEffect,
   ReactNode,
+  useMemo,
 } from "react";
 import axios from "axios";
 
@@ -13,7 +14,6 @@ interface User {
   email: string;
   name: string;
   nickname?: string;
-  password: string;
   img?: string;
   phone?: string;
   birth?: string;
@@ -31,34 +31,27 @@ interface UserContextType {
   setAuth: (isAuthenticated: boolean, userData: User) => void;
 }
 
-const UserContext = createContext<UserContextType>({
-  user: {
-    nickname: "",
-    name: "",
-    email: "",
-    password: "",
-    is_premium: false,
-    is_adm: false,
-    createdAt: "00/00/000",
+const defaultUser: User = {
+  email: "email@example.com",
+  name: "Visitante",
+  nickname: "visitante",
+  is_premium: false,
+  is_adm: false,
+  createdAt: "00/00/0000",
+  img: "",
+};
 
-    img: "",
-  },
+const defaultContext: UserContextType = {
+  user: defaultUser,
   isAuthenticated: false,
   loading: true,
   setAuth: () => {},
-});
+};
+
+const UserContext = createContext<UserContextType>(defaultContext);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User>({
-    name: "Visitante",
-    nickname: "visitante-0421032312",
-    email: "email@email.com",
-    password: "123456",
-    is_premium: false,
-    createdAt: "00/00/0000",
-    img: "",
-    is_adm: false,
-  });
+  const [user, setUser] = useState<User>(defaultUser);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -91,7 +84,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
         setUser(formattedUser);
       } catch (error) {
-        console.log("Erro ao buscar usuário:", error);
+        console.error("Erro ao buscar usuário:", error);
         setIsAuthenticated(false);
       } finally {
         setLoading(false);
@@ -110,10 +103,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setUser(formattedUser);
   };
 
+  const contextValue = useMemo(
+    () => ({
+      user,
+      isAuthenticated,
+      loading,
+      setAuth,
+    }),
+    [user, isAuthenticated, loading]
+  );
+
   return (
-    <UserContext.Provider value={{ user, isAuthenticated, loading, setAuth }}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
   );
 };
 

@@ -1,22 +1,24 @@
 "use client";
 
 import Image from "next/image";
-import { useSidebar } from "../../context/SidebarContext";
+// import { useSidebar } from "../../context/SidebarContext";
 import Link from "next/link";
 import { Menu, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Searchbar, { SearchView } from "./Searchbar";
 import { useUser } from "@/app/context/UserContext";
 import Skeleton from "./Skeleton";
+import { useSidebar } from "@/app/context/SidebarContext";
 
 const Navbar = () => {
-  const { toggleSidebar } = useSidebar();
+  // const { toggleSidebar } = useSidebar();
   const [showSearchView, setShowSearchView] = useState(false);
   const { user, isAuthenticated, loading } = useUser();
+  const { toggleSidebar } = useSidebar();
 
   if (loading) {
     return (
-      <nav className="h-20 bg-background-light px-5 grid grid-cols-3 items-center shadow-sm">
+      <nav className="absolute top-0 left-0 z-50 h-20 bg-background-light px-5 grid grid-cols-3 items-center shadow-sm">
         <div className="flex gap-5 items-center">
           <Skeleton className="h-[45px] w-[250px]" />
         </div>
@@ -29,7 +31,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="h-20 w-full bg-background-light px-5 grid grid-cols-3 items-center shadow-sm">
+    <nav className="absolute top-0 left-0 h-20 w-full bg-background-light px-5 grid grid-cols-3 items-center shadow-sm">
       <div className="flex gap-5 items-center">
         <Menu
           onClick={toggleSidebar}

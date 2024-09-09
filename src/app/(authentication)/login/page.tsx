@@ -1,9 +1,11 @@
-"use client"
+"use client";
 
 import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
 import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
 import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
-import SocialOptions, { Option } from "@/app/ui/components/authenticationForm/SocialsOptions";
+import SocialOptions, {
+  Option,
+} from "@/app/ui/components/authenticationForm/SocialsOptions";
 import RedirectLink from "@/app/ui/components/authenticationForm/RedirectLink";
 import axios from "axios";
 import React, { useState } from "react";
@@ -27,6 +29,7 @@ export default function Login() {
       )
       .then((response) => {
         if (response.status === 200) {
+          setErrorMessage("");
           setAuth(true, response.data);
           router.push("/profile");
         }
@@ -47,7 +50,7 @@ export default function Login() {
 
   const loginWithFacebook = () => {
     window.location.href = "http://localhost:5002/facebook";
-  }
+  };
 
   return (
     <>
@@ -84,8 +87,12 @@ export default function Login() {
       </form>
       <SocialOptions>
         <Option onClick={() => {}} />
-        <Option icon={faGoogle} brandName="Google" onClick={ loginWithGoogle } />
-        <Option icon={faFacebook} brandName="Facebook" onClick={ loginWithFacebook } />
+        <Option icon={faGoogle} brandName="Google" onClick={loginWithGoogle} />
+        <Option
+          icon={faFacebook}
+          brandName="Facebook"
+          onClick={loginWithFacebook}
+        />
       </SocialOptions>
       <RedirectLink
         message="Ainda não tem uma conta?"
