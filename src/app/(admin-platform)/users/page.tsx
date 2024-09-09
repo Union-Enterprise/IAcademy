@@ -15,20 +15,62 @@ import {
   UsersRound,
 } from "lucide-react";
 
+import axios from "axios";
+import { useEffect, useState } from "react";
+import UserItem from "@/app/ui/components/adminUtils/UserItem"
+
 export default function Admins() {
+  const [users, setUsers] = useState([]);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalPremiumUsers, setTotalPremiumUsers] = useState(0);
+  const [totalBannedUsers, setTotalBannedUsers] = useState(0);
+  const [totalNotBannedUsers, setTotalNotBannedUsers] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5002/users",
+          { withCredentials: true }
+        );
+
+        setUsers(response.data);
+      } catch (error) {
+        console.log("Erro ao buscar usuários", error);
+      }
+
+      try {
+        const response = await axios.get("http://localhost:5002/users_total", {
+          withCredentials: true,
+        });
+
+        setTotalUsers(response.data.totalUsers);
+        setTotalPremiumUsers(response.data.premiumUsers);
+        setTotalBannedUsers(response.data.bannedUsers);
+        setTotalNotBannedUsers(response.data.notBannedUsers);
+
+      } catch (error) {
+        console.log("Erro ao buscar usuários", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
   return (
     <div className="flex flex-col gap-5">
       <h1 className="text-3xl font-bold text-title-light">Usuários</h1>
       <section className="grid grid-cols-4 gap-5">
         <StatResume
           title="Sessões"
-          value="0"
+          value={`${totalUsers ? totalUsers : 0}`}
           lucideIcon={UsersRound}
           description="Total de usuários"
         />
         <StatResume
           title="Premium"
-          value="0"
+          value={`${totalPremiumUsers ? totalPremiumUsers : 0}`}
           lucideIcon={UserRoundPlus}
           description="Usuários Premium"
           iconColor="text-mainBlue"
@@ -36,7 +78,7 @@ export default function Admins() {
         />
         <StatResume
           title="Ativos"
-          value="0"
+          value={`${totalNotBannedUsers ? totalNotBannedUsers : 0}`}
           lucideIcon={UserRoundCheck}
           description="Usuários ativos"
           iconColor="text-green-500"
@@ -44,7 +86,7 @@ export default function Admins() {
         />
         <StatResume
           title="Suspensos"
-          value="0"
+          value={`${totalBannedUsers ? totalBannedUsers : 0}`}
           lucideIcon={UserRoundMinus}
           description="Usuários banidos / suspensos"
           iconColor="text-red-500"
@@ -158,17 +200,20 @@ export default function Admins() {
             </tr>
           </thead>
           <tbody>
-            <tr className="text-left w-full *:py-4 flex items-center justify-between px-6">
-              <th className="px-5">
-                <input type="checkbox" />
-              </th>
-              <td className="w-full pl-3 text-text-lightSub">0</td>
-              <td className="w-full pl-3 text-text-lightSub">Junin</td>
-              <td className="w-full pl-3 text-text-lightSub">Usuário</td>
-              <td className="w-full pl-3 text-text-lightSub">Básico</td>
-              <td className="w-full pl-3 text-text-lightSub">Ativo</td>
-              <td className="w-full pl-3 text-text-lightSub">12312312312</td>
-            </tr>
+            {users.length > 0 ? (
+              users.map((user: any, index: number) => (
+                <UserItem 
+                  key={index}
+                  id={`${index}`} 
+                  name={user.name} 
+                  categorie={user.is_adm ? "Administrador" : "Usuário"} 
+                  plan={user.is_premium ? "Premium" : "Grátis"}
+                  status={user.is_banned ? "Banido" : "Ativo"}
+                  action="" />
+              ))
+            ) : (
+              <p>Nenhum usuário encontrado.</p>
+            )}
           </tbody>
         </table>
       </section>
@@ -190,4 +235,8 @@ function Admin() {
       </td>
     </tr>
   );
+}
+
+function User(){
+
 }
