@@ -37,7 +37,7 @@ export default function Dashboard() {
         const response = await axios.get("http://localhost:5002/users_total", {
           withCredentials: true,
         });
-        setTotalUsers(response.data);
+        setTotalUsers(response.data.commonUsers);
       } catch (error) {
         console.log("Erro ao buscar usuários", error);
       }
@@ -63,7 +63,7 @@ export default function Dashboard() {
           <StatResume title="Assinaturas" value="+2" lucideIcon={CreditCard} />
           <StatResume
             title="Usuários na plataforma"
-            value={`${totalUsers}`}
+            value={`${totalUsers ? totalUsers : 0}`}
             lucideIcon={Users}
           />
           <StatResume
