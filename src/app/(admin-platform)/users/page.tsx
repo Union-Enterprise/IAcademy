@@ -26,6 +26,30 @@ export default function Admins() {
   const [totalBannedUsers, setTotalBannedUsers] = useState(0);
   const [totalNotBannedUsers, setTotalNotBannedUsers] = useState(0);
 
+  const [category, setCategory] = useState('');
+  const [plan, setPlan] = useState('');
+  const [status, setStatus] = useState('');
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get("http://localhost:5002/users", {
+        params: {
+          category,
+          plan,
+          status,
+        },
+        withCredentials: true,
+      });
+      setUsers(response.data);
+    } catch (error) {
+      console.log("Erro ao buscar usuários", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, [category, plan, status]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -102,6 +126,7 @@ export default function Admins() {
             <select
               id="category"
               className="w-full px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-background-light group-hover/select:border-mainBlue"
+              onChange={(e) => setCategory(e.target.value)}
             >
               <option key="" value="">
                 Selecione uma Categoria
@@ -118,6 +143,7 @@ export default function Admins() {
             <select
               id="plan"
               className="w-full px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-background-light group-hover/select:border-mainBlue"
+              onChange={(e) => setPlan(e.target.value)}
             >
               <option key="" value="">
                 Selecione um Plano
@@ -134,6 +160,7 @@ export default function Admins() {
             <select
               id="status"
               className="w-full px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-background-light group-hover/select:border-mainBlue"
+              onChange={(e) => setStatus(e.target.value)}
             >
               <option key="" value="">
                 Selecione um Status
@@ -206,13 +233,13 @@ export default function Admins() {
                   key={index}
                   id={`${index}`} 
                   name={user.name} 
-                  categorie={user.is_adm ? "Administrador" : "Usuário"} 
+                  category={user.is_adm ? "Administrador" : "Usuário"} 
                   plan={user.is_premium ? "Premium" : "Básico"}
                   status={user.is_banned ? "Suspenso" : "Ativo"}
                   action="" />
               ))
             ) : (
-              <p>Nenhum usuário encontrado.</p>
+              <p className="text-center py-5 text-text-lightSub">Nenhum usuário encontrado.</p>
             )}
           </tbody>
         </table>
