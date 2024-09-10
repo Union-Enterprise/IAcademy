@@ -6,6 +6,7 @@ import {
   BadgeCheck,
   UserRoundPlus,
   ChartPie,
+  BellRing,
 } from "lucide-react";
 import Link from "next/link";
 import { useSidebar } from "../../context/SidebarContext";
@@ -84,20 +85,20 @@ const Sidebar = ({ isUserLayout = true }) => {
             onClick={() => setSelectedItem("/dashboard")}
           />
           <Item
-            title="Administradores"
-            lucideIcon={UserRoundPlus}
-            isOpen={isOpen}
-            href="/admins"
-            isSelected={selectedItem === "/admins"}
-            onClick={() => setSelectedItem("/admins")}
-          />
-          <Item
             title="Usuários"
             lucideIcon={UserRoundPlus}
             isOpen={isOpen}
             href="/users"
             isSelected={selectedItem === "/users"}
             onClick={() => setSelectedItem("/users")}
+          />
+          <Item
+            title="Notificações"
+            lucideIcon={BellRing}
+            isOpen={isOpen}
+            href="/notifications"
+            isSelected={selectedItem === "/notifications"}
+            onClick={() => setSelectedItem("/notifications")}
           />
         </>
       )}

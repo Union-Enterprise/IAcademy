@@ -35,7 +35,7 @@ export default function Profile() {
           <div className="flex gap-2 items-center">
             <BadgeCheck className="w-[30px] h-[30px] text-mainBlue" />
             <h3 className="text-lg font-semibold">IAcademy Premium</h3>
-            <Link href="/profile/signatures">
+            <Link href="/profile/purchases">
               <p className="text-mainBlue opacity-80 hover:opacity-100 text-sm duration-100">
                 Ver Assinaturas
               </p>

@@ -34,9 +34,7 @@ export default function ProfileLayout({
   }
 
   if (loading) {
-    return (
-      <LoadingFrame />
-    );
+    return <LoadingFrame />;
   }
 
   return (

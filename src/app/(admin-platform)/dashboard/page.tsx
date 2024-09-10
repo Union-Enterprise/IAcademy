@@ -77,10 +77,10 @@ export default function Dashboard() {
         <div className="p-6 pb-3 border-b-2 border-border-lightA border-opacity-30">
           <h3 className="text-title-light font-bold">Usuários Recentes</h3>
           <p className="text-text-lightSub text-sm mt-1">
-            Últimos 5 usuários cadastrados.
+            Últimos usuários registrados.
           </p>
         </div>
-        <div className="flex flex-col px-6 gap-[32px]">
+        <div className="flex flex-col overflow-hidden">
           {recentUsers.length > 0 ? (
             recentUsers.map((user: any, index: number) => (
               <AvatarResume
@@ -95,49 +95,23 @@ export default function Dashboard() {
           )}
         </div>
       </div>
-      <div className="p-6 pb-14 bg-background-light col-span-4 rounded-lg h-[350px] flex flex-col gap-5">
+      <div className="p-6 pb-14 bg-background-light col-span-5 rounded-lg h-[350px] flex flex-col gap-5">
         <h3 className="text-title-light text-xl font-bold">
           Usuários registrados - 2024
         </h3>
         <LineChart />
       </div>
-
-      {/* <div className="flex flex-col p-6 bg-background-light col-span-3 rounded-lg gap-10">
-        <LineChart />
-      </div> */}
-      {/* <div className="grid grid-cols-4 gap-4 bg-blue-400"></div>
-      <div className="grid grid-cols-7 gap-4 mt-5">
-        <div className="col-span-4 border-[1px] border-border-lightC rounded-xl shadow-md hover:-translate-y-1 duration-100 hover:shadow-lg">
-          <h3 className="text-title-light p-[24px] font-semibold">
-            Visão Geral
-          </h3>
-          <div className="p-[24px]">
-            <LineChart />
-          </div>
+      <div className="flex flex-col bg-background-light col-span-2 rounded-lg gap-5">
+        <div className="p-6 pb-3 border-b-2 border-border-lightA border-opacity-30">
+          <h3 className="text-title-light font-bold">Notificações recentes</h3>
+          <p className="text-text-lightSub text-sm mt-1">
+            Últimas notificações recebidas.
+          </p>
         </div>
-        <div className="col-span-3 rounded-xl border-[1px] shadow-md border-border-lightC hover:-translate-y-1 duration-100 hover:shadow-lg">
-          <div className="p-[24px] pb-[12px] border-b-2 border-border-lightC border-opacity-10">
-            <h3 className="text-title-light font-bold">Usuários Recentes</h3>
-            <p className="text-text-lightSub text-sm mt-1">
-              Últimos 5 usuários cadastrados.
-            </p>
-          </div>
-          <div className="flex flex-col pt-0 mt-[12px] p-[24px] gap-[32px]">
-            {recentUsers.length > 0 ? (
-              recentUsers.map((user: any, index: number) => (
-                <AvatarResume
-                  key={index}
-                  name={user.name}
-                  email={user.email}
-                  avatarUrl={user.img || "/default_user.jpg"}
-                />
-              ))
-            ) : (
-              <p>Nenhum usuário recente encontrado.</p>
-            )}
-          </div>
+        <div className="flex flex-col px-6 gap-[32px]">
+          <p>Nenhuma nova mensagem por enquanto.</p>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

@@ -45,7 +45,12 @@ export default function SettingsRemove({
     >
       {confirmPage ? (
         <>
-        <p>Notamos que você possui uma assinatura do plano Premium. Tem certeza que deseja excluir a sua conta? Ao confirmar você perderá total acesso aos recursos do plano e cobranças feitas antes da exclusão da conta se manterão ativas.</p>
+          <p>
+            Notamos que você possui uma assinatura do plano Premium. Tem certeza
+            que deseja excluir a sua conta? Ao confirmar você perderá total
+            acesso aos recursos do plano e cobranças feitas antes da exclusão da
+            conta se manterão ativas.
+          </p>
           <button
             type="submit"
             className="w-full bg-red-400 hover:bg-red-600 bg-opacity-90 px-8 py-3 rounded-md hover:bg-opacity-100 duration-100 *:text-white flex justify-center font-bold items-center gap-5"

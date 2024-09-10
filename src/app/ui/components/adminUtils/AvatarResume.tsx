@@ -8,7 +8,7 @@ interface AvatarResumeProps {
 
 export default function AvatarResume({ name, email, avatarUrl }: AvatarResumeProps) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 px-6 py-4 hover:bg-background-lightHover duration-100">
       <span className="flex shrink-0 overflow-hidden rounded-full h-9 w-9">
         <Image
           src={avatarUrl}
