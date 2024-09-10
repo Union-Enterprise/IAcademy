@@ -32,6 +32,8 @@ export function usePageTitle() {
       pageTitle = "Dashboard";
     } else if (pathname.includes("/users")) {
       pageTitle = "Usuários";
+    } else if (pathname.includes("/notifications")) {
+      pageTitle = "Notificações";
     } else {
       pageTitle = "Home";
     }

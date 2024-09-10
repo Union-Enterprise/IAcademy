@@ -223,9 +223,13 @@ export default function Admins() {
             </tr>
           </thead>
           <tbody>
-            <p className="text-center py-5 text-text-lightSub">
-              Nenhuma mensagem encontrada.
-            </p>
+            <tr>
+              <td>
+                <p className="text-center py-5 text-text-lightSub">
+                  Nenhuma mensagem encontrada.
+                </p>
+              </td>
+            </tr>
           </tbody>
         </table>
       </section>
@@ -248,5 +252,3 @@ function Admin() {
     </tr>
   );
 }
-
-function User() {}

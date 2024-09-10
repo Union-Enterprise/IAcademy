@@ -17,7 +17,7 @@ import {
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import UserItem from "@/app/ui/components/adminUtils/UserItem"
+import UserItem from "@/app/ui/components/adminUtils/UserItem";
 
 export default function Admins() {
   const [users, setUsers] = useState([]);
@@ -26,9 +26,9 @@ export default function Admins() {
   const [totalBannedUsers, setTotalBannedUsers] = useState(0);
   const [totalNotBannedUsers, setTotalNotBannedUsers] = useState(0);
 
-  const [category, setCategory] = useState('');
-  const [plan, setPlan] = useState('');
-  const [status, setStatus] = useState('');
+  const [category, setCategory] = useState("");
+  const [plan, setPlan] = useState("");
+  const [status, setStatus] = useState("");
 
   const fetchUsers = async () => {
     try {
@@ -53,10 +53,9 @@ export default function Admins() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5002/users",
-          { withCredentials: true }
-        );
+        const response = await axios.get("http://localhost:5002/users", {
+          withCredentials: true,
+        });
 
         setUsers(response.data);
       } catch (error) {
@@ -72,7 +71,6 @@ export default function Admins() {
         setTotalPremiumUsers(response.data.premiumUsers);
         setTotalBannedUsers(response.data.bannedUsers);
         setTotalNotBannedUsers(response.data.notBannedUsers);
-
       } catch (error) {
         console.log("Erro ao buscar usuários", error);
       }
@@ -80,7 +78,6 @@ export default function Admins() {
 
     fetchData();
   }, []);
-
 
   return (
     <div className="flex flex-col gap-5">
@@ -229,17 +226,22 @@ export default function Admins() {
           <tbody>
             {users.length > 0 ? (
               users.map((user: any, index: number) => (
-                <UserItem 
+                <UserItem
                   key={index}
-                  id={`${index}`} 
-                  name={user.name} 
-                  category={user.is_adm ? "Administrador" : "Usuário"} 
+                  id={`${index}`}
+                  name={user.name}
+                  category={user.is_adm ? "Administrador" : "Usuário"}
                   plan={user.is_premium ? "Premium" : "Básico"}
                   status={user.is_banned ? "Suspenso" : "Ativo"}
-                  action="" />
+                  action=""
+                />
               ))
             ) : (
-              <p className="text-center py-5 text-text-lightSub">Nenhum usuário encontrado.</p>
+              <tr>
+                <td className="text-center py-5 text-text-lightSub">
+                  Nenhum usuário encontrado.
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
@@ -264,6 +266,4 @@ function Admin() {
   );
 }
 
-function User(){
-
-}
+function User() {}
