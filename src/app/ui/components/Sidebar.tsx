@@ -7,6 +7,7 @@ import {
   UserRoundPlus,
   ChartPie,
   BellRing,
+  Library,
 } from "lucide-react";
 import Link from "next/link";
 import { useSidebar } from "../../context/SidebarContext";
@@ -64,6 +65,14 @@ const Sidebar = ({ isUserLayout = true }) => {
             isSelected={selectedItem.startsWith("/trilhas")}
             onClick={() => setSelectedItem("/trilhas")}
           />
+           <Item
+            title="Meus estudos"
+            lucideIcon={Library}
+            isOpen={isOpen}
+            href="/Student"
+            isSelected={selectedItem.startsWith("/Student")}
+            onClick={() => setSelectedItem("/Student")}
+          />
           <Item
             title="Premium"
             isPremium={true}
@@ -73,6 +82,7 @@ const Sidebar = ({ isUserLayout = true }) => {
             isSelected={selectedItem === "/premium"}
             onClick={() => setSelectedItem("/premium")}
           />
+          
         </>
       ) : (
         <>
