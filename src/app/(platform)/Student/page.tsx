@@ -24,8 +24,8 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import UserItem from "@/app/ui/components/adminUtils/UserItem";
-import LineChart from "@/app/ui/components/adminUtils/charts/LineChart";
-import LineStudent from "@/app/ui/components/LineStudent";
+import LineStudent from "@/app/ui/components/Student/LineStudent";
+import CardsStudent from "@/app/ui/components/Student/CardsStudent";
 
 
 export default function Admins() {
@@ -92,14 +92,14 @@ export default function Admins() {
  
     <div className="flex flex-col gap-5">
         <h1 className="text-3xl font-bold text-title-light">Meus estudos</h1>
-        <section className="grid grid-cols-4 gap-5">
-            <StatResume
+        <section className="grid grid-cols-4 gap-2">
+            <CardsStudent
             title="Perguntas para a IA"
             value={`0`}
             lucideIcon={MessagesSquare}
             description=""
             />
-            <StatResume
+            <CardsStudent
             title="Acertos nos quizzes"
             value={`0`}
             lucideIcon={CheckCheck}
@@ -107,7 +107,7 @@ export default function Admins() {
             iconColor="text-green-500"
            
             />
-            <StatResume
+            <CardsStudent
             title=" Quizzes resolvidos"
             value={`0`}
             lucideIcon={BookCheck}
@@ -115,7 +115,7 @@ export default function Admins() {
             iconColor="text-green-500"
             
             />
-            <StatResume
+            <CardsStudent
             title="Respostas erradas"
             value={`0`}
             lucideIcon={CircleX}
@@ -125,13 +125,13 @@ export default function Admins() {
             />
         </section>
         <div className="grid grid-cols-2 gap-96">
-            <div className="p-6 pb-14 bg-background-light  rounded-lg h-[480px] w-[800px] flex flex-col gap-5 ">
+            <div className="p-6 pb-14 bg-background-light  rounded-lg h-[400px] w-[800px] flex flex-col gap-5 ">
                 <h3 className="text-title-light text-xl font-bold">
                 Frequencia de estudos - 2024
                 </h3>
                 <LineStudent /> 
             </div>
-            <div className="flex justify-center bg-background-light border rounded-lg  gap-5 w-[400px]">
+            <div className="flex justify-center bg-background-light border rounded-lg shadow-lg gap-5 w-[400px]">
                 <div className="p-6 pb-3 border-b-2 border-border-lightA border-opacity-30">
                     <h3 className="text-title-light font-bold">Historico de quizzes feitos</h3>
                    

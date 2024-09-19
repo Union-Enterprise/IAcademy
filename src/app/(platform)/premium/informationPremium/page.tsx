@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 import Link from 'next/link';
 import { ChevronRight, CreditCard, UserRound } from 'lucide-react';
+import axios from 'axios'; // Certifique-se de importar o axios
 
 // Função para validar CPF
 const validarCPF = (cpf: string): boolean => {
@@ -63,6 +64,38 @@ export default function CheckoutForm() {
       setCpfError('CPF inválido! Por favor, verifique e tente novamente.');
     } else {
       setCpfError('');
+    }
+  };
+
+  const fetchAddress = async (cep: string) => {
+    try {
+      const response = await axios.get(`https://viacep.com.br/ws/${cep}/json`);
+      if (response.data.erro) {
+        setCepError('CEP não encontrado.');
+        return null;
+      }
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar o endereço:", error);
+      setCepError('Erro ao buscar o endereço.');
+      return null;
+    }
+  };
+
+  const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cepInput = e.target.value;
+    setCep(cepInput);
+
+    if (cepInput.length === 9) { // Verifica se o CEP está no formato correto (com hífen)
+      const addressData = await fetchAddress(cepInput);
+      if (addressData) {
+        setRua(addressData.logradouro);
+        setBairro(addressData.bairro);
+        setCidade(addressData.localidade);
+        setEstado(addressData.uf);
+      }
+    } else {
+      setCepError('');
     }
   };
 
@@ -212,7 +245,7 @@ export default function CheckoutForm() {
                       type="text"
                       placeholder="CEP"
                       value={cep}
-                      onChange={(e) => setCep(e.target.value)}
+                      onChange={handleCepChange} // Atualize aqui
                       className={`w-full p-2 border-2 rounded-md focus:outline-none ${cepError ? 'border-red-500' : 'focus:border-mainBlue hover:border-mainBlue'} peer duration-100`}
                     />
                     {cepError && <p className="text-red-500 text-sm mt-1">{cepError}</p>}
@@ -278,7 +311,7 @@ export default function CheckoutForm() {
               </div>
 
               <div className="flex justify-end mt-4">
-                <SubmitButton  text="Finalizar" />
+                <SubmitButton text="Finalizar" />
               </div>
             </form>
           </div>

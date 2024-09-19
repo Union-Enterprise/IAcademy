@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { Box, CircleAlert, Cone, Cuboid, Diameter, TriangleRight, Brain, Percent } from "lucide-react";
+
+
 
 export default function ContentList({ title = "" }) {
   return (
@@ -10,39 +13,27 @@ export default function ContentList({ title = "" }) {
         </button>
       </div>
       <div className="grid grid-cols-3 gap-5">
-        <Item
-          title="Geometria"
-          href="/trilhas/overview"
-          description="A geometria plana é um ramo fundamental da matemática que lida com as
-              propriedades e relações de figuras em um plano bidimensional.
-              Compreender a geometria plana é essencial não apenas para a matemática
-              pura, mas também para a resolução de problemas práticos em diversas
-              áreas, como arquitetura, engenharia e design."
-        />
+      <Item
+        title="Geometria Plana"
+        href="/trilhas/overview"
+        icon={<Cone />}
+        description="Geometria Plana explora figuras bidimensionais, como triângulos, círculos e quadrados, ajudando a calcular perímetros, áreas e ângulos."
+      />
 
-        <Item
-          title="Geometria plana"
-          href="/trilhas/overview"
-          description="Geometria plana estuda figuras bidimensionais, 
-            como triângulos, quadriláteros e círculos.
-            Ela se baseia em conceitos de pontos, 
-            linhas e ângulos. Triângulos são classificados por lados e ângulos,
-            enquanto quadriláteros incluem formas como quadrados e retângulos.
-            Círculos envolvem conceitos de raio, diâmetro e área.
-            A geometria plana também abrange perímetro,
-            área e o Teorema de Pitágoras, que relaciona os lados de triângulos retângulos."
-        />
+     
+      <Item
+        title="Fatorial"
+        href="/trilhas/overview"
+        icon={<CircleAlert />}
+        description="O fatorial é amplamente utilizado em combinatória, probabilidade e em várias áreas da matemática para calcular o número de permutações."
+      />
 
-        <Item
-          title="Geometria Analitica"
-          href="/trilhas/overview"
-          description="Geometria analítica é o estudo das figuras geométricas usando um sistema de coordenadas,
-            como o plano cartesiano.
-            Ela combina álgebra e geometria para analisar pontos, retas, curvas e suas propriedades.
-            Com ferramentas como a equação da reta, a fórmula da distância entre dois pontos e a equação das cônicas (circunferências, parábolas, elipses e hipérboles),
-            a geometria analítica permite resolver problemas geométricos de forma precisa e algébrica.
-            É uma área fundamental para a matemática e para a compreensão de diversas aplicações científicas e tecnológicas."
-        />
+      <Item
+        title="Raciocínio Lógico"
+        href="/trilhas/overview"
+        icon={<Brain />}
+        description="Raciocínio lógico é a habilidade de pensar de forma clara e resolver problemas, usando dedução e indução para chegar a conclusões. É essencial em matemática e na vida cotidiana."
+      />
       </div>
     </section>
   );
@@ -52,14 +43,18 @@ export function Item({
   title = "Título aqui",
   description = "Descrição",
   href = "",
+  icon = "Icon",
 }) {
   return (
     <Link
       href={href}
-      className="rounded-xl border-2 border-border-lightC shadow-md hover:border-mainBlue flex flex-col justify-between p-5 w-full min-h-[250px] duration-100 gap-4"
+      className="rounded-xl border-2 border-border-lightC shadow-md hover:border-mainBlue hover:text-mainBlue flex flex-col justify-between p-5 w-full min-h-[250px] duration-100 gap-4"
     >
       <div>
-        <h6 className="font-bold text-lg text-text-light">{title}</h6>
+        <div className="flex gap-2">
+        <div className="text-lg flex">{icon}</div>
+          <h6 className="font-bold text-lg text-text-light flex">{title}</h6>
+        </div>
         <p className="text-sm text-text-lightSub">00/00 tópicos estudados</p>
       </div>
       <p className="text-sm text-text-lightSub leading-6 justify-items-end flex h-[75px] overflow-hidden">
