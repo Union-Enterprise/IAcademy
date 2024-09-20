@@ -26,6 +26,7 @@ import { useEffect, useState } from "react";
 import UserItem from "@/app/ui/components/adminUtils/UserItem";
 import LineStudent from "@/app/ui/components/Student/LineStudent";
 import CardsStudent from "@/app/ui/components/Student/CardsStudent";
+import Fifagrafico from "@/app/ui/components/Student/Fifagrafico";
 
 
 export default function Admins() {
@@ -126,16 +127,11 @@ export default function Admins() {
         </section>
         <div className="grid grid-cols-2 gap-96">
             <div className="p-6 pb-14 bg-background-light  rounded-lg h-[400px] w-[800px] flex flex-col gap-5 ">
-                <h3 className="text-title-light text-xl font-bold">
-                Frequencia de estudos - 2024
-                </h3>
+              
                 <LineStudent /> 
             </div>
-            <div className="flex justify-center bg-background-light border rounded-lg shadow-lg gap-5 w-[400px]">
-                <div className="p-6 pb-3 border-b-2 border-border-lightA border-opacity-30">
-                    <h3 className="text-title-light font-bold">Historico de quizzes feitos</h3>
-                   
-                </div>
+            <div className="flex justify-center bg-background-light  gap-5 w-[400px]">
+                <Fifagrafico/>
                
             </div>
         </div>

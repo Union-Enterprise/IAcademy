@@ -1,61 +1,81 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Bar, BarChart, CartesianGrid, XAxis, Tooltip, Cell } from "recharts";
+import { TrendingUp } from "lucide-react"
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+
+export const description = "A multiple bar chart"
 
 const chartData = [
-  { month: "Janeiro", "frequencia de estudos": 86 },
-  { month: "Fevereiro", "frequencia de estudos": 285 },
-  { month: "Março", "frequencia de estudos": 297 },
-  { month: "Abril", "frequencia de estudos": 203 },
-  { month: "Maio", "frequencia de estudos": 209 },
-  { month: "Junho", "frequencia de estudos": 264 },
-  { month: "Julho", "frequencia de estudos": 214 },
-  { month: "Agosto", "frequencia de estudos": 234 },
-  { month: "Setembro", "frequencia de estudos": 264 },
-  { month: "Outubro", "frequencia de estudos": 204 },
-  { month: "Novembro", "frequencia de estudos": 264 },
-  { month: "Dezembro", "frequencia de estudos": 304 },
-];
+  { month: "Janeiro", desktop: 186, mobile: 80 },
+  { month: "Fevereiro", desktop: 305, mobile: 200 },
+  { month: "Março", desktop: 237, mobile: 120 },
+  { month: "Abril", desktop: 73, mobile: 190 },
+  { month: "Maio", desktop: 209, mobile: 130 },
+  { month: "Junho", desktop: 214, mobile: 140 },
+  { month: "Julho", desktop: 214, mobile: 140 },
+  { month: "Agosto", desktop: 214, mobile: 140 },
+  { month: "Setembro", desktop: 214, mobile: 140 },
+  { month: "Outubro", desktop: 214, mobile: 140 },
+  { month: "Novembro", desktop: 214, mobile: 140 },
+  { month: "Dezembro", desktop: 214, mobile: 140 },
+]
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "#1865F2",
+  },
+  mobile: {
+    label: "Mobile",
+    color: "#3b82f6",
+  },
+} satisfies ChartConfig
 
 export default function Component() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
-  const getBarColor = (value: number) => {
-    return value > 250 ? "#FF5733" : "#1865F2";
-  };
-
-
   return (
-    <div className="p-4">
-      <div className="pb-0">
-        <div className="mx-auto">
-          <BarChart width={700} height={300} data={chartData}>
+    <Card>
+      <CardHeader>
+        <CardTitle>Frequencia de estudos - 2024</CardTitle>
+       
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig} className="h-64 w-[700px]">
+          <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="month"
               tickLine={false}
               tickMargin={10}
-              axisLine={true}
+              axisLine={false}
               tickFormatter={(value) => value.slice(0, 3)}
             />
-            <Tooltip />
-            <Bar dataKey="frequencia de estudos" radius={5} barSize={20}>
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getBarColor(entry["frequencia de estudos"])} />
-              ))}
-            </Bar>
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dashed" />}
+            />
+            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+            <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
           </BarChart>
-        </div>
-      </div>
-    </div>
-  );
+        </ChartContainer>
+      </CardContent>
+      <CardFooter className="flex-col items-start gap-2 text-sm">
+      
+      </CardFooter>
+    </Card>
+  )
 }
