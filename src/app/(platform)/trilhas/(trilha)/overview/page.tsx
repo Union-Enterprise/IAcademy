@@ -39,7 +39,7 @@ function DetailItem({
     <div className="flex gap-5 col-span-1">
       <LucideIcon
         size={40}
-        className="bg-background-lightHover text-text-lightSub rounded-xl p-2"
+        className="bg-bg-lightHover text-text-lightSub rounded-xl p-2"
       />
       <div>
         <p className="text-xs text-text-lightSub">{label}</p>

@@ -48,7 +48,7 @@ export default function Dashboard() {
 
   return (
     <div className="grid grid-cols-7 gap-5 *:shadow-sm">
-      <div className="flex flex-col p-6 bg-background-light col-span-5 rounded-lg gap-10">
+      <div className="flex flex-col p-6 bg-bg-light col-span-5 rounded-lg gap-10">
         <div className="flex justify-between items-center">
           <div>
             <h3 className="text-title-light font-bold text-xl">
@@ -73,7 +73,7 @@ export default function Dashboard() {
           />
         </div>
       </div>
-      <div className="flex flex-col bg-background-light col-span-2 rounded-lg gap-5">
+      <div className="flex flex-col bg-bg-light col-span-2 rounded-lg gap-5">
         <div className="p-6 pb-3 border-b-2 border-border-lightA border-opacity-30">
           <h3 className="text-title-light font-bold">Usuários Recentes</h3>
           <p className="text-text-lightSub text-sm mt-1">
@@ -95,13 +95,13 @@ export default function Dashboard() {
           )}
         </div>
       </div>
-      <div className="p-6 pb-14 bg-background-light col-span-5 rounded-lg h-[350px] flex flex-col gap-5">
+      <div className="p-6 pb-14 bg-bg-light col-span-5 rounded-lg h-[350px] flex flex-col gap-5">
         <h3 className="text-title-light text-xl font-bold">
           Usuários registrados - 2024
         </h3>
         <LineChart />
       </div>
-      <div className="flex flex-col bg-background-light col-span-2 rounded-lg gap-5">
+      <div className="flex flex-col bg-bg-light col-span-2 rounded-lg gap-5">
         <div className="p-6 pb-3 border-b-2 border-border-lightA border-opacity-30">
           <h3 className="text-title-light font-bold">Notificações recentes</h3>
           <p className="text-text-lightSub text-sm mt-1">

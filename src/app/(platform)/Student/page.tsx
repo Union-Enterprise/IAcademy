@@ -1,35 +1,18 @@
 "use client";
 
-import ExportButton, {
-  AddButton,
-} from "@/app/ui/components/adminUtils/ExportButton";
-import StatResume from "@/app/ui/components/adminUtils/StatResume";
-import {
-  Input,
-  Select,
-} from "@/app/ui/components/authenticationForm/InputGroup";
-import {
-  UserRoundCheck,
-  UserRoundMinus,
-  UserRoundPlus,
-  MessagesSquare,
-  CheckCheck,
-  MessageSquareWarning,
-  MessageSquareDot,
-  BookCheck,
-  CircleX,
-
-} from "lucide-react";
-
+import { MessageCircleQuestion, Layers, Split } from "lucide-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import UserItem from "@/app/ui/components/adminUtils/UserItem";
-import LineStudent from "@/app/ui/components/Student/LineStudent";
 import CardsStudent from "@/app/ui/components/Student/CardsStudent";
-import Fifagrafico from "@/app/ui/components/Student/Fifagrafico";
+import { Fifagrafico } from "@/app/ui/components/Student/Fifagrafico";
+import { LoginsChart } from "@/app/ui/components/Student/LoginsChart";
+import { TimeChart } from "@/app/ui/components/Student/TimeChart";
+import { UtilizationChart } from "@/app/ui/components/Student/UtilizationChart";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/app/context/UserContext";
+import LoadingFrame from "@/app/ui/components/LoadingFrame";
 
-
-export default function Admins() {
+export default function Student() {
   const [users, setUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalPremiumUsers, setTotalPremiumUsers] = useState(0);
@@ -39,106 +22,63 @@ export default function Admins() {
   const [category, setCategory] = useState("");
   const [plan, setPlan] = useState("");
   const [status, setStatus] = useState("");
+  const { user, loading, isAuthenticated } = useUser();
+  const router = useRouter();
 
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get("http://localhost:5002/users", {
-        params: {
-          category,
-          plan,
-          status,
-        },
-        withCredentials: true,
-      });
-      setUsers(response.data);
-    } catch (error) {
-      console.log("Erro ao buscar usuários", error);
-    }
-  };
+  // if (!loading && !isAuthenticated) {
+  //   router.push("/login");
+  //   return null;
+  // }
 
-  useEffect(() => {
-    fetchUsers();
-  }, [category, plan, status]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:5002/users", {
-          withCredentials: true,
-        });
-
-        setUsers(response.data);
-      } catch (error) {
-        console.log("Erro ao buscar usuários", error);
-      }
-
-      try {
-        const response = await axios.get("http://localhost:5002/users_total", {
-          withCredentials: true,
-        });
-
-        setTotalUsers(response.data.totalUsers);
-        setTotalPremiumUsers(response.data.premiumUsers);
-        setTotalBannedUsers(response.data.bannedUsers);
-        setTotalNotBannedUsers(response.data.notBannedUsers);
-      } catch (error) {
-        console.log("Erro ao buscar usuários", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  // if (loading) {
+  //   return <LoadingFrame />;
+  // }
 
   return (
- 
-    <div className="flex flex-col gap-5">
-        <h1 className="text-3xl font-bold text-title-light">Meus estudos</h1>
-        <section className="grid grid-cols-4 gap-2">
-            <CardsStudent
-            title="Perguntas para a IA"
-            value={`0`}
-            lucideIcon={MessagesSquare}
-            description=""
-            />
-            <CardsStudent
-            title="Acertos nos quizzes"
-            value={`0`}
-            lucideIcon={CheckCheck}
-            description=""
-            iconColor="text-green-500"
-           
-            />
-            <CardsStudent
-            title=" Quizzes resolvidos"
-            value={`0`}
-            lucideIcon={BookCheck}
-            description=""
-            iconColor="text-green-500"
-            
-            />
-            <CardsStudent
-            title="Respostas erradas"
-            value={`0`}
-            lucideIcon={CircleX}
-            description=""
-            iconColor="text-red-500"
-       
-            />
-        </section>
-        <div className="grid grid-cols-2 gap-96">
-            <div className="p-6 pb-14 bg-background-light  rounded-lg h-[400px] w-[800px] flex flex-col gap-5 ">
-              
-                <LineStudent /> 
-            </div>
-            <div className="flex justify-center bg-background-light  gap-5 w-[400px]">
-                <Fifagrafico/>
-               
-            </div>
+    <div className="grid grid-cols-10 gap-5 min-h-full">
+      <div className="col-span-6 flex flex-col gap-5">
+        <div className="w-full h-full bg-mainBlue p-10 *:text-white flex flex-col gap-5 rounded-lg">
+          <h1 className="text-4xl">
+            Bem-vindo de volta, <b>Kauã</b> 👋
+          </h1>
+          <p className="max-w-[60%]">
+            Você concluiu <b className="font-bold">80%</b> da trilha de
+            matemática neste mês! Continue assim e você estará cada vez mais
+            próximo dos seus objetivos.
+          </p>
         </div>
+        <div className="grid grid-cols-3 *:col-span-1 gap-5 h-full">
+          <CardsStudent
+            title="Quizzes realizados"
+            value={"0"}
+            lucideIcon={MessageCircleQuestion}
+            iconBg="bg-[#F4734C]"
+          />
+          <CardsStudent
+            title="Tópicos lidos"
+            value={"00/00"}
+            lucideIcon={Layers}
+            iconBg="bg-[#438FFB]"
+          />
+          <CardsStudent
+            title="Tópicos Restantes"
+            value={"0"}
+            lucideIcon={Split}
+          />
+        </div>
+      </div>
+      <div className="col-span-2 *:h-full">
+        <UtilizationChart />
+      </div>
+      <div className="col-span-2 *:h-full">
+        <Fifagrafico />
+      </div>
+      <div className="col-span-4">
+        <LoginsChart />
+      </div>
+      <div className="col-span-6">
+        <TimeChart />
+      </div>
     </div>
-        
-  
-    
   );
 }
-

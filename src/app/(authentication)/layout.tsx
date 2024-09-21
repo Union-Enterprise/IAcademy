@@ -49,7 +49,7 @@ export default function RootLayout({
         {pathname.includes("/admin") ? (
           <div className="col-span-3 bg-[url('/wave.svg')] bg-center bg-cover bg-no-repeat bg-blue-500 flex flex-col gap-4 items-center justify-center">
             <Image alt="" src="/whiteIcon.svg" width={80} height={80} />
-            <main className=" bg-background-light p-10 w-fit rounded-lg">
+            <main className=" bg-bg-light p-10 w-fit rounded-lg">
               {children}
             </main>
           </div>
@@ -83,7 +83,7 @@ export default function RootLayout({
                 @IAcademy 2024 - Todos os direitos reservados.
               </p>
             </div>
-            <main className="col-span-1 bg-background-light p-20 h-full overflow-auto">
+            <main className="col-span-1 bg-bg-light px-20 flex flex-col pt-14 h-full overflow-auto">
               <div className="flex flex-col gap-8">
                 <img width={200} src="./bluelogo.svg" alt="IAcademy Logo" />
                 <div

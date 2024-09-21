@@ -11,14 +11,13 @@ import Skeleton from "./Skeleton";
 import { useSidebar } from "@/app/context/SidebarContext";
 
 const Navbar = () => {
-  // const { toggleSidebar } = useSidebar();
   const [showSearchView, setShowSearchView] = useState(false);
   const { user, isAuthenticated, loading } = useUser();
   const { toggleSidebar } = useSidebar();
 
   if (loading) {
     return (
-      <nav className="absolute top-0 left-0 z-50 h-20 bg-background-light px-5 grid grid-cols-3 items-center shadow-sm">
+      <nav className="absolute top-0 left-0 z-50 h-20 bg-bg-light px-5 grid grid-cols-3 items-center shadow-sm">
         <div className="flex gap-5 items-center">
           <Skeleton className="h-[45px] w-[250px]" />
         </div>
@@ -31,12 +30,12 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="absolute top-0 left-0 h-20 w-full bg-background-light px-5 grid grid-cols-3 items-center shadow-sm">
+    <nav className="absolute top-0 left-0 h-20 w-full bg-bg-light px-5 grid grid-cols-3 items-center shadow-sm">
       <div className="flex gap-5 items-center">
         <Menu
           onClick={toggleSidebar}
           size={50}
-          className="cursor-pointer rounded-md text-text-light p-3 hover:bg-background-lightHover duration-200"
+          className="cursor-pointer rounded-md text-text-light p-3 hover:bg-bg-lightHover duration-200"
         />
         <Link href="/">
           <Image
@@ -72,7 +71,7 @@ const Navbar = () => {
           <>
             <Link
               href="/login"
-              className="px-6 py-[0.65rem] bg-white rounded-md flex items-center text-whiteText bg-opacity-80 border-2 hover:bg-background-lightA border-border-light hover:bg-opacity-100 duration-100"
+              className="px-6 py-[0.65rem] bg-white rounded-md flex items-center text-whiteText bg-opacity-80 border-2 hover:bg-bg-lightA border-border-light hover:bg-opacity-100 duration-100"
             >
               <p className="font-bold">Entrar</p>
             </Link>

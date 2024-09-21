@@ -10,7 +10,7 @@ export default function Home() {
   const { user, isAuthenticated } = useUser();
 
   return (
-    <div className="mx-[100px] mt-[40px] mb-[140px]">
+    <div>
       <div className="flex flex-col gap-[40px]">
         <div>
           <h1 className="text-title-light text-4xl">

@@ -34,6 +34,8 @@ export function usePageTitle() {
       pageTitle = "Usuários";
     } else if (pathname.includes("/notifications")) {
       pageTitle = "Notificações";
+    } else if (pathname.includes("/student")) {
+      pageTitle = "Dashboard Estudante";
     } else {
       pageTitle = "Home";
     }

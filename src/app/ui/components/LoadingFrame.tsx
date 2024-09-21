@@ -8,7 +8,7 @@ export default function LoadingFrame() {
         alt="IAcademy Logo"
         width={150}
         height={150}
-        className="animate-bounce duration-500"
+        className="animate-bounce duration-1000"
       />
     </div>
   );

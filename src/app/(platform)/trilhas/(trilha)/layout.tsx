@@ -15,7 +15,7 @@ export default function TrilhaLayout({
   return (
     <div>
       {!pathname.includes("/topic") && (
-        <div className="bg-background-lightA h-[300px] flex flex-col justify-between px-[200px] pt-[60px]">
+        <div className="bg-bg-lightA h-[300px] flex flex-col justify-between px-[200px] pt-[60px]">
           <div className="flex flex-col gap-3">
             <Link
               href="/trilhas"
@@ -108,7 +108,7 @@ function StickyCard({
       className={`${
         isPremium
           ? "bg-mainBlue"
-          : "bg-background-lightCard border-2 border-border-light"
+          : "bg-bg-lightCard border-2 border-border-light"
       } p-6 rounded-md shadow-sm`}
     >
       <h2

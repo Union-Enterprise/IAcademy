@@ -32,7 +32,7 @@ const Sidebar = ({ isUserLayout = true }) => {
       <section
         className={`h-full ${
           isOpen ? "w-[300px]" : "w-[95px]"
-        } flex flex-col gap-2 px-5 py-6 duration-200`}
+        } flex flex-col gap-2 px-5 py-10 duration-200`}
       >
         <Skeleton className="h-[50px] w-full" />
         <Skeleton className="h-[50px] w-full" />
@@ -45,7 +45,7 @@ const Sidebar = ({ isUserLayout = true }) => {
     <section
       className={`h-full ${
         isOpen ? "w-[300px]" : "w-[95px]"
-      } flex flex-col gap-2 px-5 py-6 duration-200`}
+      } flex flex-col gap-2 px-5 py-10 duration-200`}
     >
       {!user.is_adm ? (
         <>
@@ -58,20 +58,20 @@ const Sidebar = ({ isUserLayout = true }) => {
             onClick={() => setSelectedItem("/")}
           />
           <Item
+            title="Meus estudos"
+            lucideIcon={Library}
+            isOpen={isOpen}
+            href="/student"
+            isSelected={selectedItem.startsWith("/student")}
+            onClick={() => setSelectedItem("/student")}
+          />
+          <Item
             title="Trilhas"
             lucideIcon={Compass}
             isOpen={isOpen}
             href="/trilhas"
             isSelected={selectedItem.startsWith("/trilhas")}
             onClick={() => setSelectedItem("/trilhas")}
-          />
-           <Item
-            title="Meus estudos"
-            lucideIcon={Library}
-            isOpen={isOpen}
-            href="/Student"
-            isSelected={selectedItem.startsWith("/Student")}
-            onClick={() => setSelectedItem("/Student")}
           />
           <Item
             title="Premium"
@@ -82,7 +82,6 @@ const Sidebar = ({ isUserLayout = true }) => {
             isSelected={selectedItem === "/premium"}
             onClick={() => setSelectedItem("/premium")}
           />
-          
         </>
       ) : (
         <>
@@ -148,7 +147,7 @@ function Item({
             : "opacity-50"
         }
 
-        ${!isSelected && !isPremium && "hover:bg-background-lightHover"}
+        ${!isSelected && !isPremium && "hover:bg-bg-lightHover"}
 
         ${isPremium ? "bg-mainBlue text-white" : "text-title-light "}`}
     >

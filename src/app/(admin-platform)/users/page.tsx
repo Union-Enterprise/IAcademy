@@ -114,7 +114,7 @@ export default function Admins() {
           iconBg="bg-red-100"
         />
       </section>
-      <section className="bg-background-light rounded-lg *:p-6 border-2 border-border-light flex flex-col">
+      <section className="bg-bg-light rounded-lg *:p-6 border-2 border-border-light flex flex-col">
         <form className="grid grid-cols-3 gap-5">
           <h2 className="text-text-light col-span-3 font-semibold text-xl">
             Filtros
@@ -122,7 +122,7 @@ export default function Admins() {
           <div className="group/select">
             <select
               id="category"
-              className="w-full px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-background-light group-hover/select:border-mainBlue"
+              className="w-full px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-bg-light group-hover/select:border-mainBlue"
               onChange={(e) => setCategory(e.target.value)}
             >
               <option key="" value="">
@@ -139,7 +139,7 @@ export default function Admins() {
           <div className="group/select">
             <select
               id="plan"
-              className="w-full px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-background-light group-hover/select:border-mainBlue"
+              className="w-full px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-bg-light group-hover/select:border-mainBlue"
               onChange={(e) => setPlan(e.target.value)}
             >
               <option key="" value="">
@@ -156,7 +156,7 @@ export default function Admins() {
           <div className="group/select">
             <select
               id="status"
-              className="w-full px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-background-light group-hover/select:border-mainBlue"
+              className="w-full px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-bg-light group-hover/select:border-mainBlue"
               onChange={(e) => setStatus(e.target.value)}
             >
               <option key="" value="">
@@ -175,7 +175,7 @@ export default function Admins() {
           <div className="group/select w-fit">
             <select
               id="amount"
-              className="px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-background-light group-hover/select:border-mainBlue"
+              className="px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-bg-light group-hover/select:border-mainBlue"
             >
               <option key="10" value="10">
                 10
@@ -252,7 +252,7 @@ export default function Admins() {
 
 function Admin() {
   return (
-    <tr className="border-b-[1px] border-border-lightB *:px-[24px] *:py-[12px] hover:bg-background-lightHover duration-100">
+    <tr className="border-b-[1px] border-border-lightB *:px-[24px] *:py-[12px] hover:bg-bg-lightHover duration-100">
       <td className=" text-text-lightSub text-sm">0</td>
       <td className=" text-text-lightSub text-sm">Admin</td>
       <td className=" text-text-lightSub text-sm">admin@email.com</td>

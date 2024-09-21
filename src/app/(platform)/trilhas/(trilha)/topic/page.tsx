@@ -77,7 +77,7 @@ export default function Topic() {
           </li>
         </ul>
       </div>
-      <div className="w-full bg-background-lightA p-5 rounded-md mt-5 shadow-md">
+      <div className="w-full bg-bg-lightA p-5 rounded-md mt-5 shadow-md">
         <h2 className="text-xl font-semibold mb-4">Conte-nos o motivo:</h2>
         <div className="flex flex-wrap w-full justify-center gap-2">
           <FeedbackButton text="Não gostei do estilo" />
@@ -94,7 +94,7 @@ export default function Topic() {
 
 function FeedbackButton({ text = "Motivo aqui" }) {
   return (
-    <button className="bg-background-lightB text-sm text-gray-800 px-8 py-3 rounded-md hover:bg-gray-300 duration-200">
+    <button className="bg-bg-lightB text-sm text-gray-800 px-8 py-3 rounded-md hover:bg-gray-300 duration-200">
       {text}
     </button>
   );
