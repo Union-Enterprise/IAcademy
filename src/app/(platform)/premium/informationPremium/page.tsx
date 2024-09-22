@@ -83,20 +83,24 @@ export default function CheckoutForm() {
   };
 
   const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const cepInput = e.target.value;
-    setCep(cepInput);
+    const cepInput = e.target.value.replace(/\D/g, ''); 
+    setCep(e.target.value);
 
-    if (cepInput.length === 9) { // Verifica se o CEP está no formato correto (com hífen)
+    if (cepInput.length === 8) { 
       const addressData = await fetchAddress(cepInput);
       if (addressData) {
-        setRua(addressData.logradouro);
-        setBairro(addressData.bairro);
-        setCidade(addressData.localidade);
-        setEstado(addressData.uf);
+          setRua(addressData.logradouro || '');
+          setBairro(addressData.bairro || '');
+          setCidade(addressData.localidade || '');
+          setEstado(addressData.uf || '');
       }
-    } else {
-      setCepError('');
-    }
+  } else {
+      setCepError('CEP inválido.');
+      setRua('');
+      setBairro('');
+      setCidade('');
+      setEstado('');
+  }
   };
 
   const validateForm = (): boolean => {
@@ -178,7 +182,8 @@ export default function CheckoutForm() {
       return; 
     }
 
-    // Redirecionar para a próxima página
+
+
     router.push('/premium/pagamentPremium');
   };
 
