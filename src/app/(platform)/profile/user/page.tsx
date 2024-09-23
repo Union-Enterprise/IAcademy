@@ -14,6 +14,7 @@ import Modal from "@/app/ui/components/profile/Modal";
 import axios from "axios";
 import { cpf } from "cpf-cnpj-validator";
 import { useToast } from "@/app/context/ToastContext";
+import GeneroShad from "@/app/ui/components/profile/GeneroShad";
 
 const formatPhone = (value: string) => {
   const cleanValue = value.replace(/\D/g, "");
@@ -404,21 +405,11 @@ export default function User() {
             error={state.formErrors.birth}
             cols="col-span-2"
           />
-          <Select
-            label="Gênero"
-            labelFor="genero"
-            options={[
-              { value: "", label: "Selecione uma opção" },
-              { value: "masculino", label: "Masculino" },
-              { value: "feminino", label: "Feminino" },
-              { value: "nb", label: "Não-binário" },
-              { value: "outro", label: "Outro" },
-            ]}
-            isRequired={false}
-            value={state.userFormData.genero}
-            onChange={handleUserInputChange}
-            error={state.formErrors.genero}
-            cols="col-span-2"
+          <GeneroShad
+            // value={state.userFormData.genero}
+            // onChange={handleUserInputChange}
+            // error={state.formErrors.genero}
+          
           />
           <InputGroup
             label="Telefone"
@@ -429,7 +420,7 @@ export default function User() {
             isRequired={false}
             onChange={handleUserInputChange}
             error={state.formErrors.phone}
-            cols="col-span-2"
+            cols="col-span-3 ml-24"
           />
         </SettingsSection>
         <SubmitButton
