@@ -43,9 +43,9 @@ const Sidebar = ({ isUserLayout = true }) => {
 
   return (
     <section
-      className={`h-full ${
-        isOpen ? "w-[300px]" : "w-[95px]"
-      } flex flex-col gap-2 px-5 py-10 duration-200`}
+      className={`h-fit lg:h-full w-[300px] ${
+        isOpen ? "flex lg:w-[300px]" : "hidden lg:flex w-[95px]"
+      } absolute lg:relative left-4 top-24 lg:left-0 lg:top-0 lg:px-4 lg:py-6 lg:rounded-none rounded-md overflow-hidden bg-bg-lightA flex flex-col lg:gap-2 duration-100 border-borders-light`}
     >
       {!user.is_adm ? (
         <>
@@ -138,7 +138,7 @@ function Item({
     <Link
       onClick={onClick}
       href={href}
-      className={`relative pl-[55px] flex overflow-hidden gap-4 h-[50px] rounded-md items-center cursor-pointer hover:opacity-100 duration-200 w-full
+      className={`px-6 py-4 lg:px-4 flex overflow-hidden gap-4 lg:rounded-md items-center cursor-pointer hover:opacity-100 duration-200 w-full
         ${
           isSelected
             ? isPremium
@@ -151,9 +151,7 @@ function Item({
 
         ${isPremium ? "bg-mainBlue text-white" : "text-title-light "}`}
     >
-      {LucideIcon && (
-        <LucideIcon className="absolute left-[15px] h-[25px] w-[25px]" />
-      )}
+      {LucideIcon && <LucideIcon size={25} className="flex-shrink-0" />}
       {isOpen && <p className="whitespace-nowrap">{title}</p>}
     </Link>
   );

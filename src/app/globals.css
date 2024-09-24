@@ -10,6 +10,20 @@
   box-sizing: border-box;
 }
 
+*::-webkit-scrollbar {
+  width: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: none;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(24, 100, 242, 0.8);
+  border-radius: 20px;
+  border: 3px solid #fff;
+}
+
 input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: none;
   appearance: none;

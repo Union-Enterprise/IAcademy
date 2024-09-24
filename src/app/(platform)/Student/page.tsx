@@ -3,11 +3,11 @@
 import { MessageCircleQuestion, Layers, Split } from "lucide-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import CardsStudent from "@/app/ui/components/Student/CardsStudent";
-import { Fifagrafico } from "@/app/ui/components/Student/Fifagrafico";
-import { LoginsChart } from "@/app/ui/components/Student/LoginsChart";
-import { TimeChart } from "@/app/ui/components/Student/TimeChart";
-import { UtilizationChart } from "@/app/ui/components/Student/UtilizationChart";
+import CardsStudent from "@/app/ui/components/student/CardsStudent";
+import { Fifagrafico } from "@/app/ui/components/student/Fifagrafico";
+import { LoginsChart } from "@/app/ui/components/student/LoginsChart";
+import { TimeChart } from "@/app/ui/components/student/TimeChart";
+import { UtilizationChart } from "@/app/ui/components/student/UtilizationChart";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
 import LoadingFrame from "@/app/ui/components/LoadingFrame";

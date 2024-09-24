@@ -29,7 +29,7 @@ export default function RootLayout({
           <SidebarProvider>
             <Navbar />
             <Sidebar />
-            <main className="flex flex-col overflow-auto w-full h-[calc(100% - 80px)] p-10">
+            <main className="flex flex-col overflow-auto w-full h-[calc(100% - 80px)] py-6 px-10">
               <ToastProvider>{children}</ToastProvider>
             </main>
           </SidebarProvider>

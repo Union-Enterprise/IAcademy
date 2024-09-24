@@ -92,7 +92,7 @@ export default function Register() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-mainBlue">Cadastrar</h1>
+      <h1 className="text-2xl font-bold text-mainBlue">Cadastre-se gratuitamente</h1>
       <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
         <InputGroup
           label="Nome"
@@ -133,7 +133,7 @@ export default function Register() {
             </p>
           )}
         </div>
-        <SubmitButton text="Cadastrar" loading={isSubmitting} />
+        <SubmitButton text="Cadastrar-se gratuitamente" loading={isSubmitting} />
       </form>
       <RedirectLink
         message="Já tem uma conta?"

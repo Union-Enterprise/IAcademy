@@ -44,18 +44,18 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.svg" />
       </head>
       <body
-        className={`${inter.className} h-[100vh] overflow-hidden select-none grid grid-cols-3`}
+        className={`${inter.className} h-[100vh] w-[100vw] overflow-hidden select-none xl:flex`}
       >
         {pathname.includes("/admin") ? (
-          <div className="col-span-3 bg-[url('/wave.svg')] bg-center bg-cover bg-no-repeat bg-blue-500 flex flex-col gap-4 items-center justify-center">
+          <div className="w-full h-full bg-[url('/wave.svg')] bg-center bg-cover bg-no-repeat bg-blue-500 flex flex-col gap-4 items-center justify-center">
             <Image alt="" src="/whiteIcon.svg" width={80} height={80} />
-            <main className=" bg-bg-light p-10 w-fit rounded-lg">
+            <main className="bg-bg-light p-6 lg:p-10 w-fit h-fit rounded-lg">
               {children}
             </main>
           </div>
         ) : (
           <>
-            <div className="bg-gradient-to-b from-mainBlue to-blue-900 col-span-2 flex flex-col gap-10 h-[100vh] px-[100px] py-[100px]">
+            <div className="w-full bg-gradient-to-b hidden xl:flex from-mainBlue to-blue-900 flex-col gap-10 h-[100vh] px-[100px] py-[100px]">
               <Image
                 src="/whiteIcon.svg"
                 alt="Descrição da Imagem"
@@ -83,16 +83,14 @@ export default function RootLayout({
                 @IAcademy 2024 - Todos os direitos reservados.
               </p>
             </div>
-            <main className="col-span-1 bg-bg-light px-20 flex flex-col pt-14 h-full overflow-auto">
-              <div className="flex flex-col gap-8">
-                <img width={200} src="./bluelogo.svg" alt="IAcademy Logo" />
-                <div
-                  className={`${
-                    loading && "pointer-events-none"
-                  } flex flex-col gap-8`}
-                >
-                  {children}
-                </div>
+            <main className="xl:min-w-[560px] bg-bg-light p-7 xl:p-20 xl:py-14 flex flex-col h-full overflow-auto">
+              <img width={200} src="./bluelogo.svg" alt="IAcademy Logo" />
+              <div
+                className={`${
+                  loading && "pointer-events-none"
+                } flex flex-col gap-6 mt-8`}
+              >
+                {children}
               </div>
             </main>
           </>

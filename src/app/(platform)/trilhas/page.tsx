@@ -3,7 +3,7 @@ import { Box, CircleAlert, Cone, Cuboid, Diameter, TriangleRight, Brain, Percent
 
 export default function Trilhas() {
   return (
-    <div className="mx-[100px] mt-[40px] mb-[140px]">
+    <div>
       <h1 className="text-3xl font-bold mb-5">Trilhas de Aprendizado</h1>
       <div className="flex flex-col gap-5 mb-8 bg-mainBlue px-[32px] py-[60px] rounded-lg *:text-white">
         <h2 className="text-2xl font-bold">Aprendizado rápido e organizado</h2>

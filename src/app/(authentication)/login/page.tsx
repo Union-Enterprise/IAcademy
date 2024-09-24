@@ -54,7 +54,7 @@ export default function Login() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-mainBlue">Entrar</h1>
+      <h1 className="text-2xl font-bold text-mainBlue">Acesse sua conta</h1>
       <form
         className="flex flex-col gap-5"
         onSubmit={(e) => {
@@ -96,7 +96,7 @@ export default function Login() {
       </SocialOptions>
       <RedirectLink
         message="Ainda não tem uma conta?"
-        action="Clique aqui para se cadastrar"
+        action="Inscreva-se gratuitamente"
         href="/register"
       />
     </>
