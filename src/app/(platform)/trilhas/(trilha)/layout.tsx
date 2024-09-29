@@ -61,12 +61,12 @@ export default function TrilhaLayout({
       <div className="h-full mt-12 grid grid-cols-3 gap-10 px-[200px] relative">
         <div className="w-full col-span-2 flex flex-col gap-5">{children}</div>
         <div className="col-span-1 gap-5 flex flex-col sticky h-fit top-12">
-          <StickyCard isPremium={true} title="Premium" action="Assinar">
+          <StickyCard isPremium={true} title="Premium" action="Assinar" tabIndex={0}>
             <p className="mb-4 text-white">
               Estude sem preocupações ou distrações a qualquer momento.
             </p>
           </StickyCard>
-          <StickyCard title="Quizzes" action="Realizar Quiz">
+          <StickyCard title="Quizzes" action="Realizar Quiz" tabIndex={0}>
             <p className="mb-4">
               Vamos ver se você entendeu sobre o conteúdo? Clique no botão
               abaixo e teste seus conhecimentos sobre Geometria.
@@ -74,7 +74,7 @@ export default function TrilhaLayout({
           </StickyCard>
           {pathname.includes("/topic") && (
             <>
-              <StickyCard title="Pergunte à IA" action="Enviar">
+              <StickyCard title="Pergunte à IA" action="Enviar" tabIndex={0}>
                 <p className="mb-4">
                   Ficou com dúvida em alguma parte desse conteúdo? Basta digitar
                   logo abaixo.
@@ -97,11 +97,13 @@ function StickyCard({
   title = "",
   children,
   action = "",
+  tabIndex = -1,
 }: {
   isPremium?: boolean;
   title: string;
   children: React.ReactNode;
   action: string;
+  tabIndex?: number; 
 }) {
   return (
     <div
@@ -110,6 +112,14 @@ function StickyCard({
           ? "bg-mainBlue"
           : "bg-bg-lightCard border-2 border-border-light"
       } p-6 rounded-md shadow-sm`}
+      tabIndex={tabIndex} 
+      onFocus={() => console.log(`${title} focused`)} 
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+       
+          console.log(`${title} clicked`); 
+        }
+      }}
     >
       <h2
         className={`${
