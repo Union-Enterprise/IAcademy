@@ -14,7 +14,7 @@ import { useSidebar } from "../../context/SidebarContext";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
-import Skeleton from "../components/Skeleton"; // Importa o componente Skeleton
+import Skeleton from "../components/Skeleton";
 
 const Sidebar = ({ isUserLayout = true }) => {
   const { isOpen } = useSidebar();
@@ -22,6 +22,7 @@ const Sidebar = ({ isUserLayout = true }) => {
   const { user, loading } = useUser();
 
   const [selectedItem, setSelectedItem] = useState(pathname);
+  const isTrilha = pathname.startsWith("/overview");
 
   useEffect(() => {
     setSelectedItem(pathname);
@@ -43,9 +44,22 @@ const Sidebar = ({ isUserLayout = true }) => {
 
   return (
     <section
-      className={`h-fit lg:h-full w-[300px] ${
-        isOpen ? "flex lg:w-[300px]" : "hidden lg:flex w-[95px]"
-      } absolute lg:relative left-4 top-24 lg:left-0 lg:top-0 lg:px-4 lg:py-6 lg:rounded-none rounded-md overflow-hidden bg-bg-lightA flex flex-col lg:gap-2 duration-100 border-borders-light`}
+      className={`h-fit w-[300px]
+        ${
+          isTrilha
+            ? isOpen
+              ? "flex"
+              : "hidden"
+            : isOpen
+            ? "flex lg:w-[300px]"
+            : "hidden lg:flex w-[95px]"
+        }
+        
+        ${
+          !isTrilha &&
+          "lg:h-full lg:relative lg:left-0 lg:top-0 lg:px-4 lg:py-6 lg:rounded-none lg:gap-2"
+        }
+        absolute left-4 top-24 rounded-md overflow-hidden z-50 bg-bg-lightA flex flex-col duration-100 border-borders-light`}
     >
       {!user.is_adm ? (
         <>
@@ -61,9 +75,9 @@ const Sidebar = ({ isUserLayout = true }) => {
             title="Meus estudos"
             lucideIcon={Library}
             isOpen={isOpen}
-            href="/Student"
-            isSelected={selectedItem.startsWith("/Student")}
-            onClick={() => setSelectedItem("/Student")}
+            href="/student"
+            isSelected={selectedItem.startsWith("/student")}
+            onClick={() => setSelectedItem("/student")}
           />
           <Item
             title="Trilhas"

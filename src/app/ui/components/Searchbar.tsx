@@ -61,7 +61,7 @@ export function SearchView({ setShowSearchView }: SearchProps) {
   }, [setShowSearchView]);
 
   return (
-    <div className="bg-black bg-opacity-60 absolute m-auto w-full h-[100vh] top-0 left-0 z-20 flex items-center justify-center">
+    <div className="bg-black bg-opacity-60 absolute m-auto w-full h-[100vh] top-0 left-0 z-[999] flex items-center justify-center">
       <div className="w-[600px] flex flex-col overflow-hidden rounded-md">
         <div className="flex items-center relative">
           <input

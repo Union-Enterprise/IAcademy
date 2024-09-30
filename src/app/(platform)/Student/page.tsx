@@ -35,7 +35,7 @@ export default function Student() {
   // }
 
   return (
-    <div className="grid grid-cols-10 gap-5 min-h-full">
+    <div className="grid grid-cols-10 gap-5 min-h-full p-8">
       <div className="col-span-6 flex flex-col gap-5">
         <div className="w-full h-full bg-mainBlue p-10 *:text-white flex flex-col gap-5 rounded-lg">
           <h1 className="text-4xl">

@@ -1,9 +1,16 @@
 import Link from "next/link";
-import { Box, CircleAlert, Cone, Cuboid, Diameter, TriangleRight, Brain, Percent } from "lucide-react";
+import {
+  Box,
+  CircleAlert,
+  Cone,
+  Cuboid,
+  Diameter,
+  TriangleRight,
+  Brain,
+  Percent,
+} from "lucide-react";
 
-
-
-export default function ContentList({ title = "" }) {
+export default function ContentList({ title = "" }: { title: string }) {
   return (
     <section className="flex flex-col gap-2">
       <div className="flex justify-between items-center">
@@ -13,27 +20,26 @@ export default function ContentList({ title = "" }) {
         </button>
       </div>
       <div className="grid grid-cols-3 gap-5">
-      <Item
-        title="Geometria Plana"
-        href="/trilhas/overview"
-        icon={<Cone />}
-        description="Geometria Plana explora figuras bidimensionais, como triângulos, círculos e quadrados, ajudando a calcular perímetros, áreas e ângulos."
-      />
+        <Item
+          title="Geometria Plana"
+          href="/trilhas/overview"
+          lucideIcon={Cone}
+          description="Geometria Plana explora figuras bidimensionais, como triângulos, círculos e quadrados, ajudando a calcular perímetros, áreas e ângulos."
+        />
 
-     
-      <Item
-        title="Fatorial"
-        href="/trilhas/overview"
-        icon={<CircleAlert />}
-        description="O fatorial é amplamente utilizado em combinatória, probabilidade e em várias áreas da matemática para calcular o número de permutações."
-      />
+        <Item
+          title="Fatorial"
+          href="/trilhas/overview"
+          lucideIcon={CircleAlert}
+          description="O fatorial é amplamente utilizado em combinatória, probabilidade e em várias áreas da matemática para calcular o número de permutações."
+        />
 
-      <Item
-        title="Raciocínio Lógico"
-        href="/trilhas/overview"
-        icon={<Brain />}
-        description="Raciocínio lógico é a habilidade de pensar de forma clara e resolver problemas, usando dedução e indução para chegar a conclusões. É essencial em matemática e na vida cotidiana."
-      />
+        <Item
+          title="Raciocínio Lógico"
+          href="/trilhas/overview"
+          lucideIcon={Brain}
+          description="Raciocínio lógico é a habilidade de pensar de forma clara e resolver problemas, usando dedução e indução para chegar a conclusões. É essencial em matemática e na vida cotidiana."
+        />
       </div>
     </section>
   );
@@ -43,7 +49,12 @@ export function Item({
   title = "Título aqui",
   description = "Descrição",
   href = "",
-  icon = "Icon",
+  lucideIcon: LucideIcon,
+}: {
+  title: string;
+  description: string;
+  href: string;
+  lucideIcon: React.ElementType;
 }) {
   return (
     <Link
@@ -52,7 +63,7 @@ export function Item({
     >
       <div>
         <div className="flex gap-2">
-        <div className="text-lg flex">{icon}</div>
+          {LucideIcon && <LucideIcon size={25} className="flex-shrink-0" />}
           <h6 className="font-bold text-lg text-text-light flex">{title}</h6>
         </div>
         <p className="text-sm text-text-lightSub">00/00 tópicos estudados</p>

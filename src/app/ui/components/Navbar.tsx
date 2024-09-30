@@ -1,10 +1,9 @@
 "use client";
 
 import Image from "next/image";
-// import { useSidebar } from "../../context/SidebarContext";
 import Link from "next/link";
-import { Menu, ChevronRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Menu } from "lucide-react";
+import { useState } from "react";
 import Searchbar, { SearchIcon, SearchView } from "./Searchbar";
 import { useUser } from "@/app/context/UserContext";
 import Skeleton from "./Skeleton";
