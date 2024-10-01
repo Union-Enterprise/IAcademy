@@ -33,6 +33,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-content-loader": "^7.0.2",
     "react-dom": "^18",
+    "reactflow": "^11.11.4",
     "recharts": "^2.12.7",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7"
