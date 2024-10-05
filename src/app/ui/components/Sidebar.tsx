@@ -8,6 +8,7 @@ import {
   ChartPie,
   BellRing,
   Library,
+  FileQuestion,
 } from "lucide-react";
 import Link from "next/link";
 import { useSidebar } from "../../context/SidebarContext";
@@ -122,6 +123,14 @@ const Sidebar = ({ isUserLayout = true }) => {
             href="/notifications"
             isSelected={selectedItem === "/notifications"}
             onClick={() => setSelectedItem("/notifications")}
+          />
+          <Item
+            title="Questões"
+            lucideIcon={FileQuestion}
+            isOpen={isOpen}
+            href="/Question"
+            isSelected={selectedItem === "/Question"}
+            onClick={() => setSelectedItem("/Question")}
           />
         </>
       )}
