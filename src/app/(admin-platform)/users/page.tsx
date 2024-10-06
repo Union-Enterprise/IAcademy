@@ -13,18 +13,30 @@ import {
   UserRoundMinus,
   UserRoundPlus,
   UsersRound,
+  X,
 } from "lucide-react";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
 import UserItem from "@/app/ui/components/adminUtils/UserItem";
+import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 
-export default function Admins() {
+export default function Users() {
   const [users, setUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalPremiumUsers, setTotalPremiumUsers] = useState(0);
   const [totalBannedUsers, setTotalBannedUsers] = useState(0);
   const [totalNotBannedUsers, setTotalNotBannedUsers] = useState(0);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleAddButtonClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   const [category, setCategory] = useState("");
   const [plan, setPlan] = useState("");
@@ -194,7 +206,7 @@ export default function Admins() {
           <div className="flex items-center gap-3">
             <Input className="h-10" placeholder="Procurar usuário" />
             <ExportButton />
-            <AddButton />
+            <AddButton onClick={handleAddButtonClick} />
           </div>
         </div>
         <table>
@@ -245,6 +257,57 @@ export default function Admins() {
             )}
           </tbody>
         </table>
+      </section>
+      {/* Modal */}
+      <section
+        className={`fixed inset-0 z-50 flex items-end justify-end ${
+          isModalOpen ? "pointer-events-auto group" : "pointer-events-none"
+        }`}
+      >
+        <div
+          className={`
+            bg-black fixed inset-0 duration-300 pointer-events-none
+            ${isModalOpen ? " opacity-50 pointer-events-auto" : "opacity-0"}`}
+          onClick={handleCloseModal}
+        />
+
+        <div
+          className={`bg-white w-full max-w-md p-8 h-screen shadow-lg transform transition-transform duration-300 ease-in-out flex flex-col gap-5 ${
+            isModalOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <X
+            className="hover:text-text-light duration-100 cursor-pointer text-text-lightSub"
+            onClick={handleCloseModal}
+          />
+          <h2 className="text-xl font-semibold">Adicionar novo usuário</h2>
+          <form className="flex flex-col gap-5">
+            <Input inputType="text" placeholder="Nome" className="h-[48px]" />
+            <Input
+              inputType="email"
+              placeholder="E-mail"
+              className="h-[48px]"
+            />
+            <Input
+              inputType="password"
+              placeholder="Informe a senha"
+              className="h-[48px]"
+            />
+            <Input
+              inputType="password"
+              placeholder="Confirme a senha"
+              className="h-[48px]"
+            />
+            <Select
+              options={[
+                { value: "", label: "Categoria" },
+                { value: "user", label: "Usuário" },
+                { value: "admin", label: "Administrador" },
+              ]}
+            />
+            <SubmitButton text="Adicionar usuário" />
+          </form>
+        </div>
       </section>
     </div>
   );

@@ -1,4 +1,5 @@
 import { CirclePlus, Upload } from "lucide-react";
+import { MouseEventHandler } from "react";
 
 export default function ExportButton() {
   return (
@@ -12,11 +13,16 @@ export default function ExportButton() {
   );
 }
 
-export function AddButton() {
+export function AddButton({
+  onClick,
+}: {
+  onClick: MouseEventHandler<HTMLButtonElement>;
+}) {
   return (
     <button
       type="submit"
       className="h-10 py-2 bg-mainBlue *:text-white px-4 rounded-lg hover:bg-blue-700 duration-100 flex items-center gap-2"
+      onClick={onClick}
     >
       <CirclePlus size={20} />
       <p className="font-semibold text-sm">Adicionar</p>

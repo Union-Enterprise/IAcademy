@@ -107,8 +107,8 @@ export function Input({
 }
 
 interface SelectProps {
-  label: string;
-  labelFor: string;
+  label?: string;
+  labelFor?: string;
   isRequired?: boolean;
   options: { value: string; label: string }[];
   value?: string;
@@ -131,12 +131,14 @@ export function Select({
 }: SelectProps) {
   return (
     <div className={`${cols} flex flex-col gap-[10px]`}>
-      <Label
-        label={label}
-        labelFor={labelFor}
-        isRequired={isRequired}
-        isDisabled={isDisabled}
-      />
+      {label && labelFor && (
+        <Label
+          label={label}
+          labelFor={labelFor}
+          isRequired={isRequired}
+          isDisabled={isDisabled}
+        />
+      )}
       <div className="group/select">
         <select
           id={labelFor}

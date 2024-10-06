@@ -128,9 +128,9 @@ const Sidebar = ({ isUserLayout = true }) => {
             title="Questões"
             lucideIcon={FileQuestion}
             isOpen={isOpen}
-            href="/Question"
-            isSelected={selectedItem === "/Question"}
-            onClick={() => setSelectedItem("/Question")}
+            href="/questions"
+            isSelected={selectedItem === "/questions"}
+            onClick={() => setSelectedItem("/questions")}
           />
         </>
       )}
