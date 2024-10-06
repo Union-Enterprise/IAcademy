@@ -2,31 +2,39 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { usePathname } from "next/navigation";
 
-export default function Header() {
+interface HeaderProps {
+  title?: string;
+  description?: string;
+  linkLabel?: string;
+  hrefs?: string[];
+}
+
+export default function Header({
+  title = "Preparando-se para os vestibulares",
+  description = "Aprenda tudo que você precisa para passar nos vestibulares.",
+  linkLabel = "Conteúdos",
+  hrefs = ["/trilhas/overview", "/trilhas/contents", "/trilhas"],
+}: HeaderProps) {
   const pathname = usePathname();
 
   return (
     <div className="h-[30vh] flex flex-col justify-between px-[200px] pt-[60px] bg-bg-lightA">
       <div className="flex flex-col gap-3">
         <Link
-          href="/trilhas"
+          href={hrefs[2]}
           className="text-mainBlue opacity-60 hover:opacity-100 flex gap-2 items-center duration-100 w-fit mb-3"
         >
           <ArrowLeft />
           <p className="text-lg">Voltar</p>
         </Link>
-        <h1 className="text-5xl font-bold text-title-light">
-          Preparando-se para os vestibulares
-        </h1>
-        <p className="text-text-lightSub text-lg">
-          Aprenda tudo que você precisa para passar nos vestibulares.
-        </p>
+        <h1 className="text-5xl font-bold text-title-light">{title}</h1>
+        <p className="text-text-lightSub text-lg">{description}</p>
       </div>
       <div className="flex gap-4">
         <Link
-          href="/trilhas/overview"
+          href={hrefs[0]}
           className={`${
-            pathname.includes("/trilhas/overview")
+            pathname.includes(`/overview`)
               ? "border-b-mainBlue font-semibold"
               : "opacity-50 hover:opacity-100 hover:border-opacity-75 hover:border-b-mainBlue "
           } *:text-text-light border-b-2 p-2 text-lg duration-100`}
@@ -34,14 +42,14 @@ export default function Header() {
           <p>Visão Geral</p>
         </Link>
         <Link
-          href="/trilhas/modulos"
+          href={hrefs[1]}
           className={`${
-            pathname.includes("/trilhas/modulos")
+            pathname.includes("/contents") || pathname.includes("/topics")
               ? "border-b-mainBlue font-semibold"
               : "opacity-50 hover:opacity-100 hover:border-opacity-75 hover:border-b-mainBlue "
           } *:text-text-light border-b-2 p-2 text-lg duration-100`}
         >
-          <p>Módulos</p>
+          <p>{linkLabel}</p>
         </Link>
       </div>
     </div>
