@@ -11,7 +11,7 @@ export default function Overview({
       <div className="col-span-2">
         <Generic />
       </div>
-      <div className="col-span-1 flex flex-col gap-2 sticky top-5">
+      {/* <div className="col-span-1 flex flex-col gap-2 sticky top-5">
         <h3 className="font-semibold text-xl">Conteúdos desta trilha</h3>
         <ContentLink title="Módulo 1: Estatística" />
         <ContentLink title="Quiz: Estatísticas" />
@@ -21,7 +21,7 @@ export default function Overview({
         <ContentLink title="Módulo 5: Álgebra 1" />
         <ContentLink title="Módulo 6: Álgebra 2" />
         <ContentLink title="Avaliação Final: Matemática Ensino Médio" />
-      </div>
+      </div> */}
     </section>
   );
 }
