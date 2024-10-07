@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Edit, Trash2, Plus } from "lucide-react";
+import { Edit, Trash2, Plus, File } from "lucide-react";
 import dynamic from "next/dynamic";
 import axios from "axios";
 
@@ -11,6 +11,7 @@ import "react-quill/dist/quill.snow.css";
 export default function Questionnaires() {
   const [questionnaires, setQuestionnaires] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [titulo, setTitulo] = useState("");
   const [questao, setQuestao] = useState("");
@@ -19,6 +20,7 @@ export default function Questionnaires() {
   const [alternativas, setAlternativas] = useState([""]);
   const [tema, setTema] = useState("");
   const [ID, setID] = useState("");
+  const [selectedPdf, setSelectedPdf] = useState(null);
 
   useEffect(() => {
     const fetchQuestionnaires = async () => {
@@ -46,7 +48,7 @@ export default function Questionnaires() {
     setIsModalOpen(true);
     if (question) {
       setSelectedQuestion(question);
-      setID(question.id || "")
+      setID(question.id || "");
       setTitulo(question.titulo || "");
       setQuestao(question.questao || "");
       setExplicacao(question.explicacao || "");
@@ -75,6 +77,28 @@ export default function Questionnaires() {
     setTema("");
   };
 
+  const handlePdfUpload = (e) => {
+    const file = e.target.files[0];
+    setSelectedPdf(file);
+    setIsPdfModalOpen(true);
+  };
+
+  const handleConfirmPdf = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedPdf);
+
+      await axios.post("http://localhost:5000/upload_quiz_pdf", formData);
+
+      axios.post("http://localhost:5000/generate_quiz");
+
+      setIsPdfModalOpen(false);
+      setSelectedPdf(null);
+    } catch (error) {
+      console.error("Erro ao fazer upload e gerar quiz:", error);
+    }
+  };
+
   const handleSaveQuestionnaire = async (e) => {
     e.preventDefault();
     const newQuestionnaire = {
@@ -86,10 +110,10 @@ export default function Questionnaires() {
       alternativas,
       tema,
     };
-  
+
     try {
       if (selectedQuestion) {
-        await axios.put(`http://localhost:5002/question/${selectedQuestion.id}`, newQuestionnaire);
+        await axios.put("http://localhost:5002/question/" + selectedQuestion.id, newQuestionnaire);
         const updatedQuestions = questionnaires.map((q) =>
           q.id === selectedQuestion.id ? { ...q, ...newQuestionnaire } : q
         );
@@ -105,21 +129,21 @@ export default function Questionnaires() {
           alternativas,
           tema,
         };
-  
+
         setQuestionnaires([...questionnaires, createdQuestion]);
         setSelectedQuestion(createdQuestion);
       }
     } catch (error) {
       console.error("Erro ao salvar a questão:", error);
     }
-  
+
     handleCloseModal();
   };
 
-  const handleDeleteQuestion = async (questionId) => {
+  const handleDeleteQuestion = async (id) => {
     try {
-      await axios.delete(`http://localhost:5002/question/${questionId}`);
-      const updatedQuestions = questionnaires.filter(q => q.id !== questionId);
+      await axios.delete(`http://localhost:5002/question/${id}`);
+      const updatedQuestions = questionnaires.filter((q) => q.id !== id);
       setQuestionnaires(updatedQuestions);
     } catch (error) {
       console.error("Erro ao deletar a questão:", error);
@@ -138,6 +162,17 @@ export default function Questionnaires() {
           <Plus className="w-4 h-4" />
           Nova questão
         </button>
+
+        <label className="ml-4 bg-blue-500 text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-blue-600 duration-150 cursor-pointer">
+          <File className="w-4 h-4" />
+          Upload de questões por PDF
+          <input
+            type="file"
+            accept="application/pdf"
+            onChange={handlePdfUpload}
+            className="hidden"
+          />
+        </label>
       </div>
 
       <table className="w-full text-left">
@@ -175,7 +210,7 @@ export default function Questionnaires() {
           <div className="bg-white rounded-lg shadow-lg w-1/2">
             <div className="bg-mainBlue text-white p-4 rounded-t-lg flex justify-between items-center">
               <h2 className="text-xl font-bold">
-                {selectedQuestion ? "Editar Questão" : "Nova questão"}
+                {selectedQuestion ? "Editar Questão" : "Nova Questão"}
               </h2>
               <button
                 onClick={handleCloseModal}
@@ -237,7 +272,7 @@ export default function Questionnaires() {
                       const newAlternativas = e.target.value.split("\n");
                       setAlternativas(newAlternativas);
                       if (!newAlternativas.includes(alternativa_correta)) {
-                        setalternativa_correta(""); 
+                        setalternativa_correta("");
                       }
                     }}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
@@ -265,6 +300,29 @@ export default function Questionnaires() {
                   {selectedQuestion ? "Salvar Alterações" : "Criar Questão"}
                 </button>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isPdfModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-xl font-bold mb-4">Confirmar Criação de Quizzes</h2>
+            <p>Deseja realmente criar quizzes com o arquivo PDF enviado?</p>
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={handleConfirmPdf}
+                className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 duration-150"
+              >
+                Confirmar
+              </button>
+              <button
+                onClick={() => setIsPdfModalOpen(false)}
+                className="ml-2 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 duration-150"
+              >
+                Cancelar
+              </button>
             </div>
           </div>
         </div>
