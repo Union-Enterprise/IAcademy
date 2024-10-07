@@ -2,60 +2,128 @@
 
 import { useState, useEffect } from "react";
 import { Edit, Trash2, Plus } from "lucide-react";
-import ReactQuill from "react-quill"; 
-import "react-quill/dist/quill.snow.css"; 
+import dynamic from "next/dynamic";
+import axios from "axios";
 
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "react-quill/dist/quill.snow.css";
 
 export default function Questionnaires() {
-  const [questionnaires, setQuestionnaires] = useState([
-    { id: 1, title: "Matematica" },
-    { id: 2, title: "Questionário Geral" },
-  ]);
-
+  const [questionnaires, setQuestionnaires] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [description, setDescription] = useState("");
-  const [newQuestionTitle, setNewQuestionTitle] = useState("");
-  const [newQuestionType, setNewQuestionType] = useState("");
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [titulo, setTitulo] = useState("");
+  const [questao, setQuestao] = useState("");
+  const [explicacao, setExplicacao] = useState("");
+  const [alternativa_correta, setalternativa_correta] = useState("");
+  const [alternativas, setAlternativas] = useState([""]);
+  const [tema, setTema] = useState("");
+  const [ID, setID] = useState("");
 
   useEffect(() => {
-    // Qualquer código que precisa acessar o DOM pode ir aqui
+    const fetchQuestionnaires = async () => {
+      try {
+        const response = await axios.get("http://localhost:5002/all_questions");
+        const formattedData = response.data.map((question) => ({
+          id: question._id,
+          titulo: question.titulo,
+          questao: question.questao,
+          explicacao: question.explicacao,
+          alternativa_correta: question.alternativa_correta,
+          alternativas: question.alternativas,
+          tema: question.tema,
+        }));
+        setQuestionnaires(formattedData);
+      } catch (error) {
+        console.error("Erro ao buscar os questionários:", error);
+      }
+    };
+
+    fetchQuestionnaires();
   }, []);
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (question) => {
     setIsModalOpen(true);
+    if (question) {
+      setSelectedQuestion(question);
+      setID(question.id || "")
+      setTitulo(question.titulo || "");
+      setQuestao(question.questao || "");
+      setExplicacao(question.explicacao || "");
+      setalternativa_correta(question.alternativa_correta || "");
+      setAlternativas(question.alternativas || []);
+      setTema(question.tema || "");
+    } else {
+      setSelectedQuestion(null);
+      setTitulo("");
+      setQuestao("");
+      setExplicacao("");
+      setalternativa_correta("");
+      setAlternativas([""]);
+      setTema("");
+    }
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setNewQuestionTitle(""); 
-    setNewQuestionType(""); 
-    setDescription(""); 
+    setSelectedQuestion(null);
+    setTitulo("");
+    setQuestao("");
+    setExplicacao("");
+    setalternativa_correta("");
+    setAlternativas([""]);
+    setTema("");
   };
 
-  const handleSaveQuestionnaire = (e: { preventDefault: () => void; }) => {
-    e.preventDefault(); 
+  const handleSaveQuestionnaire = async (e) => {
+    e.preventDefault();
     const newQuestionnaire = {
-      id: questionnaires.length + 1,
-      title: newQuestionTitle,
-      type: newQuestionType,
-      description,
+      ID,
+      titulo,
+      questao,
+      explicacao,
+      alternativa_correta,
+      alternativas,
+      tema,
     };
-
-    setQuestionnaires([...questionnaires, newQuestionnaire]); 
-    handleCloseModal(); 
+  
+    try {
+      if (selectedQuestion) {
+        await axios.put(`http://localhost:5002/question/${selectedQuestion.id}`, newQuestionnaire);
+        const updatedQuestions = questionnaires.map((q) =>
+          q.id === selectedQuestion.id ? { ...q, ...newQuestionnaire } : q
+        );
+        setQuestionnaires(updatedQuestions);
+      } else {
+        const response = await axios.post("http://localhost:5002/question", newQuestionnaire);
+        const createdQuestion = {
+          id: response.data.insertedId,
+          titulo,
+          questao,
+          explicacao,
+          alternativa_correta,
+          alternativas,
+          tema,
+        };
+  
+        setQuestionnaires([...questionnaires, createdQuestion]);
+        setSelectedQuestion(createdQuestion);
+      }
+    } catch (error) {
+      console.error("Erro ao salvar a questão:", error);
+    }
+  
+    handleCloseModal();
   };
 
-  const modules = {
-    toolbar: [
-      [{ 'font': [] }],
-      [{ 'header': [1, 2, false] }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'align': [] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      ['link', 'image'],
-      ['clean']
-    ],
+  const handleDeleteQuestion = async (questionId) => {
+    try {
+      await axios.delete(`http://localhost:5002/question/${questionId}`);
+      const updatedQuestions = questionnaires.filter(q => q.id !== questionId);
+      setQuestionnaires(updatedQuestions);
+    } catch (error) {
+      console.error("Erro ao deletar a questão:", error);
+    }
   };
 
   return (
@@ -64,7 +132,7 @@ export default function Questionnaires() {
 
       <div className="flex justify-end items-center mb-4">
         <button
-          onClick={handleOpenModal}
+          onClick={() => handleOpenModal(null)}
           className="bg-green-500 text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-green-600 duration-150"
         >
           <Plus className="w-4 h-4" />
@@ -81,16 +149,19 @@ export default function Questionnaires() {
         </thead>
         <tbody>
           {questionnaires.map((questionnaire) => (
-            <tr
-              key={questionnaire.id}
-              className="border-b hover:bg-gray-50 duration-150"
-            >
-              <td className="p-3">{questionnaire.title}</td>
+            <tr key={questionnaire.id} className="border-b hover:bg-gray-50 duration-150">
+              <td className="p-3">{questionnaire.titulo} - {questionnaire.tema}</td>
               <td className="p-3 flex gap-3">
-                <button className="flex justify-end bg-mainBlue text-white p-2 rounded hover:bg-blue-800 duration-150">
-                  <Edit className="w-4 h-4"  onClick={handleOpenModal}/>
+                <button
+                  className="bg-mainBlue text-white p-2 rounded hover:bg-blue-800 duration-150"
+                  onClick={() => handleOpenModal(questionnaire)}
+                >
+                  <Edit className="w-4 h-4" />
                 </button>
-                <button className="flex justify-end bg-red-500 text-white p-2 rounded hover:bg-red-600 duration-150">
+                <button
+                  className="bg-red-500 text-white p-2 rounded hover:bg-red-600 duration-150"
+                  onClick={() => handleDeleteQuestion(questionnaire.id)}
+                >
                   <Trash2 className="w-4 h-4" />
                 </button>
               </td>
@@ -101,9 +172,11 @@ export default function Questionnaires() {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white  rounded-lg shadow-lg w-1/2">
+          <div className="bg-white rounded-lg shadow-lg w-1/2">
             <div className="bg-mainBlue text-white p-4 rounded-t-lg flex justify-between items-center">
-              <h2 className="text-xl font-bold">Nova questão</h2>
+              <h2 className="text-xl font-bold">
+                {selectedQuestion ? "Editar Questão" : "Nova questão"}
+              </h2>
               <button
                 onClick={handleCloseModal}
                 className="text-white hover:text-gray-200"
@@ -112,71 +185,85 @@ export default function Questionnaires() {
               </button>
             </div>
 
-           <div className="p-6">
-             <form className="space-y-4 p-4" onSubmit={handleSaveQuestionnaire}>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Nome do Questionário *
-                    </label>
-                    <input
-                      type="text"
-                      value={newQuestionTitle}
-                      onChange={(e) => setNewQuestionTitle(e.target.value)}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
-                      placeholder="Formulário Geral"
-                      required
-                    />
-                  </div>
+            <div className="p-6">
+              <form className="space-y-4" onSubmit={handleSaveQuestionnaire}>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Título *</label>
+                  <input
+                    type="text"
+                    value={titulo}
+                    onChange={(e) => setTitulo(e.target.value)}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
+                    required
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Tipo *
-                    </label>
-                    <select
-                      value={newQuestionType}
-                      onChange={(e) => setNewQuestionType(e.target.value)}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
-                      required
-                    >
-                      <option value="">Selecione um tipo</option>
-                      <option value="geral">Geometria</option>
-                      <option value="feedback">Regra de três</option>
-                      <option value="geral">Álgebra</option>
-                      <option value="feedback">Geometria Plana</option>
-                      <option value="geral">Fração</option>
-                      <option value="feedback">Equação</option>
-                      <option value="geral">Fracional</option>
-                      <option value="feedback">SLA</option>
-                    </select>
-                  </div>
+                <div className="!mb-14">
+                  <label className="block text-sm font-medium text-gray-700">Questão *</label>
+                  <ReactQuill
+                    value={questao}
+                    onChange={setQuestao}
+                    theme="snow"
+                    className="h-32"
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Descrição
-                    </label>
-                    <ReactQuill 
-                      value={description} 
-                      onChange={setDescription} 
-                      modules={modules} 
-                      theme="snow" 
-                      className="h-32"
-                    />
-                  </div>
+                <div className="!mb-14">
+                  <label className="block text-sm font-medium text-gray-700">Explicação</label>
+                  <ReactQuill
+                    value={explicacao}
+                    onChange={setExplicacao}
+                    theme="snow"
+                    className="h-32"
+                  />
+                </div>
 
-                  <div className="flex justify-end pt-10 ">
-                    <button
-                      onClick={handleCloseModal}
-                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 duration-150"
-                    >
-                      Fechar
-                    </button>
-                    <button
-                      type="submit"
-                      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 duration-150 ml-2"
-                    >
-                      Salvar
-                    </button>
-                  </div>
+                <div className="mt-2">
+                  <label className="block text-sm font-medium text-gray-700">Alternativa Correta *</label>
+                  <input
+                    type="text"
+                    value={alternativa_correta}
+                    onChange={(e) => setalternativa_correta(e.target.value)}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Alternativas *</label>
+                  <textarea
+                    value={alternativas.join("\n")}
+                    onChange={(e) => {
+                      const newAlternativas = e.target.value.split("\n");
+                      setAlternativas(newAlternativas);
+                      if (!newAlternativas.includes(alternativa_correta)) {
+                        setalternativa_correta(""); 
+                      }
+                    }}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
+                    rows={4}
+                    required
+                  />
+                  <small className="text-gray-500">Separe as alternativas por linhas.</small>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Tema *</label>
+                  <input
+                    type="text"
+                    value={tema}
+                    onChange={(e) => setTema(e.target.value)}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-mainBlue text-white py-2 rounded-md hover:bg-blue-800 duration-150"
+                >
+                  {selectedQuestion ? "Salvar Alterações" : "Criar Questão"}
+                </button>
               </form>
             </div>
           </div>
