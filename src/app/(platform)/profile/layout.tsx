@@ -41,7 +41,7 @@ export default function ProfileLayout({
       <div className=" grid grid-cols-3 gap-5 px-[200px] pt-[70px] pb-[150px]">
         <div className="col-span-1 flex flex-col gap-5">
           <div className="border-2 flex flex-col items-center pt-[70px] border-border-light bg-bg-lightCard rounded-md relative">
-            <div className="absolute left-0 top-0 w-full h-[40%] bg-bg-lightA p-3 flex justify-end">
+            <div className="absolute left-0 top-0 w-full h-[40%] bg-white p-3 flex justify-end">
               <PenLine className="h-[40px] w-[40px] bg-bg-light text-title-light rounded-md p-2 cursor-pointer hover:bg-mainBlue hover:text-background-light duration-200" />
             </div>
             <div className="relative z-10 overflow-hidden rounded-[70px] group cursor-pointer bg-mainBlue w-[175px] h-[160px] flex items-center justify-center">

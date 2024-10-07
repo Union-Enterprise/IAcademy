@@ -15,7 +15,7 @@ export default function SettingsSection({
 }: SettingsSectionProps) {
   return (
     <div
-      className={`border-border-lightC w-full h-fit p-6 
+      className={`border-bg-lightHover w-full h-fit p-6 
         ${style || "gap-4 flex flex-col"}
       ${
         !isDeleteAccount

@@ -88,7 +88,7 @@ export default function SettingsRemove({
           <div className="grid grid-cols-2 gap-4 mt-5">
             <button
               type="button"
-              className="bg-background-lightCard text-gray-600 px-4 py-2 rounded-md hover:bg-background-lightHover duration-100"
+              className="bg-bg-lightC text-gray-600 px-4 py-2 rounded-md hover:bg-zinc-200 duration-100"
               onClick={closeModal}
             >
               Cancelar

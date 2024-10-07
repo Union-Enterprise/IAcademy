@@ -46,15 +46,7 @@ const Sidebar = ({ isUserLayout = true }) => {
   return (
     <section
       className={`h-fit w-[300px]
-        ${
-          isTrilha
-            ? isOpen
-              ? "flex"
-              : "hidden"
-            : isOpen
-            ? "flex lg:w-[300px]"
-            : "hidden lg:flex w-[95px]"
-        }
+        
         
         ${
           !isTrilha &&
@@ -76,7 +68,7 @@ const Sidebar = ({ isUserLayout = true }) => {
             title="Meus estudos"
             lucideIcon={Library}
             isOpen={isOpen}
-            href="/student"
+            href="/tudent"
             isSelected={selectedItem.startsWith("/student")}
             onClick={() => setSelectedItem("/student")}
           />
