@@ -29,7 +29,7 @@ export default function Users() {
   const [totalNotBannedUsers, setTotalNotBannedUsers] = useState(0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  let address : string;
+  let address: string;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -38,17 +38,13 @@ export default function Users() {
     type: "",
   });
 
-
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     {
-      if(formData.type=="admin"){
+      if (formData.type == "admin") {
         address = "http://localhost:5002/create_adm";
-      }else{
+      } else {
         address = "http://localhost:5002/create_user_adm";
       }
       console.log(address)
@@ -56,9 +52,52 @@ export default function Users() {
     }
   };
 
+  const handleEditUser = (id: string) => {
+    console.log("Editando usuário com ID:", id);
+  };
+
+  const handleDeleteUser = async (email: string) => {
+    try {
+      await axios.delete(`http://localhost:5002/delete_user`, {
+        data: { email },
+        withCredentials: true,
+      });
+
+      console.log("Usuário excluído com sucesso:", email);
+
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.email === email ? { ...user, is_banned: true } : user
+        )
+      );
+    } catch (error) {
+      console.error("Erro ao excluir o usuário:", error);
+    }
+  };
+
+  const handleRestoreUser = async (email: string) => {
+    try {
+      await axios.post(`http://localhost:5002/restore_user`, {
+        email
+      }, {
+        withCredentials: true,
+      });
+
+      console.log("Usuário restaurado com sucesso:", email);
+
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.email === email ? { ...user, is_banned: false } : user
+        )
+      );
+    } catch (error) {
+      console.error("Erro ao restaurar o usuário:", error);
+    }
+  };
+
   const sendData = () => {
     setIsSubmitting(true);
-    const { name, email, password,  } = formData;
+    const { name, email, password, } = formData;
     axios
       .post(
         address,
@@ -83,7 +122,7 @@ export default function Users() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  
+
   const [category, setCategory] = useState("");
   const [plan, setPlan] = useState("");
   const [status, setStatus] = useState("");
@@ -288,10 +327,13 @@ export default function Users() {
                   key={index}
                   id={`${index}`}
                   name={user.name}
+                  email={user.email}
                   category={user.is_adm ? "Administrador" : "Usuário"}
                   plan={user.is_premium ? "Premium" : "Básico"}
                   status={user.is_banned ? "Suspenso" : "Ativo"}
-                  action=""
+                  onEdit={(id) => handleEditUser(id)}
+                  onDelete={(email) => handleDeleteUser(email)}
+                  onUnban={(email) => handleRestoreUser(email)}
                 />
               ))
             ) : (
@@ -306,9 +348,8 @@ export default function Users() {
       </section>
       {/* Modal */}
       <section
-        className={`fixed inset-0 z-50 flex items-end justify-end ${
-          isModalOpen ? "pointer-events-auto group" : "pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-50 flex items-end justify-end ${isModalOpen ? "pointer-events-auto group" : "pointer-events-none"
+          }`}
       >
         <div
           className={`
@@ -318,9 +359,8 @@ export default function Users() {
         />
 
         <div
-          className={`bg-white w-full max-w-md p-8 h-screen shadow-lg transform transition-transform duration-300 ease-in-out flex flex-col gap-5 ${
-            isModalOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={`bg-white w-full max-w-md p-8 h-screen shadow-lg transform transition-transform duration-300 ease-in-out flex flex-col gap-5 ${isModalOpen ? "translate-x-0" : "translate-x-full"
+            }`}
         >
           <X
             className="hover:text-text-light duration-100 cursor-pointer text-text-lightSub"
@@ -328,30 +368,30 @@ export default function Users() {
           />
           <h2 className="text-xl font-semibold">Adicionar novo usuário</h2>
           <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-            <Input inputType="text" placeholder="Nome" className="h-[48px]" 
+            <Input inputType="text" placeholder="Nome" className="h-[48px]"
               value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
             <Input
               inputType="email"
               placeholder="E-mail"
               className="h-[48px]"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
             <Input
               inputType="password"
               placeholder="Informe a senha"
               className="h-[48px]"
               value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
             <Input
               inputType="password"
               placeholder="Confirme a senha"
               className="h-[48px]"
               value={formData.confirmPassword}
-              onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
             />
             <Select
               options={[
@@ -361,8 +401,8 @@ export default function Users() {
               ]}
               value={formData.type}
               onChange={
-                (e) => setFormData({...formData, type: e.target.value})
-                
+                (e) => setFormData({ ...formData, type: e.target.value })
+
               }
             />
             <SubmitButton text="Adicionar usuário" />
@@ -389,4 +429,4 @@ function Admin() {
   );
 }
 
-function User() {}
+function User() { }
