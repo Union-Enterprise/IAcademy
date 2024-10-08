@@ -26,12 +26,7 @@ export default function Overview({
       <div className="col-span-2">
         <Generic />
       </div>
-      <div className="col-span-1 flex flex-col gap-2 sticky top-5">
-        <h3 className="font-semibold text-xl">Conteúdos deste Módulo</h3>
-        {moduleData.topics.map((topic, index) => (
-          <ContentLink index={index} title={topic.title} />
-        ))}
-      </div>
+     
     </section>
   );
 }

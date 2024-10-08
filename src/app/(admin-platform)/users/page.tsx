@@ -428,9 +428,3 @@ function Admin() {
     </tr>
   );
 }
-
-<<<<<<< HEAD
-function User() { }
-=======
-function User() {}
->>>>>>> a99010f4508d5290e4758e4be637d4630c544ab7

@@ -22,28 +22,7 @@ export default function Header() {
           Aprenda tudo que você precisa para passar nos vestibulares.
         </p>
       </div>
-      <div className="flex gap-4">
-        <Link
-          href="/trilhas/RoadmapContent"
-          className={`${
-            pathname.includes("/trilhas/RoadmapContent")
-              ? "border-b-mainBlue font-semibold"
-              : "opacity-50 hover:opacity-100 hover:border-opacity-75 hover:border-b-mainBlue "
-          } *:text-text-light border-b-2 p-2 text-lg duration-100`}
-        >
-          <p>Visão Geral</p>
-        </Link>
-        <Link
-          href="/trilhas/topic"
-          className={`${
-            pathname.includes("/trilhas/topic")
-              ? "border-b-mainBlue font-semibold"
-              : "opacity-50 hover:opacity-100 hover:border-opacity-75 hover:border-b-mainBlue "
-          } *:text-text-light border-b-2 p-2 text-lg duration-100`}
-        >
-          <p>Conteudos</p>
-        </Link>
-      </div>
+      
     </div>
   );
 }

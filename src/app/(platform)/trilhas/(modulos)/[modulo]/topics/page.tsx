@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { modulosData } from "@/app/ui/components/modulos/data";
 import { ContentsSection } from "@/app/ui/trilha/ContentsSection";
 import normalizeString from "@/app/ui/components/modulos/normalizeString";
+import Link from "next/link";
 
 type ModuloKey = keyof typeof modulosData;
 
@@ -17,6 +18,7 @@ export default function ModuloTopics() {
   }
 
   return (
+    // <Link href={"/textTopic"}>
     <section className="flex flex-col gap-3 px-[200px] relative h-full mt-6">
       {modulo.topics.map((topic, idx) => (
         <ContentsSection
@@ -28,5 +30,6 @@ export default function ModuloTopics() {
         </ContentsSection>
       ))}
     </section>
+    // </Link>
   );
 }

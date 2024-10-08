@@ -155,6 +155,7 @@ const ENEMRoadmap: React.FC = () => {
       <ReactFlow
         nodes={nodes}
         edges={edges}
+        fitView={false}
         onNodeClick={(_, node) => node.data?.onClick && node.data.onClick()}
         defaultViewport={{ x: 200, y: 0, zoom: 0.4 }}
       >

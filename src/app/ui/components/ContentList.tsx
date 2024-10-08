@@ -24,21 +24,21 @@ export default function ContentList({ title = "" }: { title: string }) {
           title="Geometria Plana"
           href="/trilhas/overview"
           lucideIcon={Cone}
-          description="Geometria Plana explora figuras bidimensionais, como triângulos, círculos e quadrados, ajudando a calcular perímetros, áreas e ângulos."
+          description="Geometria Plana explora figuras bidimensionais."
         />
 
         <Item
           title="Fatorial"
           href="/trilhas/overview"
           lucideIcon={CircleAlert}
-          description="O fatorial é amplamente utilizado em combinatória, probabilidade e em várias áreas da matemática para calcular o número de permutações."
+          description="O fatorial é amplamente utilizado em combinatória, probabilidade e em várias áreas."
         />
 
         <Item
           title="Raciocínio Lógico"
           href="/trilhas/overview"
           lucideIcon={Brain}
-          description="Raciocínio lógico é a habilidade de pensar de forma clara e resolver problemas, usando dedução e indução para chegar a conclusões. É essencial em matemática e na vida cotidiana."
+          description="Raciocínio lógico é a habilidade de pensar de forma clara e resolver problemas."
         />
       </div>
     </section>
