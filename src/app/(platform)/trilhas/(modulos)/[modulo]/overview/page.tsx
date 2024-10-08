@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import RoadmapModulo from "@/app/ui/components/flows/RoadmapModulo";
+import Generic from "@/app/ui/components/flows/Generic";
 import { useParams } from "next/navigation";
 import { modulosData } from "@/app/ui/components/modulos/data";
 
@@ -24,7 +24,7 @@ export default function Overview({
   return (
     <section className="grid grid-cols-3 py-10 gap-10 px-[200px] relative h-full mt-6">
       <div className="col-span-2">
-        <RoadmapModulo />
+        <Generic />
       </div>
       <div className="col-span-1 flex flex-col gap-2 sticky top-5">
         <h3 className="font-semibold text-xl">Conteúdos deste Módulo</h3>
