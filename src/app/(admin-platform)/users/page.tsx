@@ -29,6 +29,52 @@ export default function Users() {
   const [totalNotBannedUsers, setTotalNotBannedUsers] = useState(0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  let address : string;
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    type: "",
+  });
+
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    {
+      if(formData.type=="admin"){
+        address = "http://localhost:5002/create_adm";
+      }else{
+        address = "http://localhost:5002/create_user_adm";
+      }
+      console.log(address)
+      sendData();
+    }
+  };
+
+  const sendData = () => {
+    setIsSubmitting(true);
+    const { name, email, password,  } = formData;
+    axios
+      .post(
+        address,
+        { name, email, password },
+        { withCredentials: true }
+      )
+      .then((response) => {
+        console.log("Cadastrado com sucesso");
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
+  };
 
   const handleAddButtonClick = () => {
     setIsModalOpen(true);
@@ -37,7 +83,7 @@ export default function Users() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
+  
   const [category, setCategory] = useState("");
   const [plan, setPlan] = useState("");
   const [status, setStatus] = useState("");
@@ -281,22 +327,31 @@ export default function Users() {
             onClick={handleCloseModal}
           />
           <h2 className="text-xl font-semibold">Adicionar novo usuário</h2>
-          <form className="flex flex-col gap-5">
-            <Input inputType="text" placeholder="Nome" className="h-[48px]" />
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+            <Input inputType="text" placeholder="Nome" className="h-[48px]" 
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
+            />
             <Input
               inputType="email"
               placeholder="E-mail"
               className="h-[48px]"
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
             />
             <Input
               inputType="password"
               placeholder="Informe a senha"
               className="h-[48px]"
+              value={formData.password}
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
             />
             <Input
               inputType="password"
               placeholder="Confirme a senha"
               className="h-[48px]"
+              value={formData.confirmPassword}
+              onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
             />
             <Select
               options={[
@@ -304,6 +359,11 @@ export default function Users() {
                 { value: "user", label: "Usuário" },
                 { value: "admin", label: "Administrador" },
               ]}
+              value={formData.type}
+              onChange={
+                (e) => setFormData({...formData, type: e.target.value})
+                
+              }
             />
             <SubmitButton text="Adicionar usuário" />
           </form>
