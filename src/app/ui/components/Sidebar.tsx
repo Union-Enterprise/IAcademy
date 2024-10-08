@@ -68,7 +68,7 @@ const Sidebar = ({ isUserLayout = true }) => {
             title="Meus estudos"
             lucideIcon={Library}
             isOpen={isOpen}
-            href="/Student"
+            href="/student"
             isSelected={selectedItem.startsWith("/student")}
             onClick={() => setSelectedItem("/student")}
           />
