@@ -12,15 +12,17 @@ export default function Questionnaires() {
   const [questionnaires, setQuestionnaires] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [titulo, setTitulo] = useState("");
   const [questao, setQuestao] = useState("");
   const [explicacao, setExplicacao] = useState("");
-  const [alternativa_correta, setalternativa_correta] = useState("");
+  const [alternativa_correta, setAlternativa_correta] = useState("");
   const [alternativas, setAlternativas] = useState([""]);
   const [tema, setTema] = useState("");
   const [ID, setID] = useState("");
   const [selectedPdf, setSelectedPdf] = useState(null);
+  const [questionToDelete, setQuestionToDelete] = useState(null);
 
   useEffect(() => {
     const fetchQuestionnaires = async () => {
@@ -52,7 +54,7 @@ export default function Questionnaires() {
       setTitulo(question.titulo || "");
       setQuestao(question.questao || "");
       setExplicacao(question.explicacao || "");
-      setalternativa_correta(question.alternativa_correta || "");
+      setAlternativa_correta(question.alternativa_correta || "");
       setAlternativas(question.alternativas || []);
       setTema(question.tema || "");
     } else {
@@ -60,7 +62,7 @@ export default function Questionnaires() {
       setTitulo("");
       setQuestao("");
       setExplicacao("");
-      setalternativa_correta("");
+      setAlternativa_correta("");
       setAlternativas([""]);
       setTema("");
     }
@@ -72,7 +74,7 @@ export default function Questionnaires() {
     setTitulo("");
     setQuestao("");
     setExplicacao("");
-    setalternativa_correta("");
+    setAlternativa_correta("");
     setAlternativas([""]);
     setTema("");
   };
@@ -89,8 +91,7 @@ export default function Questionnaires() {
       formData.append("file", selectedPdf);
 
       await axios.post("http://localhost:5000/upload_quiz_pdf", formData);
-
-      axios.post("http://localhost:5000/generate_quiz");
+      await axios.post("http://localhost:5000/generate_quiz");
 
       setIsPdfModalOpen(false);
       setSelectedPdf(null);
@@ -138,6 +139,11 @@ export default function Questionnaires() {
     }
 
     handleCloseModal();
+  };
+
+  const confirmDeleteQuestion = (id) => {
+    setQuestionToDelete(id);
+    setIsDeleteModalOpen(true);
   };
 
   const handleDeleteQuestion = async (id) => {
@@ -195,7 +201,7 @@ export default function Questionnaires() {
                 </button>
                 <button
                   className="bg-red-500 text-white p-2 rounded hover:bg-red-600 duration-150"
-                  onClick={() => handleDeleteQuestion(questionnaire.id)}
+                  onClick={() => confirmDeleteQuestion(questionnaire.id)}
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -258,7 +264,7 @@ export default function Questionnaires() {
                   <input
                     type="text"
                     value={alternativa_correta}
-                    onChange={(e) => setalternativa_correta(e.target.value)}
+                    onChange={(e) => setAlternativa_correta(e.target.value)}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
                     required
                   />
@@ -272,7 +278,7 @@ export default function Questionnaires() {
                       const newAlternativas = e.target.value.split("\n");
                       setAlternativas(newAlternativas);
                       if (!newAlternativas.includes(alternativa_correta)) {
-                        setalternativa_correta("");
+                        setAlternativa_correta("");
                       }
                     }}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
@@ -320,6 +326,36 @@ export default function Questionnaires() {
               <button
                 onClick={() => setIsPdfModalOpen(false)}
                 className="ml-2 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 duration-150"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-xl font-bold mb-4">Confirmar Deleção</h2>
+            <p>Você tem certeza de que deseja deletar esta questão?</p>
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={async () => {
+                  await handleDeleteQuestion(questionToDelete);
+                  setIsDeleteModalOpen(false);
+                  setQuestionToDelete(null);
+                }}
+                className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 duration-150"
+              >
+                Confirmar
+              </button>
+              <button
+                onClick={() => {
+                  setIsDeleteModalOpen(false);
+                  setQuestionToDelete(null);
+                }}
+                className="ml-2 bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 duration-150"
               >
                 Cancelar
               </button>

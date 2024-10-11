@@ -46,6 +46,15 @@ const Sidebar = ({ isUserLayout = true }) => {
   return (
     <section
       className={`h-fit w-[300px]
+        ${
+          isTrilha
+            ? isOpen
+              ? "flex"
+              : "hidden"
+            : isOpen
+            ? "flex lg:w-[300px]"
+            : "hidden lg:flex w-[95px]"
+        }
         
         
         ${
@@ -68,7 +77,8 @@ const Sidebar = ({ isUserLayout = true }) => {
             title="Meus estudos"
             lucideIcon={Library}
             isOpen={isOpen}
-            href="/student"
+            href="/Student"
+          
             isSelected={selectedItem.startsWith("/student")}
             onClick={() => setSelectedItem("/student")}
           />
@@ -161,9 +171,7 @@ function Item({
               : "opacity-100 bg-cyan-100 *:text-mainBlue *:font-semibold"
             : "opacity-50"
         }
-
         ${!isSelected && !isPremium && "hover:bg-bg-lightHover"}
-
         ${isPremium ? "bg-mainBlue text-white" : "text-title-light "}`}
     >
       {LucideIcon && <LucideIcon size={25} className="flex-shrink-0" />}
