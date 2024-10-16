@@ -31,7 +31,7 @@ export default function Login() {
         if (response.status === 200) {
           setErrorMessage("");
           setAuth(true, response.data);
-          router.push("/Student");
+          router.push("/student");
         }
       })
       .catch((error) => {
