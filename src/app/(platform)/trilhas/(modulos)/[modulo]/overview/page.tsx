@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Generic from "@/app/ui/components/flows/Generic";
+import GenericIA from "@/app/ui/components/flows/GenericIA";
 import { useParams } from "next/navigation";
 import { modulosData } from "@/app/ui/components/modulos/data";
 
@@ -24,7 +24,7 @@ export default function Overview({
   return (
     <section className="grid grid-cols-3 py-10 gap-10 px-[200px] relative h-full mt-6">
       <div className="col-span-2">
-        <Generic />
+        <GenericIA />
       </div>
      
     </section>

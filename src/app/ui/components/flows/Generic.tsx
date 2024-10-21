@@ -1,7 +1,253 @@
+// "use client";
+// import axios from "axios";
+// import React, { useEffect, useState } from "react";
+// import ReactFlow, { Controls, Node, Edge, ReactFlowProvider} from "reactflow";
+// import "reactflow/dist/style.css";
+
+
+
+
+// const edges = [
+//   { id: "1-2", source: "1", target: "2", animated: false, style: { stroke: "#1865F2" } },
+//   { id: "1-3", source: "1", target: "3", animated: false, style: { stroke: "#1865F2" } },
+//   { id: "1-5", source: "1", target: "5", animated: false, style: { stroke: "#1865F2" } },
+//   { id: "1-6", source: "1", target: "6", animated: false, style: { stroke: "#1865F2" } },
+//   { id: "1-7", source: "1", target: "7", animated: false, style: { stroke: "#1865F2" } },
+//   { id: "1-8", source: "1", target: "8", animated: false, style: { stroke: "#1865F2" } },
+//   { id: "2-9", source: "2", target: "9", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
+//   { id: "9-10", source: "9", target: "10", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
+//   { id: "10-11", source: "10", target: "11", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
+//   { id: "11-12", source: "11", target: "12", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
+//   { id: "5-13", source: "5", target: "13", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
+//   { id: "13-14", source: "13", target: "14", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
+//   { id: "14-15", source: "14", target: "15", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
+//   { id: "15-16", source: "15", target: "16", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
+//   { id: "3-17", source: "3", target: "17", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
+//   { id: "17-18", source: "17", target: "18", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
+//   { id: "18-19", source: "18", target: "19", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
+//   { id: "19-20", source: "19", target: "20", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
+
+ 
+// ];
+
+// const nodes = [
+//   { id: "1", data: { label: "Preparativo para o ENEM" }, position: { x: 500, y: 50 }, 
+//   style: { width: 200,  backgroundColor: "#1865F2",
+//     border: "2px solid #1865F2",
+//     color:"#fff", 
+//     fontWeight: 'bold' 
+
+//   },
+//    targetPosition:'bottom' 
+//  },
+//  { 
+//   id: "2", 
+//   data: { label: "Aritmética e Proporções" }, 
+//   position: { x: 10, y: 200 },  
+//   style: {   
+//     backgroundColor: "#FFEB3B",
+//     border: "2px solid #1865F2",
+//   },
+//   sourcePosition: 'bottom', 
+//   targetPosition: 'top'  
+// },
+// { 
+//   id: "3", 
+//   data: { label: "Geometria Plana e Espacial" }, 
+//   position: { x: 1000, y: 200 },  
+//   style: {   
+//     backgroundColor: "#FFEB3B",
+//     border: "2px solid #1865F2",
+//   },
+//   sourcePosition: 'bottom', 
+//   targetPosition: 'top' 
+// },
+// { 
+//   id: "5", 
+//   data: { label: "Funções e Gráficos" }, 
+//   position: { x: 400, y: 200 },  
+//   style: {   
+//     backgroundColor: "#FFEB3B",
+//     border: "2px solid #1865F2",
+//   },
+//   sourcePosition: 'bottom', 
+//   targetPosition: 'top'  
+// },
+// { 
+//   id: "6", 
+//   data: { label: "Probabilidade e Estatística" }, 
+//   position: { x: 200, y: 200 },  
+//   style: {   
+//     backgroundColor: "#FFEB3B",
+//     border: "2px solid #1865F2",
+//   },
+//   sourcePosition: 'bottom', 
+//   targetPosition: 'top'  
+// },
+// { 
+//   id: "7", 
+//   data: { label: "Porcentagem e Juros" }, 
+//   position: { x: 600, y: 200 },  
+//   style: {   
+//     backgroundColor: "#FFEB3B",
+//     border: "2px solid #1865F2",
+//   },
+//   sourcePosition: 'bottom', 
+//   targetPosition: 'top'  
+// },
+// { 
+//   id: "8", 
+//   data: { label: "Análise Combinatória" }, 
+//   position: { x: 800, y: 200 },  
+//   style: {   
+//     backgroundColor: "#FFEB3B",
+//     border: "2px solid #1865F2",
+//   },
+//   sourcePosition: 'bottom', 
+//   targetPosition: 'top'  
+// }, 
+//   {
+//     id: "9",
+//     data: { label: "ponto" },
+//     position: { x: 10, y: 300 },
+//     style: { 
+      
+//       backgroundColor: "#f3c950",
+//       border: "2px solid #1865F2",
+//      },
+//     targetPosition: 'top',
+//     connectable: false, 
+//   },
+//   { id: "10", data: { label: "regara " }, position: { x: 10, y: 380 }, 
+//     style: {   
+//       backgroundColor: "#f3c950",
+//       border: "2px solid #1865F2",
+//     },
+//     targetPosition: 'top',
+//     connectable: false,
+//   },
+
+//   { id: "11", data: { label: "cu" }, position: { x: 10, y: 460 },
+//       style: {   
+//       backgroundColor: "#f3c950",
+//       border: "2px solid #1865F2",
+//     },
+//     targetPosition: 'top',
+//     connectable: false, 
+//   },
+//   { id: "12", data: { label: "oi" }, 
+//     position: { x: 10, y: 540 }, 
+//     style: {   
+//       backgroundColor: "#f3c950",
+//       border: "2px solid #1865F2",
+//     },
+//   targetPosition: 'top',
+//   connectable: false, 
+//  },
+//   {
+//     id: "13",
+//     data: { label: "ponto" },
+//     position: { x: 400, y: 300 },
+//     style: { 
+      
+//         backgroundColor: "#f3c950",
+//       border: "2px solid #1865F2",
+//      },
+//     targetPosition: 'top',
+//     connectable: false, 
+//   },
+//   { id: "14", data: { label: "regara " },
+//      position: { x: 400, y: 380 }, 
+//     style: {   
+//        backgroundColor: "#f3c950",
+//       border: "2px solid #1865F2",
+//     },
+//     targetPosition: 'top',
+//     connectable: false,
+//   },
+
+//   { id: "15", data: { label: "cu" },
+//      position: { x: 400, y: 460 },
+//     style: {   
+//        backgroundColor: "#f3c950",
+//       border: "2px solid #1865F2",
+//     },
+//     targetPosition: 'top',
+//     connectable: false, 
+//   },
+//   { id: "16", data: { label: "oi" }, 
+//     position: { x: 400, y: 540 }, 
+//     style: {   
+//        backgroundColor: "#f3c950",
+//       border: "2px solid #1865F2",
+//     },
+//   targetPosition: 'top',
+//   connectable: false, 
+//  },
+//   {
+//     id: "17",
+//     data: { label: "ponto" },
+//     position: { x: 1000, y: 300 },
+//     style: { 
+      
+//         backgroundColor: "#f3c950",
+//       border: "2px solid #1865F2",
+//      },
+//     targetPosition: 'top',
+//     connectable: false, 
+//   },
+//   { id: "18", data: { label: "regara " },
+//      position: { x: 1000, y: 380 }, 
+//     style: {   
+//        backgroundColor: "#f3c950",
+//       border: "2px solid #1865F2",
+//     },
+//     targetPosition: 'top',
+//     connectable: false,
+//   },
+
+//   { id: "19", data: { label: "cu" },
+//      position: { x: 1000, y: 460 },
+//     style: {   
+//        backgroundColor: "#f3c950",
+//       border: "2px solid #1865F2",
+//     },
+//     targetPosition: 'top',
+//     connectable: false, 
+//   },
+//   { id: "20", data: { label: "oi" }, 
+//     position: { x: 1000, y: 540 }, 
+//     style: {   
+//        backgroundColor: "#f3c950",
+//       border: "2px solid #1865F2",
+//     },
+//   targetPosition: 'top',
+//   connectable: false, 
+//  },
+// ];
+
+
+// const RoadmapEstatisc = () => {
+
+//   return (
+//     <div style={{ height: "80vh", width: "140vh" }}>
+//       <ReactFlow nodes={nodes} edges={edges} fitView={false} />
+//       <Controls />
+//     </div>
+//   );
+// };
+
+// const WrappedRoadmapEstatisc = () => (
+//   <ReactFlowProvider>
+//     <RoadmapEstatisc />
+//   </ReactFlowProvider>
+// );
+
+// export default WrappedRoadmapEstatisc;
 "use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import ReactFlow, { Controls, Node, Edge} from "reactflow";
+import ReactFlow, { Controls, Node, Edge, ReactFlowProvider} from "reactflow";
 import "reactflow/dist/style.css";
 
 interface RoadmapData {
@@ -166,160 +412,3 @@ const ENEMRoadmap: React.FC = () => {
 };
 
 export default ENEMRoadmap;
-
-
-
-// const edges = [
-//   { id: "1-2", source: "1", target: "2", animated: false, style: { stroke: "#1865F2" } },
-//   { id: "1-3", source: "1", target: "3", animated: false, style: { stroke: "#1865F2" } },
-//   { id: "1-5", source: "1", target: "5", animated: false, style: { stroke: "#1865F2" } },
-//   { id: "1-6", source: "1", target: "6", animated: false, style: { stroke: "#1865F2" } },
-//   { id: "1-7", source: "1", target: "7", animated: false, style: { stroke: "#1865F2" } },
-//   { id: "1-8", source: "1", target: "8", animated: false, style: { stroke: "#1865F2" } },
-//   { id: "2-9", source: "2", target: "9", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-//   { id: "2-10", source: "2", target: "10", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-//   { id: "2-11", source: "2", target: "11", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-//   { id: "2-12", source: "2", target: "12", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-//   { id: "5-13", source: "5", target: "13", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-//   { id: "5-14", source: "5", target: "14", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-//   { id: "5-15", source: "5", target: "15", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-//   { id: "5-16", source: "5", target: "16", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-// ];
-
-// const nodes = [
-//   { id: "1", data: { label: "Preparativo para o ENEM" }, position: { x: 500, y: 50 }, 
-//   style: { width: 200,  backgroundColor: "#E3EFFF",
-//     border: "2px solid #1865F2", 
-//     fontWeight: 'bold' 
-
-//   },
-//    targetPosition:'bottom' 
-//  },
-//   { id: "2", data: { label: "Matemática" }, position: { x: 360, y: 200 },  style: {   
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//     },
-//     sourcePosition: 'left', targetPosition:'top'  },
-//   { id: "3", data: { label: "Linguagens" }, position: { x: 760, y: 200 },  style: {   
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//     },
-//      sourcePosition: 'left', targetPosition:'top' },
-//   { id: "5", data: { label: "Geometria" }, position: { x: 400, y: 350 },  style: {   
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//     },
-//      sourcePosition: 'left', targetPosition:'top'  },
-//   { id: "6", data: { label: "Álgebra" }, position: { x: 500, y: 500 },  style: {   
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//     },
-//      sourcePosition: 'left', targetPosition:'top'  },
-//   { id: "7", data: { label: "Redação" }, position: { x: 700, y: 350 },  style: {   
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//     },
-//      sourcePosition: 'left', targetPosition:'top'  },
-//   { id: "8", data: { label: "gramatica" }, position: { x: 700, y: 350 },  style: {   
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//     },
-//      sourcePosition: 'left', targetPosition:'top'  },
-//   {
-//     id: "9",
-//     data: { label: "ponto" },
-//     position: { x: 50, y: 90 },
-//     style: { 
-      
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//      },
-//     targetPosition: 'right',
-//     connectable: false, 
-//   },
-//   { id: "10", data: { label: "regara " }, position: { x: 50, y: 140 }, 
-//     style: {   
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//     },
-//     targetPosition: 'right',
-//     connectable: false,
-//   },
-
-//   { id: "11", data: { label: "cu" }, position: { x: 50, y: 190 },
-//       style: {   
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//     },
-//     targetPosition: 'right',
-//     connectable: false, 
-//   },
-//   { id: "12", data: { label: "oi" }, 
-//     position: { x: 50, y: 240 }, 
-//     style: {   
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//     },
-//   targetPosition: 'right',
-//   connectable: false, 
-//  },
-//   {
-//     id: "13",
-//     data: { label: "ponto" },
-//     position: { x: 80, y: 90 },
-//     style: { 
-      
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//      },
-//     targetPosition: 'right',
-//     connectable: false, 
-//   },
-//   { id: "14", data: { label: "regara " },
-//      position: { x: 80, y: 140 }, 
-//     style: {   
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//     },
-//     targetPosition: 'right',
-//     connectable: false,
-//   },
-
-//   { id: "15", data: { label: "cu" },
-//      position: { x: 80, y: 190 },
-//     style: {   
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//     },
-//     targetPosition: 'right',
-//     connectable: false, 
-//   },
-//   { id: "16", data: { label: "oi" }, 
-//     position: { x: 80, y: 240 }, 
-//     style: {   
-//       backgroundColor: "#E3EFFF",
-//       border: "2px solid #1865F2",
-//     },
-//   targetPosition: 'right',
-//   connectable: false, 
-//  },
-// ];
-
-
-// const RoadmapEstatisc = () => {
-
-//   return (
-//     <div style={{ height: "80vh", width: "140vh" }}>
-//       <ReactFlow nodes={nodes} edges={edges} fitView={false} />
-//       <Controls />
-//     </div>
-//   );
-// };
-
-// const WrappedRoadmapEstatisc = () => (
-//   <ReactFlowProvider>
-//     <RoadmapEstatisc />
-//   </ReactFlowProvider>
-// );
-
-// export default WrappedRoadmapEstatisc;
