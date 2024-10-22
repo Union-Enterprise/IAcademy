@@ -52,7 +52,7 @@ const ENEMRoadmap: React.FC = () => {
         currentY += 150; // Espaçamento vertical após o nó principal
 
         // Subtópicos organizados como uma trilha
-        const statisticsSubjects = roadmap["Estatística"];
+        const statisticsSubjects = roadmap["Aritmética"];
         if (statisticsSubjects && Array.isArray(statisticsSubjects)) {
           statisticsSubjects.forEach((subject, index) => {
             const childNodeId = `subject-${index + 1}`;

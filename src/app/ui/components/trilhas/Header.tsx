@@ -51,6 +51,16 @@ export default function Header({
         >
           <p>{linkLabel}</p>
         </Link>
+        <Link
+          href={hrefs[1]}
+          className={`${
+            pathname.includes("/contents") || pathname.includes("/Quizzes")
+              ? "border-b-mainBlue font-semibold"
+              : "opacity-50 hover:opacity-100 hover:border-opacity-75 hover:border-b-mainBlue "
+          } *:text-text-light border-b-2 p-2 text-lg duration-100`}
+        >
+          <p>Quizzes</p>
+        </Link>
       </div>
     </div>
   );
