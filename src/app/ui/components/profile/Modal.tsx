@@ -18,7 +18,7 @@ export default function Modal({
   isDisabled?: boolean;
   loading?: boolean;
   setVisible: (visible: boolean) => void;
-  children: React.ReactNode;  
+  children: React.ReactNode;
   hasOwnSubmit?: boolean;
 }) {
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function Modal({
 
   return (
     <div
-      className={`bg-black bg-opacity-60  fixed inset-0 z-20 flex items-center justify-center transition-opacity duration-300 ease-in-out ${
+      className={`bg-black bg-opacity-60  fixed inset-0 z-[999] flex items-center justify-center transition-opacity duration-300 ease-in-out ${
         visible ? "opacity-100" : "opacity-0"
       }`}
       onClick={handleOutsideClick}
