@@ -1,4 +1,5 @@
 import { Edit, Ban, RotateCcw } from "lucide-react";
+import { useState } from "react";
 
 interface UserItemProps {
   id: string;
@@ -23,7 +24,23 @@ export default function UserItem({
   onDelete,
   onUnban
 }: UserItemProps) {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [pendingDeleteEmail, setPendingDeleteEmail] = useState<string | null>(null);
+
+  const handleDeleteClick = (email: string) => {
+    setPendingDeleteEmail(email);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (pendingDeleteEmail) {
+      await onDelete(pendingDeleteEmail);
+      setIsDeleteModalOpen(false);
+      setPendingDeleteEmail(null);
+    }
+  };
   return (
+    <>
     <tr className="text-left w-full *:py-4 flex items-center justify-between px-6">
       <th className="px-5">
         <input type="checkbox" />
@@ -44,7 +61,7 @@ export default function UserItem({
           {status !== "Suspenso" ? (
               <button
               className="bg-red-500 text-white p-2 rounded hover:bg-red-600 duration-150"
-              onClick={() => onDelete(email)}
+              onClick={() => handleDeleteClick(email)}
               >
                 <Ban className="w-4 h-4" />
               </button>
@@ -59,6 +76,31 @@ export default function UserItem({
         </div>
       </td>
     </tr>
+     {isDeleteModalOpen && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-xl font-bold mb-4">Confirmar Suspensão</h2>
+          <p>Você tem certeza de que deseja suspender este usuário?</p>
+          <div className="mt-4 flex justify-end">
+            <button
+              onClick={confirmDelete}
+              className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 duration-150"
+            >
+              Confirmar
+            </button>
+            <button
+              onClick={() => {
+                setIsDeleteModalOpen(false);
+                setPendingDeleteEmail(null);
+              }}
+              className="ml-4 bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 duration-150"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+  </>
   );
 }
-

@@ -213,7 +213,7 @@ export default function Questionnaires() {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg w-1/2">
+          <div className="bg-white rounded-lg shadow-lg w-1/2 max-h-[80vh] overflow-y-auto"> {/* Scrollable form */}
             <div className="bg-mainBlue text-white p-4 rounded-t-lg flex justify-between items-center">
               <h2 className="text-xl font-bold">
                 {selectedQuestion ? "Editar Questão" : "Nova Questão"}
@@ -313,21 +313,21 @@ export default function Questionnaires() {
 
       {isPdfModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-bold mb-4">Confirmar Criação de Quizzes</h2>
-            <p>Deseja realmente criar quizzes com o arquivo PDF enviado?</p>
-            <div className="mt-4 flex justify-end">
-              <button
-                onClick={handleConfirmPdf}
-                className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 duration-150"
-              >
-                Confirmar
-              </button>
+          <div className="bg-white rounded-lg shadow-lg w-1/3 p-6">
+            <h2 className="text-xl font-bold mb-4">Confirmar Upload de PDF</h2>
+            <p>Tem certeza que deseja enviar este PDF para gerar questões?</p>
+            <div className="flex justify-end mt-4">
               <button
                 onClick={() => setIsPdfModalOpen(false)}
-                className="ml-2 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 duration-150"
+                className="bg-gray-500 text-white py-2 px-4 rounded-md mr-2"
               >
                 Cancelar
+              </button>
+              <button
+                onClick={handleConfirmPdf}
+                className="bg-blue-500 text-white py-2 px-4 rounded-md"
+              >
+                Confirmar
               </button>
             </div>
           </div>
@@ -336,28 +336,24 @@ export default function Questionnaires() {
 
       {isDeleteModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-bold mb-4">Confirmar Deleção</h2>
-            <p>Você tem certeza de que deseja deletar esta questão?</p>
-            <div className="mt-4 flex justify-end">
+          <div className="bg-white rounded-lg shadow-lg w-1/3 p-6">
+            <h2 className="text-xl font-bold mb-4">Confirmar Exclusão</h2>
+            <p>Tem certeza que deseja excluir esta questão?</p>
+            <div className="flex justify-end mt-4">
               <button
-                onClick={async () => {
-                  await handleDeleteQuestion(questionToDelete);
-                  setIsDeleteModalOpen(false);
-                  setQuestionToDelete(null);
-                }}
-                className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 duration-150"
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="bg-gray-500 text-white py-2 px-4 rounded-md mr-2"
               >
-                Confirmar
+                Cancelar
               </button>
               <button
                 onClick={() => {
+                  handleDeleteQuestion(questionToDelete);
                   setIsDeleteModalOpen(false);
-                  setQuestionToDelete(null);
                 }}
-                className="ml-2 bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 duration-150"
+                className="bg-red-500 text-white py-2 px-4 rounded-md"
               >
-                Cancelar
+                Confirmar
               </button>
             </div>
           </div>

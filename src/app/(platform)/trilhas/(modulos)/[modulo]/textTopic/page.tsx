@@ -1,7 +1,20 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
 
 export default function Topic() {
+  const [showOtherFeedback, setShowOtherFeedback] = useState(false);
+  const [otherFeedback, setOtherFeedback] = useState("");
+
+  const handleOtherFeedbackSubmit = () => {
+    // Aqui você pode adicionar a lógica para enviar o feedback
+    console.log("Feedback enviado:", otherFeedback);
+    setOtherFeedback("");
+    setShowOtherFeedback(false);
+  };
+
   return (
     <>
       <div className="pl-10 bg-bg-lightA mt-12">
@@ -68,22 +81,43 @@ export default function Topic() {
         <div className="w-full bg-bg-lightA p-5 rounded-md mt-5 shadow-md">
           <h2 className="text-xl font-semibold mb-4" tabIndex={0}>Conte-nos o motivo:</h2>
           <div className="flex flex-wrap w-full justify-center gap-2">
-            <FeedbackButton text="Não gostei do estilo" />
-            <FeedbackButton text="Conteúdo incoerente" />
-            <FeedbackButton text="Não correspondeu às expectativas" />
-            <FeedbackButton text="Confuso" />
-            <FeedbackButton text="Entediante" />
-            <FeedbackButton text="Outro" />
+            <FeedbackButton text="Não gostei do estilo" onClick={undefined} />
+            <FeedbackButton text="Conteúdo incoerente" onClick={undefined} />
+            <FeedbackButton text="Não correspondeu às expectativas" onClick={undefined} />
+            <FeedbackButton text="Confuso" onClick={undefined} />
+            <FeedbackButton text="Entediante" onClick={undefined} />
+            <FeedbackButton text="Outro" onClick={() => setShowOtherFeedback(true)} />
           </div>
+
+          {showOtherFeedback && (
+            <div className="mt-4">
+              <input
+                type="text"
+                value={otherFeedback}
+                onChange={(e) => setOtherFeedback(e.target.value)}
+                placeholder="Seu feedback aqui"
+                className="border border-gray-300 rounded-md p-2 w-full focus:border-mainBlue"
+              />
+              <button
+                onClick={handleOtherFeedbackSubmit}
+                className="bg-mainBlue text-white px-4 py-2 rounded-md mt-2"
+              >
+                Enviar
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
   );
 }
 
-function FeedbackButton({ text = "Motivo aqui" }) {
+function FeedbackButton({ text = "Motivo aqui", onClick }) {
   return (
-    <button className="bg-bg-lightB text-sm text-gray-800 px-8 py-3 rounded-md hover:bg-gray-300 duration-200">
+    <button 
+      className="bg-bg-lightA text-sm text-gray-800 px-8 py-3 rounded-md hover:bg-gray-300 duration-200"
+      onClick={onClick}
+    >
       {text}
     </button>
   );
