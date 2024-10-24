@@ -15,8 +15,8 @@ const ENEMRoadmap: React.FC = () => {
   useEffect(() => {
     const fetchRoadmap = async () => {
       try {
-        const response = await axios.get<{ roadmap: RoadmapData[] }>(
-          "http://localhost:5002/roadmap"
+        const response = await axios.post<{ roadmap: RoadmapData[] }>(
+          "http://localhost:5002/roadmap", { email: "iacademy@iacademy.com" } //deixar esse email dinamico a depender do usuario
         );
 
         const roadmapData = response.data[0];
