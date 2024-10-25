@@ -9,6 +9,7 @@ import {
   BellRing,
   Library,
   FileQuestion,
+  CircleHelp,
 } from "lucide-react";
 import Link from "next/link";
 import { useSidebar } from "../../context/SidebarContext";
@@ -133,6 +134,14 @@ const Sidebar = ({ isUserLayout = true }) => {
             href="/questions"
             isSelected={selectedItem === "/questions"}
             onClick={() => setSelectedItem("/questions")}
+          />
+          <Item
+            title="Questões iniciais"
+            lucideIcon={CircleHelp}
+            isOpen={isOpen}
+            href="/inicialQuestion"
+            isSelected={selectedItem === "/inicialQuestion"}
+            onClick={() => setSelectedItem("/inicialQuestion")}
           />
         </>
       )}
