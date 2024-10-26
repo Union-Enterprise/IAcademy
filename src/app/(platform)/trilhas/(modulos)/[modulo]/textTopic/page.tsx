@@ -96,11 +96,11 @@ export default function Topic() {
                 value={otherFeedback}
                 onChange={(e) => setOtherFeedback(e.target.value)}
                 placeholder="Seu feedback aqui"
-                className="border border-gray-300 rounded-md p-2 w-full focus:border-mainBlue"
+                className="border border-gray-300 rounded-md p-2 w-full focus:border-mainBlue focus:shadow-md focus:outline-none hover:border-mainBlue hover:shadow-md"
               />
               <button
                 onClick={handleOtherFeedbackSubmit}
-                className="bg-mainBlue text-white px-4 py-2 rounded-md mt-2"
+                className="bg-mainBlue text-white px-4 py-2 rounded-md mt-2 hover:bg-mainBlue/90"
               >
                 Enviar
               </button>
@@ -115,7 +115,7 @@ export default function Topic() {
 function FeedbackButton({ text = "Motivo aqui", onClick }) {
   return (
     <button 
-      className="bg-bg-lightA text-sm text-gray-800 px-8 py-3 rounded-md hover:bg-gray-300 duration-200"
+      className="bg-bg-lightA text-sm text-gray-800 px-8 py-3 rounded-md hover:bg-gray-300 duration-200 "
       onClick={onClick}
     >
       {text}

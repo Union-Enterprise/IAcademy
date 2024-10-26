@@ -1,14 +1,13 @@
 "use client";
 
 import { MessageCircleQuestion, Layers, Split } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import CardsStudent from "@/app/ui/components/Student/CardsStudent";
 import { Fifagrafico } from "@/app/ui/components/Student/Fifagrafico";
 import { LoginsChart } from "@/app/ui/components/Student/LoginsChart";
 import { TimeChart } from "@/app/ui/components/Student/TimeChart";
 import { UtilizationChart } from "@/app/ui/components/Student/UtilizationChart";
 import { useUser } from "@/app/context/UserContext";
-import LoadingFrame from "@/app/ui/components/LoadingFrame";
 
 const questions = [
   {
@@ -45,40 +44,43 @@ const questions = [
 ];
 
 const Student = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // Controla a exibição do modal
-  const [currentQuestion, setCurrentQuestion] = useState(0); // Questão atual
+  const [isModalOpen, setIsModalOpen] = useState(false); // Inicialmente, o modal está fechado
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const { user } = useUser();
 
-  // Verifica se o modal já foi exibido no local storage
-  useEffect(() => {
-    const modalShown = localStorage.getItem("modalShown");
-    if (!modalShown) {
-      setIsModalOpen(true); 
-    }
-  }, []);
+  // Estado para verificar se o quiz foi respondido
+  const [quizAnswered, setQuizAnswered] = useState(false);
 
-  // Função para  registrar no local storage
-  const closeModal = () => {
-    localStorage.setItem("modalShown", "true");
-    setIsModalOpen(false);
-  };
+  useEffect(() => {
+    const hasAnswered = localStorage.getItem(`quizAnswered_${user?.id}`) === 'true'; // Verifica se o quiz foi respondido
+    setQuizAnswered(hasAnswered);
+
+    // Se o quiz não foi respondido, abre o modal
+    if (!hasAnswered) {
+      setIsModalOpen(true);
+    }
+  }, [user]);
 
   const questionsLeft = questions.length - currentQuestion - 1;
 
-  
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion((prev) => prev - 1);
     }
   };
 
- 
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
     } else {
-      closeModal(); 
+      closeModal();
+      setQuizAnswered(true); // Marca o quiz como respondido
+      localStorage.setItem(`quizAnswered_${user?.id}`, 'true'); // Armazena no localStorage
     }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -87,7 +89,7 @@ const Student = () => {
         <div className="col-span-6 flex flex-col gap-5">
           <div className="w-full h-full bg-mainBlue p-10 text-white flex flex-col gap-5 rounded-lg">
             <h1 className="text-4xl">
-              Bem-vindo de volta, <b>{user?.name || "Usuário"}</b> 👋
+              Bem-vindo(a) de volta, <b>{user?.name || "Usuário"}</b> 👋
             </h1>
             <p className="max-w-[60%]">
               Você concluiu <b className="font-bold">80%</b> da trilha de
@@ -129,7 +131,7 @@ const Student = () => {
         </div>
       </div>
 
-      {isModalOpen && (
+      {isModalOpen && ( // O modal aparece apenas se isModalOpen for true
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-1/2">
             {currentQuestion < questions.length ? (
