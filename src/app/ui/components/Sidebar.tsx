@@ -10,6 +10,7 @@ import {
   Library,
   FileQuestion,
   CircleHelp,
+  BookX,
 } from "lucide-react";
 import Link from "next/link";
 import { useSidebar } from "../../context/SidebarContext";
@@ -136,8 +137,8 @@ const Sidebar = ({ isUserLayout = true }) => {
             onClick={() => setSelectedItem("/questions")}
           />
           <Item
-            title="Questões iniciais"
-            lucideIcon={CircleHelp}
+            title="Formulario inicial"
+            lucideIcon={BookX}
             isOpen={isOpen}
             href="/inicialQuestion"
             isSelected={selectedItem === "/inicialQuestion"}

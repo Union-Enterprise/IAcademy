@@ -114,13 +114,19 @@ export default function Questionnaires() {
 
     try {
       if (selectedQuestion) {
-        await axios.put("http://localhost:5002/question/" + selectedQuestion.id, newQuestionnaire);
+        await axios.put(
+          "http://localhost:5002/question/" + selectedQuestion.id,
+          newQuestionnaire
+        );
         const updatedQuestions = questionnaires.map((q) =>
           q.id === selectedQuestion.id ? { ...q, ...newQuestionnaire } : q
         );
         setQuestionnaires(updatedQuestions);
       } else {
-        const response = await axios.post("http://localhost:5002/question", newQuestionnaire);
+        const response = await axios.post(
+          "http://localhost:5002/question",
+          newQuestionnaire
+        );
         const createdQuestion = {
           id: response.data.insertedId,
           titulo,
@@ -158,18 +164,16 @@ export default function Questionnaires() {
 
   return (
     <div className="p-6 bg-white rounded-md shadow-md">
-      <h1 className="text-2xl font-bold mb-4">Questões iniciais</h1>
+      <h1 className="text-2xl font-bold mb-4">Formulario iniciai</h1>
 
       <div className="flex justify-end items-center mb-4">
         <button
           onClick={() => handleOpenModal(null)}
-          className="bg-green-500 text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-green-600 duration-150"
+          className="bg-mainBlue text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-mainBlue/80 duration-150"
         >
           <Plus className="w-4 h-4" />
           Criar questões iniciais
         </button>
-
-        
       </div>
 
       <table className="w-full text-left">
@@ -181,8 +185,13 @@ export default function Questionnaires() {
         </thead>
         <tbody>
           {questionnaires.map((questionnaire) => (
-            <tr key={questionnaire.id} className="border-b hover:bg-gray-50 duration-150">
-              <td className="p-3">{questionnaire.titulo} - {questionnaire.tema}</td>
+            <tr
+              key={questionnaire.id}
+              className="border-b hover:bg-gray-50 duration-150"
+            >
+              <td className="p-3">
+                {questionnaire.titulo} - {questionnaire.tema}
+              </td>
               <td className="p-3 flex gap-3">
                 <button
                   className="bg-mainBlue text-white p-2 rounded hover:bg-blue-800 duration-150"
@@ -204,7 +213,9 @@ export default function Questionnaires() {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg w-1/2 max-h-[80vh] overflow-y-auto"> {/* Scrollable form */}
+          <div className="bg-white rounded-lg shadow-lg w-1/2 max-h-[80vh] overflow-y-auto">
+            {" "}
+            {/* Scrollable form */}
             <div className="bg-mainBlue text-white p-4 rounded-t-lg flex justify-between items-center">
               <h2 className="text-xl font-bold">
                 {selectedQuestion ? "Editar Questão" : "Nova Questão"}
@@ -216,11 +227,12 @@ export default function Questionnaires() {
                 X
               </button>
             </div>
-
             <div className="p-6">
               <form className="space-y-4" onSubmit={handleSaveQuestionnaire}>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Título *</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Título *
+                  </label>
                   <input
                     type="text"
                     value={titulo}
@@ -231,7 +243,9 @@ export default function Questionnaires() {
                 </div>
 
                 <div className="!mb-14">
-                  <label className="block text-sm font-medium text-gray-700">Questão *</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Questões *
+                  </label>
                   <ReactQuill
                     value={questao}
                     onChange={setQuestao}
@@ -241,7 +255,9 @@ export default function Questionnaires() {
                 </div>
 
                 <div className="!mb-14">
-                  <label className="block text-sm font-medium text-gray-700">Explicação</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Explicação
+                  </label>
                   <ReactQuill
                     value={explicacao}
                     onChange={setExplicacao}
@@ -251,17 +267,19 @@ export default function Questionnaires() {
                 </div>
 
                 <div className="mt-2">
-                  <label className="block text-sm font-medium text-gray-700">Alternativa Correta *</label>
-                  <input
-                    type="text"
+                  <label className="block text-sm font-medium text-gray-700">
+                    Resposta Correta *
+                  </label>
+                  <textarea
                     value={alternativa_correta}
                     onChange={(e) => setAlternativa_correta(e.target.value)}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
+                    rows={3} // You can adjust the number of rows as needed
                     required
                   />
                 </div>
 
-                <div>
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700">Alternativas *</label>
                   <textarea
                     value={alternativas.join("\n")}
@@ -277,10 +295,12 @@ export default function Questionnaires() {
                     required
                   />
                   <small className="text-gray-500">Separe as alternativas por linhas.</small>
-                </div>
+                </div> */}
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Tema *</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Tema *
+                  </label>
                   <input
                     type="text"
                     value={tema}
@@ -302,7 +322,7 @@ export default function Questionnaires() {
         </div>
       )}
 
-      {isPdfModalOpen && (
+      {/* {isPdfModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-1/3 p-6">
             <h2 className="text-xl font-bold mb-4">Confirmar Upload de PDF</h2>
@@ -323,7 +343,7 @@ export default function Questionnaires() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       {isDeleteModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
