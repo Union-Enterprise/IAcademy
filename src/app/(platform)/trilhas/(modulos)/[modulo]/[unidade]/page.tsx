@@ -2,16 +2,14 @@
 
 import { useParams } from "next/navigation";
 import { modulosData } from "@/app/ui/components/modulos/data";
-import { ContentsSection } from "@/app/ui/trilha/ContentsSection";
 import normalizeString from "@/app/ui/components/modulos/normalizeString";
-import Link from "next/link";
 
 type ModuloKey = keyof typeof modulosData;
 
-export default function Topico() {
+export default function Unidade() {
   const params = useParams();
   const moduloKey = params.modulo;
-  const topicoKey = params.topico;
+  const unidadeKey = params.unidade;
 
   const modulo = modulosData[moduloKey as ModuloKey];
 
@@ -19,17 +17,17 @@ export default function Topico() {
     return <p>Módulo não encontrado.</p>;
   }
 
-  const topico = modulo.topics.find(
-    (topic) => normalizeString(topic.title) === topicoKey
+  const unidade = modulo.unidades.find(
+    (unidade) => normalizeString(unidade.title) === unidadeKey
   );
 
-  if (!topico) {
-    return <p>Tópico não encontrado.</p>;
+  if (!unidade) {
+    return <p>Unidade não encontrada.</p>;
   }
 
   return (
     <div>
-      <h1>{topico.title}</h1>
+      <h1>{unidade.title}</h1>
     </div>
   );
 }

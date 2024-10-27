@@ -1,7 +1,7 @@
 "use client";
 
 import { usePageTitle } from "@/app/hooks/usePageTitle";
-import Header from "@/app/ui/components/trilhas/Header";
+import TrilhaMenu from "@/app/ui/components/trilhas/TrilhaMenu";
 
 export default function RootLayout({
   children,
@@ -10,9 +10,9 @@ export default function RootLayout({
 }>) {
   usePageTitle();
   return (
-    <>
-      {/* <Header /> */}
+    <section>
+      <TrilhaMenu />
       {children}
-    </>
+    </section>
   );
 }

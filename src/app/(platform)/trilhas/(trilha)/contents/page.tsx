@@ -12,7 +12,7 @@ interface ModuloProps {
 
 export default function Modulos() {
   return (
-    <section className="flex flex-col gap-14 px-[200px] relative mt-14">
+    <section className="flex flex-col items-center gap-14 px-[200px] relative mt-14">
       {Object.entries(modulosData).map(([moduloLink, modulo]) => (
         <Modulo key={modulo.index} link={moduloLink} {...modulo} />
       ))}
@@ -24,7 +24,7 @@ function Modulo({ title, index, topics, link }: ModuloProps) {
   return (
     <div className="flex flex-col gap-3">
       <Link
-        href={`/trilhas/${link}/overview`}
+        href={`/trilhas/${link}`}
         className="*:duration-200 w-fit group"
       >
         <span className="text-text-lightSub group-hover:text-mainBlue">

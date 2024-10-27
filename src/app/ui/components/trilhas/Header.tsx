@@ -13,7 +13,7 @@ export default function Header({
   title = "Preparando-se para os vestibulares",
   description = "Aprenda tudo que você precisa para passar nos vestibulares.",
   linkLabel = "Conteúdos",
-  hrefs = ["/trilhas/overview", "/trilhas/contents", "/trilhas"],
+  hrefs = ["/trilhas/overview", "/trilhas/modulos", "/trilhas"],
 }: HeaderProps) {
   const pathname = usePathname();
 
@@ -34,7 +34,7 @@ export default function Header({
         <Link
           href={hrefs[0]}
           className={`${
-            pathname.includes(`/overview`)
+            pathname === hrefs[0]
               ? "border-b-mainBlue font-semibold"
               : "opacity-50 hover:opacity-100 hover:border-opacity-75 hover:border-b-mainBlue "
           } *:text-text-light border-b-2 p-2 text-lg duration-100`}
@@ -44,7 +44,7 @@ export default function Header({
         <Link
           href={hrefs[1]}
           className={`${
-            pathname.includes("/contents") || pathname.includes("/topics")
+            pathname === hrefs[1]
               ? "border-b-mainBlue font-semibold"
               : "opacity-50 hover:opacity-100 hover:border-opacity-75 hover:border-b-mainBlue "
           } *:text-text-light border-b-2 p-2 text-lg duration-100`}

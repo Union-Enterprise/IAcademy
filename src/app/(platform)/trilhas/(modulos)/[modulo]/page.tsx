@@ -1,19 +1,18 @@
 "use client";
 
-import { usePageTitle } from "@/app/hooks/usePageTitle";
-import Header from "@/app/ui/components/trilhas/Header";
+import Link from "next/link";
+import GenericIA from "@/app/ui/components/flows/GenericIA";
 import { useParams } from "next/navigation";
 import { modulosData } from "@/app/ui/components/modulos/data";
+import Header from "@/app/ui/components/trilhas/Header";
 
 type ModuloKey = keyof typeof modulosData;
 
-export default function ModuloLayout({
+export default function Overview({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
-  usePageTitle();
-
+}>) {
   const params = useParams();
   const modulo = params.modulo as string;
 
@@ -22,19 +21,24 @@ export default function ModuloLayout({
   }
 
   const moduleData = modulosData[modulo as ModuloKey];
+
   return (
     <>
       <Header
         title={moduleData.title}
         description={moduleData.description}
-        linkLabel="Tópicos"
+        linkLabel="Unidades"
         hrefs={[
-          `/trilhas/${modulo}/overview`,
-          `/trilhas/${modulo}/topics`,
+          `/trilhas/${modulo}`,
+          `/trilhas/${modulo}/unidades`,
           "/trilhas/overview",
         ]}
       />
-      {children}
+      <section className="grid grid-cols-3 mb-10 gap-10 px-[200px] relative h-full">
+        <div className="col-span-2">
+          <GenericIA />
+        </div>
+      </section>
     </>
   );
 }
