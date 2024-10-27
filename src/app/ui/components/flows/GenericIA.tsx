@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ReactFlow, { Controls, Node, Edge } from "reactflow";
 import "reactflow/dist/style.css";
+import { useUser } from "@/app/context/UserContext";
 
 interface RoadmapData {
   [topic: string]: string[];
@@ -11,12 +12,14 @@ interface RoadmapData {
 const ENEMRoadmap: React.FC = () => {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
+  const { user, loading } = useUser();
 
   useEffect(() => {
     const fetchRoadmap = async () => {
       try {
         const response = await axios.post<{ roadmap: RoadmapData[] }>(
-          "http://localhost:5002/roadmap", { email: "iacademy@iacademy.com" } //deixar esse email dinamico a depender do usuario
+          "http://localhost:5002/roadmap",
+          { email: user.email } //deixar esse email dinamico a depender do usuario - tá feito, se n funcionar a culpa n é minha.
         );
 
         const roadmapData = response.data[0];

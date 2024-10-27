@@ -11,7 +11,7 @@ export default function RootLayout({
   usePageTitle();
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       {children}
     </>
   );

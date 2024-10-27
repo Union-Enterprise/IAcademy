@@ -1,389 +1,910 @@
-"use client";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import ReactFlow, { Controls, Node, Edge, ReactFlowProvider} from "reactflow";
+import React from "react";
+import ReactFlow, {
+  Controls,
+  Node,
+  Edge,
+  ReactFlowProvider,
+  Handle,
+  Position,
+} from "reactflow";
 import "reactflow/dist/style.css";
 
-
-
-
-const edges = [
-  { id: "1-2", source: "1", target: "2", animated: false, style: { stroke: "#1865F2" } },
-  { id: "1-3", source: "1", target: "3", animated: false, style: { stroke: "#1865F2" } },
-  { id: "1-5", source: "1", target: "5", animated: false, style: { stroke: "#1865F2" } },
-  { id: "1-6", source: "1", target: "6", animated: false, style: { stroke: "#1865F2" } },
-  { id: "1-7", source: "1", target: "7", animated: false, style: { stroke: "#1865F2" } },
-  { id: "1-8", source: "1", target: "8", animated: false, style: { stroke: "#1865F2" } },
-  { id: "2-9", source: "2", target: "9", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "9-10", source: "9", target: "10", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "10-11", source: "10", target: "11", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "11-12", source: "11", target: "12", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "5-13", source: "5", target: "13", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "13-14", source: "13", target: "14", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "14-15", source: "14", target: "15", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "15-16", source: "15", target: "16", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "3-17", source: "3", target: "17", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "17-18", source: "17", target: "18", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "18-19", source: "18", target: "19", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "19-20", source: "19", target: "20", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "7-21", source: "7", target: "21", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "20-21", source: "20", target: "", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "21-22", source: "21", target: "22", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "22-23", source: "22", target: "23", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "23-24", source: "23", target: "24", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "8-25", source: "8", target: "25", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "25-26", source: "25", target: "26", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "26-27", source: "26", target: "27", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "27-28", source: "27", target: "28", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "6-30", source: "6", target: "", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "30-31", source: "30", target: "30", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "31-32", source: "31", target: "31", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "32-33", source: "32", target: "32", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-  { id: "33-34", source: "33", target: "33", animated: true, style: { stroke: "#1865F2" }, sourcePosition: 'right' },
-
- 
+// Edge configurations
+const edges: Edge[] = [
+  {
+    id: "1-2",
+    source: "1",
+    target: "2",
+    animated: false,
+    targetHandle: "targetTop",
+    style: { stroke: "#1865F2", strokeWidth: "3" },
+  },
+  {
+    id: "2-3",
+    source: "2",
+    sourceHandle: "right",
+    target: "3",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "2-4",
+    source: "2",
+    sourceHandle: "right",
+    target: "4",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "2-5",
+    source: "2",
+    sourceHandle: "right",
+    target: "5",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "2-6",
+    source: "2",
+    sourceHandle: "right",
+    target: "6",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "2-11",
+    source: "2",
+    sourceHandle: "left",
+    targetHandle: "targetTop",
+    target: "11",
+    animated: false,
+    style: { stroke: "#1865F2", strokeWidth: "3" },
+  },
+  {
+    id: "11-17",
+    source: "11",
+    sourceHandle: "left",
+    target: "17",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "11-18",
+    source: "11",
+    sourceHandle: "bottom",
+    target: "18",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "11-25",
+    source: "11",
+    sourceHandle: "bottom",
+    target: "25",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "11-30",
+    source: "11",
+    sourceHandle: "right",
+    targetHandle: "targetLeft",
+    target: "30",
+    animated: false,
+    style: { stroke: "#1865F2", strokeWidth: "3" },
+  },
+  {
+    id: "30-32",
+    source: "30",
+    sourceHandle: "top",
+    target: "32",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "30-33",
+    source: "30",
+    sourceHandle: "right",
+    target: "33",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "30-34",
+    source: "30",
+    sourceHandle: "right",
+    target: "34",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "30-36",
+    source: "30",
+    sourceHandle: "right",
+    target: "36",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "30-37",
+    source: "30",
+    sourceHandle: "right",
+    target: "37",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "30-38",
+    source: "30",
+    sourceHandle: "right",
+    target: "38",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "30-39",
+    source: "30",
+    sourceHandle: "left",
+    targetHandle: "targetRight",
+    target: "39",
+    animated: false,
+    style: { stroke: "#1865F2", strokeWidth: "3" },
+  },
+  {
+    id: "39-40",
+    source: "39",
+    sourceHandle: "left",
+    target: "40",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "39-41",
+    source: "39",
+    sourceHandle: "bottom",
+    target: "41",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "39-44",
+    source: "39",
+    sourceHandle: "bottom",
+    target: "44",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "39-48",
+    source: "39",
+    sourceHandle: "right",
+    targetHandle: "targetLeft",
+    target: "48",
+    animated: false,
+    style: { stroke: "#1865F2", strokeWidth: "3" },
+  },
+  {
+    id: "48-50",
+    source: "48",
+    sourceHandle: "top",
+    target: "50",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "48-51",
+    source: "48",
+    sourceHandle: "right",
+    targetHandle: "targetLeft",
+    target: "51",
+    animated: false,
+    style: { stroke: "#1865F2", strokeWidth: "3" },
+  },
+  {
+    id: "51-52",
+    source: "51",
+    sourceHandle: "bottom",
+    target: "52",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "51-59",
+    source: "51",
+    sourceHandle: "left",
+    targetHandle: "targetTop",
+    target: "59",
+    animated: false,
+    style: { stroke: "#1865F2", strokeWidth: "3" },
+  },
+  {
+    id: "59-60",
+    source: "59",
+    sourceHandle: "left",
+    target: "60",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "59-61",
+    source: "59",
+    sourceHandle: "left",
+    target: "61",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "59-62",
+    source: "59",
+    sourceHandle: "left",
+    target: "62",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "59-63",
+    source: "59",
+    sourceHandle: "left",
+    target: "63",
+    animated: false,
+    style: { stroke: "#1865F2", strokeDasharray: "6" },
+  },
+  {
+    id: "59-64",
+    source: "59",
+    sourceHandle: "bottom",
+    target: "64",
+    animated: false,
+    style: { stroke: "#1865F2", strokeWidth: "3" },
+  },
 ];
 
-const nodes = [
-  { id: "1", data: { label: "Preparativo para o ENEM" }, position: { x: 500, y: 50 }, 
-  style: { width: 200,  backgroundColor: "#1865F2",
-    border: "2px solid #1865F2",
-    color:"#fff", 
-    fontWeight: 'bold' 
+const RoadMapNode = ({ data }: any) => (
+  <div
+    style={{
+      padding: 10,
+      backgroundColor: data.bg || "#FFEB3B",
+      border: data.border || "1px solid black",
+      borderRadius: 4,
+      fontSize: "12px",
+      width: data.width || "fit-content",
+      minWidth: 150,
+      display: "flex",
+      justifyContent: "center",
+      fontWeight: data.weight || "normal",
+    }}
+  >
+    {data.label}
+    {data.showSTopHandle && (
+      <Handle type={"source"} position={Position.Top} id="top" />
+    )}
+    {data.showSRightHandle && (
+      <Handle type={"source"} position={Position.Right} id="right" />
+    )}
+    {data.showSBottomHandle && (
+      <Handle type={"source"} position={Position.Bottom} id="bottom" />
+    )}
+    {data.showSLeftHandle && (
+      <Handle type={"source"} position={Position.Left} id="left" />
+    )}
+    {data.showTTopHandle && (
+      <Handle type={"target"} position={Position.Top} id="targetTop" />
+    )}
+    {data.showTRightHandle && (
+      <Handle type={"target"} position={Position.Right} id="targetRight" />
+    )}
+    {data.showTBottomHandle && (
+      <Handle type={"target"} position={Position.Bottom} id="targetBottom" />
+    )}
+    {data.showTLeftHandle && (
+      <Handle type={"target"} position={Position.Left} id="targetLeft" />
+    )}
+  </div>
+);
 
+const TopicNode = ({ data }: any) => (
+  <div
+    style={{
+      padding: 10,
+      backgroundColor: data.bg || "#CAFFAA",
+      border: data.border || "1px solid black",
+      borderRadius: 4,
+      color: data.color || "#000",
+      fontSize: "12px",
+      width: data.width,
+      height: data.height || "fit-content",
+      display: "flex",
+      justifyContent: "center",
+    }}
+  >
+    {data.label}
+    {data.showTopHandle && <Handle type="target" position={Position.Top} />}
+    {data.showRightHandle && <Handle type="target" position={Position.Right} />}
+    {data.showBottomHandle && (
+      <Handle type="target" position={Position.Bottom} />
+    )}
+    {data.showLeftHandle && <Handle type="target" position={Position.Left} />}
+  </div>
+);
+
+const nodes: Node[] = [
+  {
+    id: "1",
+    type: "roadmap",
+    data: {
+      label: "Matemática Ensino Médio",
+      showSBottomHandle: true,
+      bg: "transparent",
+      border: "none",
+      width: 200,
+      weight: "bold",
+    },
+    position: { x: 475, y: 0 },
   },
-   targetPosition:'bottom' 
- },
- { 
-  id: "2", 
-  data: { label: "Aritmética e Proporções" }, 
-  position: { x: 10, y: 200 },  
-  style: {   
-    backgroundColor: "#FFEB3B",
-    border: "2px solid #1865F2",
+  {
+    id: "2",
+    type: "roadmap",
+    data: {
+      label: "Álgebra 1",
+      showTTopHandle: true,
+      showSRightHandle: true,
+      showSLeftHandle: true,
+    },
+    position: { x: 500, y: 180 },
   },
-  sourcePosition: 'bottom', 
-  targetPosition: 'top'  
-},
-{ 
-  id: "3", 
-  data: { label: "Geometria Plana e Espacial" }, 
-  position: { x: 1000, y: 200 },  
-  style: {   
-    backgroundColor: "#FFEB3B",
-    border: "2px solid #1865F2",
+  {
+    id: "3",
+    type: "topic",
+    data: {
+      label: "Expressões e Operações Algébricas",
+      showLeftHandle: true,
+      width: 250,
+    },
+    position: { x: 800, y: 100 },
   },
-  sourcePosition: 'bottom', 
-  targetPosition: 'top' 
-},
-{ 
-  id: "5", 
-  data: { label: "Funções e Gráficos" }, 
-  position: { x: 400, y: 200 },  
-  style: {   
-    backgroundColor: "#FFEB3B",
-    border: "2px solid #1865F2",
+  {
+    id: "4",
+    type: "topic",
+    data: {
+      label: "Equações e Inequações de 1° grau",
+      width: 250,
+      showLeftHandle: true,
+    },
+    position: { x: 800, y: 150 },
   },
-  sourcePosition: 'bottom', 
-  targetPosition: 'top'  
-},
-{ 
-  id: "6", 
-  data: { label: "Probabilidade e Estatística" }, 
-  position: { x: 200, y: 200 },  
-  style: {   
-    backgroundColor: "#FFEB3B",
-    border: "2px solid #1865F2",
+  {
+    id: "5",
+    type: "topic",
+    data: { label: "Razão e Proporção", width: 250, showLeftHandle: true },
+    position: { x: 800, y: 200 },
+    targetPosition: Position.Left,
   },
-  sourcePosition: 'bottom', 
-  targetPosition: 'top'  
-},
-{ 
-  id: "7", 
-  data: { label: "Porcentagem e Juros" }, 
-  position: { x: 600, y: 200 },  
-  style: {   
-    backgroundColor: "#FFEB3B",
-    border: "2px solid #1865F2",
+  {
+    id: "6",
+    type: "topic",
+    data: { label: "Sistemas Lineares", width: 250, showLeftHandle: true },
+    position: { x: 800, y: 250 },
+    targetPosition: Position.Left,
   },
-  sourcePosition: 'bottom', 
-  targetPosition: 'top'  
-},
-{ 
-  id: "8", 
-  data: { label: "Análise Combinatória" }, 
-  position: { x: 800, y: 200 },  
-  style: {   
-    backgroundColor: "#FFEB3B",
-    border: "2px solid #1865F2",
+  {
+    id: "7",
+    type: "topic",
+    data: { label: "Taxas", width: 150 },
+    position: { x: 1060, y: 100 },
   },
-  sourcePosition: 'bottom', 
-  targetPosition: 'top'  
-}, 
+  {
+    id: "8",
+    type: "topic",
+    data: { label: "Juros", width: 150 },
+    position: { x: 1060, y: 150 },
+  },
   {
     id: "9",
-    data: { label: "ponto" },
-    position: { x: 10, y: 300 },
-    style: { 
-      
-      backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-     },
-    targetPosition: 'top',
-    connectable: false, 
+    type: "topic",
+    data: { label: "Função Afim", width: 150 },
+    position: { x: 1060, y: 200 },
   },
-  { id: "10", data: { label: "regara " }, position: { x: 10, y: 380 }, 
-    style: {   
-      backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-    targetPosition: 'top',
-    connectable: false,
+  {
+    id: "10",
+    type: "topic",
+    data: { label: "Função Quadrática", width: 150 },
+    position: { x: 1060, y: 250 },
   },
-
-  { id: "11", data: { label: "cu" }, position: { x: 10, y: 460 },
-      style: {   
-      backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
+  {
+    id: "11",
+    type: "roadmap",
+    data: {
+      label: "Geometria",
+      showTTopHandle: true,
+      showSLeftHandle: true,
+      showSRightHandle: true,
+      showSBottomHandle: true,
     },
-    targetPosition: 'top',
-    connectable: false, 
+    position: { x: 295, y: 300 },
   },
-  { id: "12", data: { label: "oi" }, 
-    position: { x: 10, y: 540 }, 
-    style: {   
-      backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-  targetPosition: 'top',
-  connectable: false, 
- },
+  {
+    id: "12",
+    type: "topic",
+    data: { label: "Polígonos Regulares", width: 210 },
+    position: { x: 0, y: 150 },
+  },
   {
     id: "13",
-    data: { label: "ponto" },
-    position: { x: 400, y: 300 },
-    style: { 
-      
-        backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-     },
-    targetPosition: 'top',
-    connectable: false, 
+    type: "topic",
+    data: { label: "Noções sobre Fractais", width: 210 },
+    position: { x: 0, y: 200 },
   },
-  { id: "14", data: { label: "regara " },
-     position: { x: 400, y: 380 }, 
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-    targetPosition: 'top',
-    connectable: false,
+  {
+    id: "14",
+    type: "topic",
+    data: { label: "Simetrias", width: 100 },
+    position: { x: 0, y: 250 },
   },
-
-  { id: "15", data: { label: "cu" },
-     position: { x: 400, y: 460 },
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-    targetPosition: 'top',
-    connectable: false, 
+  {
+    id: "15",
+    type: "topic",
+    data: { label: "Isometrias", width: 100 },
+    position: { x: 110, y: 250 },
   },
-  { id: "16", data: { label: "oi" }, 
-    position: { x: 400, y: 540 }, 
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-  targetPosition: 'top',
-  connectable: false, 
- },
+  {
+    id: "16",
+    type: "topic",
+    data: { label: "Semelhança", width: 100 },
+    position: { x: 0, y: 300 },
+  },
   {
     id: "17",
-    data: { label: "ponto" },
-    position: { x: 1000, y: 300 },
-    style: { 
-      
-        backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-     },
-    targetPosition: 'top',
-    connectable: false, 
+    type: "topic",
+    data: { label: "Congruência", width: 100, showRightHandle: true },
+    position: { x: 110, y: 300 },
+    targetPosition: Position.Right,
   },
-  { id: "18", data: { label: "regara " },
-     position: { x: 1000, y: 380 }, 
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-    targetPosition: 'top',
-    connectable: false,
+  {
+    id: "18",
+    type: "topic",
+    data: { label: "Geometria Espacial", width: 210, showTopHandle: true },
+    position: { x: 25, y: 450 },
   },
-
-  { id: "19", data: { label: "cu" },
-     position: { x: 1000, y: 460 },
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-    targetPosition: 'top',
-    connectable: false, 
+  {
+    id: "19",
+    type: "topic",
+    data: { label: "Volume", width: 100 },
+    position: { x: 25, y: 500 },
   },
-  { id: "20", data: { label: "oi" }, 
-    position: { x: 1000, y: 540 }, 
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-  targetPosition: 'top',
-  connectable: false, 
- },
+  {
+    id: "20",
+    type: "topic",
+    data: { label: "Conceitos", width: 100 },
+    position: { x: 135, y: 500 },
+  },
   {
     id: "21",
-    data: { label: "ponto" },
-    position: { x: 600, y: 300 },
-    style: { 
-      
-        backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-     },
-    targetPosition: 'top',
-    connectable: false, 
+    type: "topic",
+    data: { label: "Cones", width: 100 },
+    position: { x: 25, y: 550 },
   },
-  { id: "22", data: { label: "regara " },
-     position: { x: 600, y: 380 }, 
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-    targetPosition: 'top',
-    connectable: false,
+  {
+    id: "22",
+    type: "topic",
+    data: { label: "Pirâmides", width: 100 },
+    position: { x: 135, y: 550 },
   },
-
-  { id: "23", data: { label: "cu" },
-     position: { x: 600, y: 460 },
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-    targetPosition: 'top',
-    connectable: false, 
+  {
+    id: "23",
+    type: "topic",
+    data: { label: "Esferas", width: 100 },
+    position: { x: 25, y: 600 },
   },
-  { id: "24", data: { label: "oi" }, 
-    position: { x: 600, y: 540 }, 
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-  targetPosition: 'top',
-  connectable: false, 
- },
+  {
+    id: "24",
+    type: "topic",
+    data: { label: "Cilíndros", width: 100 },
+    position: { x: 135, y: 600 },
+  },
   {
     id: "25",
-    data: { label: "ponto" },
-    position: { x: 800, y: 300 },
-    style: { 
-      
-        backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-     },
-    targetPosition: 'top',
-    connectable: false, 
+    type: "topic",
+    data: { label: "Geometria Plana", width: 200, showTopHandle: true },
+    position: { x: 270, y: 450 },
   },
-  { id: "26", data: { label: "regara " },
-     position: { x: 800, y: 380 }, 
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-    targetPosition: 'top',
-    connectable: false,
+  {
+    id: "26",
+    type: "topic",
+    data: { label: "Relações de Euler", width: 200 },
+    position: { x: 270, y: 500 },
   },
-
-  { id: "27", data: { label: "cu" },
-     position: { x: 800, y: 460 },
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-    targetPosition: 'top',
-    connectable: false, 
+  {
+    id: "27",
+    type: "topic",
+    data: { label: "Área", width: 95 },
+    position: { x: 270, y: 550 },
   },
-  { id: "28", data: { label: "oi" }, 
-    position: { x: 800, y: 540 }, 
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-  targetPosition: 'top',
-  connectable: false, 
- },
-  { id: "29", data: { label: "oi" }, 
-    position: { x: 800, y: 540 }, 
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-    },
-  targetPosition: 'top',
-  connectable: false, 
- },
+  {
+    id: "28",
+    type: "topic",
+    data: { label: "Perímetro", width: 95 },
+    position: { x: 375, y: 550 },
+  },
+  {
+    id: "29",
+    type: "topic",
+    data: { label: "Operações com Polinômios", width: 200 },
+    position: { x: 270, y: 600 },
+  },
   {
     id: "30",
-    data: { label: "ponto" },
-    position: { x: 200, y: 300 },
-    style: { 
-      
-        backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
-     },
-    targetPosition: 'top',
-    connectable: false, 
-  },
-  { id: "31", data: { label: "regara " },
-     position: { x: 200, y: 380 }, 
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
+    type: "roadmap",
+    data: {
+      label: "Álgebra 2",
+      showTLeftHandle: true,
+      showSLeftHandle: true,
+      showSTopHandle: true,
+      showSRightHandle: true,
     },
-    targetPosition: 'top',
-    connectable: false,
+    position: { x: 675, y: 525 },
+  },
+  {
+    id: "31",
+    type: "topic",
+    data: { label: "Progressão Aritmética (P.A.)", width: 200 },
+    position: { x: 650, y: 375 },
+  },
+  {
+    id: "32",
+    type: "topic",
+    data: {
+      label: "Progressão Geométrica (P.G.)",
+      width: 200,
+      showBottomHandle: true,
+    },
+    position: { x: 650, y: 425 },
+  },
+  {
+    id: "33",
+    type: "topic",
+    data: {
+      label: "Funções definidas por partes",
+      width: 210,
+      showLeftHandle: true,
+    },
+    position: { x: 975, y: 450 },
+  },
+  {
+    id: "34",
+    type: "topic",
+    data: { label: "Exponenciais", width: 100, showLeftHandle: true },
+    position: { x: 975, y: 500 },
+  },
+  {
+    id: "35",
+    type: "topic",
+    data: { label: "Logarítmicas", width: 100 },
+    position: { x: 1085, y: 500 },
+  },
+  {
+    id: "36",
+    type: "topic",
+    data: { label: "Equações de reta", width: 210, showLeftHandle: true },
+    position: { x: 975, y: 550 },
+  },
+  {
+    id: "37",
+    type: "topic",
+    data: { label: "Retas e circunferência", width: 210, showLeftHandle: true },
+    position: { x: 975, y: 600 },
+  },
+  {
+    id: "38",
+    type: "topic",
+    data: {
+      label: "Pensamento Computacional",
+      width: 210,
+      showLeftHandle: true,
+    },
+    position: { x: 975, y: 650 },
+  },
+  {
+    id: "39",
+    type: "roadmap",
+    data: {
+      label: "Estatística",
+      showTRightHandle: true,
+      showSLeftHandle: true,
+      showSBottomHandle: true,
+      showSRightHandle: true,
+    },
+    position: { x: 300, y: 750 },
+  },
+  {
+    id: "40",
+    type: "topic",
+    data: {
+      label: "Introdução / Conceitos básicos",
+      width: 200,
+      showRightHandle: true,
+    },
+    position: { x: 0, y: 750 },
+  },
+  {
+    id: "41",
+    type: "topic",
+    data: { label: "Representação de dados", width: 200, showTopHandle: true },
+    position: { x: 0, y: 850 },
+  },
+  {
+    id: "42",
+    type: "topic",
+    data: { label: "Distribuição de frequências", width: 200 },
+    position: { x: 0, y: 900 },
+  },
+  {
+    id: "43",
+    type: "topic",
+    data: { label: "Medidas de Tendência Central", width: 200 },
+    position: { x: 0, y: 950 },
+  },
+  {
+    id: "44",
+    type: "topic",
+    data: { label: "Medidas de Dispersão", width: 200, showTopHandle: true },
+    position: { x: 210, y: 850 },
+  },
+  {
+    id: "45",
+    type: "topic",
+    data: { label: "Distribuição Normal", width: 200 },
+    position: { x: 210, y: 900 },
+  },
+  {
+    id: "46",
+    type: "topic",
+    data: { label: "Estatística inferencial", width: 200 },
+    position: { x: 210, y: 950 },
+  },
+  {
+    id: "47",
+    type: "topic",
+    data: { label: "Amortização", width: 410 },
+    position: { x: 0, y: 1000 },
+  },
+  {
+    id: "48",
+    type: "roadmap",
+    data: {
+      label: "Medidas",
+      showTLeftHandle: true,
+      showSTopHandle: true,
+      showSRightHandle: true,
+    },
+    position: { x: 675, y: 750 },
+  },
+  {
+    id: "49",
+    type: "topic",
+    data: { label: "Notação Científica", width: 150 },
+    position: { x: 675, y: 615 },
+  },
+  {
+    id: "50",
+    type: "topic",
+    data: { label: "Sistema Binário", width: 150, showBottomHandle: true },
+    position: { x: 675, y: 665 },
   },
 
-  { id: "32", data: { label: "cu" },
-     position: { x: 200, y: 460 },
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
+  {
+    id: "51",
+    type: "roadmap",
+    data: {
+      label: "Trigonometria",
+      showTLeftHandle: true,
+      showSLeftHandle: true,
+      showSBottomHandle: true,
     },
-    targetPosition: 'top',
-    connectable: false, 
+    position: { x: 1060, y: 750 },
   },
-  { id: "33", data: { label: "oi" }, 
-    position: { x: 200, y: 540 }, 
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
+  {
+    id: "52",
+    type: "topic",
+    data: { label: "Triângulos Retângulos", width: 250, showTopHandle: true },
+    position: { x: 1010, y: 825 },
+  },
+  {
+    id: "53",
+    type: "topic",
+    data: { label: "Triângulos quaisquer", width: 250 },
+    position: { x: 1010, y: 875 },
+  },
+  {
+    id: "54",
+    type: "topic",
+    data: { label: "Razões inversas", width: 250 },
+    position: { x: 1010, y: 925 },
+  },
+  {
+    id: "55",
+    type: "topic",
+    data: { label: "Ângulos e arcos de uma circunferência", width: 250 },
+    position: { x: 1010, y: 975 },
+  },
+  {
+    id: "56",
+    type: "topic",
+    data: { label: "Ciclo trigonométrico", width: 250 },
+    position: { x: 1010, y: 1025 },
+  },
+  {
+    id: "57",
+    type: "topic",
+    data: { label: "Funções trigonométricas", width: 250 },
+    position: { x: 1010, y: 1075 },
+  },
+  {
+    id: "58",
+    type: "topic",
+    data: { label: "Identidades Trigonométricas", width: 250 },
+    position: { x: 1010, y: 1125 },
+  },
+  {
+    id: "59",
+    type: "roadmap",
+    data: {
+      label: "Probabilidade",
+      showTTopHandle: true,
+      showSLeftHandle: true,
+      showSBottomHandle: true,
     },
-  targetPosition: 'top',
-  connectable: false, 
- },
-  { id: "34", data: { label: "oi" }, 
-    position: { x: 200, y: 540 }, 
-    style: {   
-       backgroundColor: "#f3c950",
-      border: "2px solid #1865F2",
+    position: { x: 750, y: 950 },
+  },
+  {
+    id: "60",
+    type: "topic",
+    data: { label: "Contagem", width: 175, showRightHandle: true },
+    position: { x: 450, y: 875 },
+  },
+  {
+    id: "61",
+    type: "topic",
+    data: { label: "Probabilidade", width: 175, showRightHandle: true },
+    position: { x: 450, y: 925 },
+  },
+  {
+    id: "62",
+    type: "topic",
+    data: {
+      label: "Probabilidade e Contagem",
+      width: 175,
+      showRightHandle: true,
     },
-  targetPosition: 'top',
-  connectable: false, 
- },
+    position: { x: 450, y: 975 },
+  },
+  {
+    id: "63",
+    type: "topic",
+    data: {
+      label: "Probabilidade e Estatística",
+      width: 175,
+      showRightHandle: true,
+    },
+    position: { x: 450, y: 1025 },
+  },
+  {
+    id: "64",
+    type: "topic",
+    data: {
+      label: "",
+      width: 460,
+      showTopHandle: true,
+      bg: "#fff",
+      height: 150,
+    },
+    position: { x: 350, y: 1200 },
+  },
+  {
+    id: "65",
+    type: "topic",
+    data: {
+      label: "Dê uma olhada em algumas outras trilhas relevantes",
+      width: 460,
+      bg: "transparent",
+      border: "none",
+    },
+    position: { x: 350, y: 1200 },
+  },
+  {
+    id: "66",
+    type: "topic",
+    data: {
+      label: "Álgebra 1",
+      width: 100,
+      bg: "#1865F2",
+      border: "none",
+      color: "#fff",
+    },
+    position: { x: 365, y: 1250 },
+  },
+  {
+    id: "67",
+    type: "topic",
+    data: {
+      label: "Geometria",
+      width: 100,
+      bg: "#1865F2",
+      border: "none",
+      color: "#fff",
+    },
+    position: { x: 475, y: 1250 },
+  },
+  {
+    id: "68",
+    type: "topic",
+    data: {
+      label: "Álgebra 2",
+      width: 100,
+      bg: "#1865F2",
+      border: "none",
+      color: "#fff",
+    },
+    position: { x: 585, y: 1250 },
+  },
+  {
+    id: "69",
+    type: "topic",
+    data: {
+      label: "Estatística",
+      width: 100,
+      bg: "#1865F2",
+      border: "none",
+      color: "#fff",
+    },
+    position: { x: 695, y: 1250 },
+  },
+  {
+    id: "70",
+    type: "topic",
+    data: {
+      label: "Medidas",
+      width: 100,
+      bg: "#1865F2",
+      border: "none",
+      color: "#fff",
+    },
+    position: { x: 435, y: 1295 },
+  },
+  {
+    id: "71",
+    type: "topic",
+    data: {
+      label: "Trigonometria",
+      width: 100,
+      bg: "#1865F2",
+      border: "none",
+      color: "#fff",
+    },
+    position: { x: 545, y: 1295 },
+  },
+  {
+    id: "72",
+    type: "topic",
+    data: {
+      label: "Probabilidade",
+      width: 100,
+      bg: "#1865F2",
+      border: "none",
+      color: "#fff",
+    },
+    position: { x: 655, y: 1295 },
+  },
 ];
 
+const nodeTypes = {
+  roadmap: RoadMapNode,
+  topic: TopicNode,
+};
 
 const RoadmapEstatisc = () => {
-
   return (
-    <div style={{ height: "80vh", width: "140vh" }}>
-      <ReactFlow nodes={nodes} edges={edges} fitView={false} />
+    <div className="w-full h-[100vh]">
+      <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView />
       <Controls />
     </div>
   );
@@ -396,171 +917,3 @@ const WrappedRoadmapEstatisc = () => (
 );
 
 export default WrappedRoadmapEstatisc;
-// "use client";
-// import axios from "axios";
-// import React, { useEffect, useState } from "react";
-// import ReactFlow, { Controls, Node, Edge, ReactFlowProvider} from "reactflow";
-// import "reactflow/dist/style.css";
-
-// interface RoadmapData {
-//   [topic: string]: string[];
-// }
-
-// const ENEMRoadmap: React.FC = () => {
-//   const [nodes, setNodes] = useState<Node[]>([]);
-//   const [edges, setEdges] = useState<Edge[]>([]);
-//   const [expandedNodes, setExpandedNodes] = useState<string[]>([]);
-
-//   useEffect(() => {
-//     const fetchRoadmap = async () => {
-//       try {
-//         const response = await axios.get<{ roadmap: RoadmapData[] }>(
-//           "http://localhost:5002/roadmap"
-//         );
-
-//         const roadmapData = response.data[0];
-//         const roadmap = roadmapData.roadmap;
-
-//         if (typeof roadmap !== "object" || roadmap === null) {
-//           throw new Error("Roadmap is not a valid object");
-//         }
-
-//         const newNodes: Node[] = [];
-//         const newEdges: Edge[] = [];
-//         let currentY = 50;
-//         const xOffset = 420;
-
-//         let previousNodeId: string | null = null;
-//         let isLeft = true;
-
-//         for (const [topic, subjects] of Object.entries(roadmap)) {
-//           if (!Array.isArray(subjects)) {
-//             continue;
-//           }
-
-//           const parentNodeId = `topic-${newNodes.length + 1}`;
-//           newNodes.push({
-//             id: parentNodeId,
-//             data: { label: topic },
-//             position: { x: 50, y: currentY },
-//             style: {
-//               backgroundColor: "#1865F2",
-//               color: "#fff",
-//               borderRadius: "8px",
-//               padding: "20px",
-//               width: "400px",
-//               fontWeight: "bold",
-//               fontSize: "30px",
-//             },
-//           });
-
-//           currentY += 150;
-
-//           const limitedSubjects = expandedNodes.includes(parentNodeId)
-//             ? subjects
-//             : subjects.slice(0, 3);
-//           const remainingCount = subjects.length - limitedSubjects.length;
-
-//           const childXPosition = isLeft ? -xOffset : xOffset;
-
-//           limitedSubjects.forEach((subject, index) => {
-//             const childNodeId = `subject-${newNodes.length + 1}`;
-//             newNodes.push({
-//               id: childNodeId,
-//               data: { label: subject },
-//               position: { x: 50 + childXPosition, y: currentY },
-//               style: {
-//                 backgroundColor: "#E3EFFF",
-//                 border: "2px solid #1865F2",
-//                 borderRadius: "8px",
-//                 padding: "20px",
-//                 width: "400px",
-//                 fontSize: "29px",
-//               },
-//             });
-
-//             newEdges.push({
-//               id: `${parentNodeId}-${childNodeId}`,
-//               source: parentNodeId,
-//               target: childNodeId,
-//               animated: true,
-//               style: { stroke: "#1865F2" },
-//             });
-
-//             currentY += 105;
-//           });
-
-//           if (remainingCount > 0 && !expandedNodes.includes(parentNodeId)) {
-//             const moreNodeId = `more-${newNodes.length + 1}`;
-//             newNodes.push({
-//               id: moreNodeId,
-//               data: { label: `+ ${remainingCount} mais...`, onClick: () => handleExpand(parentNodeId) },
-//               position: { x: 50 + childXPosition, y: currentY },
-//               style: {
-//                 backgroundColor: "#FFC107",
-//                 border: "2px solid #1865F2",
-//                 borderRadius: "8px",
-//                 padding: "20px",
-//                 width: "400px",
-//                 fontSize: "25px",
-//                 textAlign: "center",
-//                 cursor: "pointer",
-//               },
-//             });
-
-//             newEdges.push({
-//               id: `${parentNodeId}-${moreNodeId}`,
-//               source: parentNodeId,
-//               target: moreNodeId,
-//               animated: true,
-//               style: { stroke: "#1865F2" },
-//             });
-
-//             currentY += 75;
-//           }
-
-//           if (previousNodeId) {
-//             newEdges.push({
-//               id: `${previousNodeId}-${parentNodeId}`,
-//               source: previousNodeId,
-//               target: parentNodeId,
-//               animated: true,
-//               style: { stroke: "#1865F2" },
-//             });
-//           }
-
-//           previousNodeId = parentNodeId;
-//           currentY += 100;
-//           isLeft = !isLeft;
-//         }
-
-//         setNodes(newNodes);
-//         setEdges(newEdges);
-//       } catch (error) {
-//         console.error("Error fetching roadmap data:", error);
-//       }
-//     };
-
-//     fetchRoadmap();
-//   }, [expandedNodes]);
-
-//   const handleExpand = (nodeId: string) => {
-//     setExpandedNodes((prev) => [...prev, nodeId]);
-//   };
-
-//   return (
-//     <div style={{ height: "80vh", width: "140vh" }}>
-//       <ReactFlow
-//         nodes={nodes}
-//         edges={edges}
-//         fitView={false}
-//         onNodeClick={(_, node) => node.data?.onClick && node.data.onClick()}
-//         defaultViewport={{ x: 200, y: 0, zoom: 0.4 }}
-//       >
-//         <Controls />
-//       </ReactFlow>
-//     </div>
-//   );
-// };
-
-// export default ENEMRoadmap;
