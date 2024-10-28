@@ -1,10 +1,10 @@
 "use client";
 
 import { usePageTitle } from "@/app/hooks/usePageTitle";
-import Header from "@/app/ui/components/trilhas/Header";
 import { useParams } from "next/navigation";
 import { modulosData } from "@/app/ui/components/modulos/data";
 import normalizeString from "@/app/ui/components/modulos/normalizeString";
+import Link from "next/link";
 
 type ModuloKey = keyof typeof modulosData;
 
@@ -37,11 +37,19 @@ export default function TopicoLayout({
     (topico) => normalizeString(topico.title) === topicoKey
   );
 
-  console.log(topico);
-
   if (!topico) {
     return <p>Tópico não encontrado.</p>;
   }
 
-  return <section className="flex flex-col gap-5">{children}</section>;
+  return (
+    <section className="grid grid-cols-3 gap-5 h-full">
+      <div className="col-span-2 *:w-full m-10 overflow-auto pr-5 flex flex-col gap-5">
+        <Link href={`/trilhas/${moduloKey}/${unidadeKey}`}>Voltar</Link>
+        {children}
+      </div>
+      <div className="col-span-1 bg-bg-lightA border-2 border-borders-lightA rounded-lg p-10">
+        <p>Chat do PT</p>
+      </div>
+    </section>
+  );
 }

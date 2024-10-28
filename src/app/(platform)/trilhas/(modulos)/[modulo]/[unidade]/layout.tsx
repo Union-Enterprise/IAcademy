@@ -5,6 +5,7 @@ import Header from "@/app/ui/components/trilhas/Header";
 import { useParams, usePathname } from "next/navigation";
 import { modulosData } from "@/app/ui/components/modulos/data";
 import normalizeString from "@/app/ui/components/modulos/normalizeString";
+import { useEffect, useState } from "react";
 
 type ModuloKey = keyof typeof modulosData;
 
@@ -16,6 +17,7 @@ export default function UnidadeTemplate({
   usePageTitle();
 
   const pathname = usePathname();
+  const [isPathnameLoaded, setIsPathnameLoaded] = useState(false);
 
   const params = useParams();
   const moduloKey = params.modulo;
@@ -23,6 +25,24 @@ export default function UnidadeTemplate({
   const moduloLink = params.modulo as string;
   const unidadeLink = params.unidade as string;
   const modulo = modulosData[moduloKey as ModuloKey];
+
+  useEffect(() => {
+    if (pathname) {
+      setIsPathnameLoaded(true);
+    }
+  }, [pathname]);
+
+  if (!isPathnameLoaded) {
+    return <p>Carregando...</p>;
+  }
+
+  // Verifica se o pathname termina com unidadeLink ou unidadeLink + "/topicos"
+  const isUnidadeOrTopicosPath =
+    pathname.endsWith(unidadeLink) || pathname.endsWith(`${unidadeLink}/topicos`);
+
+  if (!isUnidadeOrTopicosPath) {
+    return children; // Renderiza apenas o conteúdo sem o layout
+  }
 
   if (!modulo) {
     return <p>Modulo não encontrado</p>;

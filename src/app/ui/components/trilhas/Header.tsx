@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 
 export default function Header({
-  title = "Preparando-se para os vestibulares",
+        title = "Preparando-se para os vestibulares",
   description = "Aprenda tudo que você precisa para passar nos vestibulares.",
   linkLabel = "Conteúdos",
   hrefs = ["/trilhas/overview", "/trilhas/modulos", "/trilhas"],
@@ -18,7 +18,7 @@ export default function Header({
   const pathname = usePathname();
 
   return (
-    <div className="h-[30vh] flex flex-col justify-between px-[200px] pt-[60px] bg-bg-lightA">
+    <div className="h-fit flex flex-col justify-between px-[200px] pt-[60px] bg-bg-lightA gap-5">
       <div className="flex flex-col gap-3">
         <Link
           href={hrefs[2]}

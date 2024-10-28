@@ -27,9 +27,6 @@ export default function Topicos() {
     return <p>Unidade não encontrada.</p>;
   }
 
-  console.log(modulo, moduloKey);
-  console.log(unidade, unidadeKey);
-
   return (
     <>
       <section className="flex flex-col gap-3 px-[200px] relative h-full mt-6">
