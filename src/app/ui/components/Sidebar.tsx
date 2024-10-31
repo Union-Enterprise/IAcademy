@@ -137,7 +137,7 @@ const Sidebar = ({ isUserLayout = true }) => {
             onClick={() => setSelectedItem("/questions")}
           />
           <Item
-            title="Formulario inicial"
+            title="Formulário inicial"
             lucideIcon={BookX}
             isOpen={isOpen}
             href="/inicialQuestion"

@@ -1,40 +1,27 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Edit, Trash2, Plus, File } from "lucide-react";
-import dynamic from "next/dynamic";
+import { Edit, Trash2, Plus } from "lucide-react";
 import axios from "axios";
-
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import "react-quill/dist/quill.snow.css";
 
 export default function Questionnaires() {
   const [questionnaires, setQuestionnaires] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [titulo, setTitulo] = useState("");
   const [questao, setQuestao] = useState("");
-  const [explicacao, setExplicacao] = useState("");
-  const [alternativa_correta, setAlternativa_correta] = useState("");
-  const [alternativas, setAlternativas] = useState([""]);
   const [tema, setTema] = useState("");
-  const [ID, setID] = useState("");
-  const [selectedPdf, setSelectedPdf] = useState(null);
   const [questionToDelete, setQuestionToDelete] = useState(null);
 
   useEffect(() => {
     const fetchQuestionnaires = async () => {
       try {
-        const response = await axios.get("http://localhost:5002/all_questions");
+        const response = await axios.get("http://localhost:5002/quizzes");
         const formattedData = response.data.map((question) => ({
           id: question._id,
           titulo: question.titulo,
           questao: question.questao,
-          explicacao: question.explicacao,
-          alternativa_correta: question.alternativa_correta,
-          alternativas: question.alternativas,
           tema: question.tema,
         }));
         setQuestionnaires(formattedData);
@@ -50,20 +37,13 @@ export default function Questionnaires() {
     setIsModalOpen(true);
     if (question) {
       setSelectedQuestion(question);
-      setID(question.id || "");
       setTitulo(question.titulo || "");
       setQuestao(question.questao || "");
-      setExplicacao(question.explicacao || "");
-      setAlternativa_correta(question.alternativa_correta || "");
-      setAlternativas(question.alternativas || []);
       setTema(question.tema || "");
     } else {
       setSelectedQuestion(null);
       setTitulo("");
       setQuestao("");
-      setExplicacao("");
-      setAlternativa_correta("");
-      setAlternativas([""]);
       setTema("");
     }
   };
@@ -73,49 +53,17 @@ export default function Questionnaires() {
     setSelectedQuestion(null);
     setTitulo("");
     setQuestao("");
-    setExplicacao("");
-    setAlternativa_correta("");
-    setAlternativas([""]);
     setTema("");
-  };
-
-  const handlePdfUpload = (e) => {
-    const file = e.target.files[0];
-    setSelectedPdf(file);
-    setIsPdfModalOpen(true);
-  };
-
-  const handleConfirmPdf = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("file", selectedPdf);
-
-      await axios.post("http://localhost:5000/upload_quiz_pdf", formData);
-      await axios.post("http://localhost:5000/generate_quiz");
-
-      setIsPdfModalOpen(false);
-      setSelectedPdf(null);
-    } catch (error) {
-      console.error("Erro ao fazer upload e gerar quiz:", error);
-    }
   };
 
   const handleSaveQuestionnaire = async (e) => {
     e.preventDefault();
-    const newQuestionnaire = {
-      ID,
-      titulo,
-      questao,
-      explicacao,
-      alternativa_correta,
-      alternativas,
-      tema,
-    };
+    const newQuestionnaire = { titulo, questao, tema };
 
     try {
       if (selectedQuestion) {
         await axios.put(
-          "http://localhost:5002/question/" + selectedQuestion.id,
+          `http://localhost:5002/quiz/${selectedQuestion.id}`,
           newQuestionnaire
         );
         const updatedQuestions = questionnaires.map((q) =>
@@ -124,21 +72,16 @@ export default function Questionnaires() {
         setQuestionnaires(updatedQuestions);
       } else {
         const response = await axios.post(
-          "http://localhost:5002/question",
+          "http://localhost:5002/quiz",
           newQuestionnaire
         );
         const createdQuestion = {
           id: response.data.insertedId,
           titulo,
           questao,
-          explicacao,
-          alternativa_correta,
-          alternativas,
           tema,
         };
-
         setQuestionnaires([...questionnaires, createdQuestion]);
-        setSelectedQuestion(createdQuestion);
       }
     } catch (error) {
       console.error("Erro ao salvar a questão:", error);
@@ -154,7 +97,7 @@ export default function Questionnaires() {
 
   const handleDeleteQuestion = async (id) => {
     try {
-      await axios.delete(`http://localhost:5002/question/${id}`);
+      await axios.delete(`http://localhost:5002/quiz/${id}`);
       const updatedQuestions = questionnaires.filter((q) => q.id !== id);
       setQuestionnaires(updatedQuestions);
     } catch (error) {
@@ -164,7 +107,7 @@ export default function Questionnaires() {
 
   return (
     <div className="p-6 bg-white rounded-md shadow-md">
-      <h1 className="text-2xl font-bold mb-4">Formulario iniciai</h1>
+      <h1 className="text-2xl font-bold mb-4">Formulários iniciais</h1>
 
       <div className="flex justify-end items-center mb-4">
         <button
@@ -172,14 +115,14 @@ export default function Questionnaires() {
           className="bg-mainBlue text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-mainBlue/80 duration-150"
         >
           <Plus className="w-4 h-4" />
-          Criar questões iniciais
+          Criar Questão
         </button>
       </div>
 
       <table className="w-full text-left">
         <thead>
           <tr className="bg-gray-100">
-            <th className="p-3">Nome</th>
+            <th className="p-3">Título</th>
             <th className="p-3">Ações</th>
           </tr>
         </thead>
@@ -189,9 +132,7 @@ export default function Questionnaires() {
               key={questionnaire.id}
               className="border-b hover:bg-gray-50 duration-150"
             >
-              <td className="p-3">
-                {questionnaire.titulo} - {questionnaire.tema}
-              </td>
+              <td className="p-3">{questionnaire.titulo} - {questionnaire.tema}</td>
               <td className="p-3 flex gap-3">
                 <button
                   className="bg-mainBlue text-white p-2 rounded hover:bg-blue-800 duration-150"
@@ -214,8 +155,6 @@ export default function Questionnaires() {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-1/2 max-h-[80vh] overflow-y-auto">
-            {" "}
-            {/* Scrollable form */}
             <div className="bg-mainBlue text-white p-4 rounded-t-lg flex justify-between items-center">
               <h2 className="text-xl font-bold">
                 {selectedQuestion ? "Editar Questão" : "Nova Questão"}
@@ -242,60 +181,18 @@ export default function Questionnaires() {
                   />
                 </div>
 
-                <div className="!mb-14">
+                <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Questões *
+                    Questão *
                   </label>
-                  <ReactQuill
+                  <textarea
                     value={questao}
-                    onChange={setQuestao}
-                    theme="snow"
-                    className="h-32"
-                  />
-                </div>
-
-                <div className="!mb-14">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Explicação
-                  </label>
-                  <ReactQuill
-                    value={explicacao}
-                    onChange={setExplicacao}
-                    theme="snow"
-                    className="h-32"
-                  />
-                </div>
-
-                <div className="mt-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Resposta Correta *
-                  </label>
-                  <textarea
-                    value={alternativa_correta}
-                    onChange={(e) => setAlternativa_correta(e.target.value)}
+                    onChange={(e) => setQuestao(e.target.value)}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
-                    rows={3} // You can adjust the number of rows as needed
+                    rows={3}
                     required
                   />
                 </div>
-
-                {/* <div>
-                  <label className="block text-sm font-medium text-gray-700">Alternativas *</label>
-                  <textarea
-                    value={alternativas.join("\n")}
-                    onChange={(e) => {
-                      const newAlternativas = e.target.value.split("\n");
-                      setAlternativas(newAlternativas);
-                      if (!newAlternativas.includes(alternativa_correta)) {
-                        setAlternativa_correta("");
-                      }
-                    }}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
-                    rows={4}
-                    required
-                  />
-                  <small className="text-gray-500">Separe as alternativas por linhas.</small>
-                </div> */}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
@@ -321,29 +218,6 @@ export default function Questionnaires() {
           </div>
         </div>
       )}
-
-      {/* {isPdfModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg w-1/3 p-6">
-            <h2 className="text-xl font-bold mb-4">Confirmar Upload de PDF</h2>
-            <p>Tem certeza que deseja enviar este PDF para gerar questões?</p>
-            <div className="flex justify-end mt-4">
-              <button
-                onClick={() => setIsPdfModalOpen(false)}
-                className="bg-gray-500 text-white py-2 px-4 rounded-md mr-2"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={handleConfirmPdf}
-                className="bg-blue-500 text-white py-2 px-4 rounded-md"
-              >
-                Confirmar
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
 
       {isDeleteModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
