@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function TrilhaMenu() {
   const pathname = usePathname();
   return (
-    <div className="mx-auto bg-bg-light border-2 border-borders-light p-5 pb-0 rounded-md flex flex-col gap-5 w-[800px]">
+    <div className="bg-bg-light border-2 border-borders-light p-5 pb-0 rounded-md flex flex-col gap-5">
       <div className="flex justify-between items-center">
         <Link
           href={"/trilhas"}

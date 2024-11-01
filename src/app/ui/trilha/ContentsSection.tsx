@@ -14,7 +14,7 @@ export function ContentsSection({
   return (
     <Link
       href={href}
-      className="border-2 rounded-md shadow-sm border-border-lightC flex gap-5 px-8 py-6 cursor-pointer hover:border-mainBlue duration-100 group"
+      className="border-2 rounded-md shadow-sm border-border-lightC flex gap-5 px-8 py-6 cursor-pointer hover:border-mainBlue duration-100 group ml-8"
     >
       <span className="p-2 border-2 border-inherit rounded-full w-fit h-fit text-text-lightSub group-hover:text-mainBlue">
         <Box size={25} />

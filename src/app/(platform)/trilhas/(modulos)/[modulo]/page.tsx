@@ -34,7 +34,7 @@ export default function Overview({
           "/trilhas/overview",
         ]}
       />
-      <section className="grid grid-cols-3 mb-10 gap-10 px-[200px] relative h-full">
+      <section className="grid grid-cols-3 mb-10 gap-10 relative h-full">
         <div className="col-span-2">
           <GenericIA />
         </div>

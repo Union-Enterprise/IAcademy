@@ -14,8 +14,8 @@ export default function Overview({
   const pathname = usePathname();
 
   return (
-    <section className="mb-10 mt-5 px-[200px] relative flex flex-col items-center gap-5">
-      <div className="bg-bg-light border-2 border-borders-light p-3 px-5 rounded-md flex justify-between gap-5 w-[800px] *:text-sm">
+    <section className="mb-10 mt-5 relative flex flex-col items-center gap-5">
+      <div className="bg-bg-light border-2 border-borders-light p-3 px-5 rounded-md flex justify-between gap-5 w-full *:text-sm">
         <div className="flex items-center gap-2">
           <span className="bg-yellow-200 px-2 py-1 rounded-md">
             0% concluído
