@@ -61,7 +61,6 @@ export default function UnidadeTemplate({
       <Header
         title={unidade.title}
         description={unidade.description}
-        linkLabel="Tópicos"
         hrefs={[
           `/trilhas/${moduloLink}/${unidadeLink}`,
           `/trilhas/${moduloLink}/${unidadeLink}/topicos`,

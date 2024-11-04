@@ -29,6 +29,10 @@ input[type="search"]::-webkit-search-cancel-button {
   appearance: none;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 @keyframes blink {
   0% {
     border-color: transparent;

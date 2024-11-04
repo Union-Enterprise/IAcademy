@@ -73,21 +73,22 @@ export const modulosData = {
       },
     ],
   },
-  geometria: {
+  geometria: { // Módulo
     title: "Geometria",
     description:
       "Explore o estudo das formas, tamanhos, e propriedades espaciais.",
     index: "2",
-    unidades: [
+    unidades: [ // Unidades
       {
         title: "Introdução à Geometria",
         description:
           "Compreenda os fundamentos da geometria e suas principais figuras.",
-        topicos: [
+        topicos: [ // Tópicos
           {
             title: "Pontos, Retas e Planos",
             description:
               "Conceitos básicos de pontos, retas e planos na geometria.",
+              // Colocar as imagens também
           },
           {
             title: "Figuras Planas",

@@ -126,6 +126,7 @@ export default function Users() {
   const [category, setCategory] = useState("");
   const [plan, setPlan] = useState("");
   const [status, setStatus] = useState("");
+  const [nameRegex, setNameRegex] = useState("");
 
   const fetchUsers = async () => {
     try {
@@ -134,6 +135,7 @@ export default function Users() {
           category,
           plan,
           status,
+          nameRegex,
         },
         withCredentials: true,
       });
@@ -145,7 +147,7 @@ export default function Users() {
 
   useEffect(() => {
     fetchUsers();
-  }, [category, plan, status]);
+  }, [category, plan, status, nameRegex]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -289,7 +291,8 @@ export default function Users() {
             </select>
           </div>
           <div className="flex items-center gap-3">
-            <Input className="h-10" placeholder="Procurar usuário" />
+            <Input className="h-10" placeholder="Procurar usuário"
+             onChange={(e) => setNameRegex(e.target.value)}/>
             <ExportButton />
             <AddButton onClick={handleAddButtonClick} />
           </div>
