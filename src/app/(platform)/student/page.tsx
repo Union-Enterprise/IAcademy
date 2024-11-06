@@ -1,13 +1,14 @@
 "use client";
 
 import { MessageCircleQuestion, Layers, Split } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import CardsStudent from "@/app/ui/components/Student/CardsStudent";
 import { Fifagrafico } from "@/app/ui/components/Student/Fifagrafico";
 import { LoginsChart } from "@/app/ui/components/Student/LoginsChart";
 import { TimeChart } from "@/app/ui/components/Student/TimeChart";
 import { UtilizationChart } from "@/app/ui/components/Student/UtilizationChart";
 import { useUser } from "@/app/context/UserContext";
+import { X } from "lucide-react";
 
 const questions = [
   {
@@ -44,22 +45,19 @@ const questions = [
 ];
 
 const Student = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // Inicialmente, o modal está fechado
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); 
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [quizAnswered, setQuizAnswered] = useState(false);
+  const [answer, setAnswer] = useState(""); 
   const { user } = useUser();
 
-  // Estado para verificar se o quiz foi respondido
-  const [quizAnswered, setQuizAnswered] = useState(false);
-
+ 
   useEffect(() => {
-    const hasAnswered = localStorage.getItem(`quizAnswered_${user?.id}`) === 'true'; // Verifica se o quiz foi respondido
-    setQuizAnswered(hasAnswered);
-
-    // Se o quiz não foi respondido, abre o modal
-    if (!hasAnswered) {
-      setIsModalOpen(true);
+    if (user && !quizAnswered) {
+      setIsConfirmModalOpen(true);
     }
-  }, [user]);
+  }, [user, quizAnswered]);
 
   const questionsLeft = questions.length - currentQuestion - 1;
 
@@ -72,15 +70,30 @@ const Student = () => {
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
+      setAnswer("");
     } else {
+      setQuizAnswered(true);
       closeModal();
-      setQuizAnswered(true); // Marca o quiz como respondido
-      localStorage.setItem(`quizAnswered_${user?.id}`, 'true'); // Armazena no localStorage
     }
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleAnswerChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+    setAnswer(event.target.value);
+  };
+
+  const handleConfirmStart = () => {
+ 
+    setIsConfirmModalOpen(false);
+    setIsModalOpen(true);
+  };
+
+  const handleCancelStart = () => {
+
+    setIsConfirmModalOpen(false);
   };
 
   return (
@@ -131,9 +144,42 @@ const Student = () => {
         </div>
       </div>
 
+      {isConfirmModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-1/2">
+            <div className="flex justify-end pb-2">
+              <X className="hover:text-red-500" onClick={handleCancelStart} />
+            </div>
+            <h2 className="text-xl font-bold mb-4">Iniciar o Quiz?</h2>
+            <p className="mb-4">
+             Ola, nós somos a IAcademy 
+            </p>
+            <div className="flex justify-between">
+              <button
+                onClick={handleCancelStart}
+                className="py-2 px-4 rounded-md bg-gray-300 text-black"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirmStart}
+                className="py-2 px-4 rounded-md bg-mainBlue text-white"
+              >
+                Iniciar Quiz
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal do Quiz */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-1/2">
+            <div className="flex justify-end pb-2">
+              <X className="hover:text-red-500" onClick={closeModal} />
+            </div>
+
             {currentQuestion < questions.length ? (
               <>
                 <h2 className="text-xl font-bold mb-4">
@@ -142,6 +188,8 @@ const Student = () => {
                 <p className="mb-4">{questions[currentQuestion].question}</p>
                 <input
                   type="text"
+                  value={answer}
+                  onChange={handleAnswerChange}
                   placeholder="Digite sua resposta..."
                   className="border rounded-md p-2 w-full mb-4 focus:border-mainBlue focus:outline-none"
                 />
@@ -160,20 +208,13 @@ const Student = () => {
                   </button>
 
                   <button
-                    onClick={() => setCurrentQuestion((prev) => prev + 1)}
-                    className="py-2 px-4 rounded-md bg-yellow-400 text-white mx-auto"
-                    disabled={currentQuestion >= questions.length - 1}
-                  >
-                    Pular
-                  </button>
-
-                  <button
                     onClick={handleNext}
                     className={`py-2 px-4 rounded-md ${
                       currentQuestion === questions.length - 1
                         ? "bg-mainBlue text-white"
                         : "bg-mainBlue text-white"
-                    }`}
+                    } ${answer.trim() === "" ? "bg-gray-600 cursor-not-allowed" : ""}`}
+                    disabled={answer.trim() === ""}
                   >
                     {currentQuestion === questions.length - 1
                       ? "Finalizar"
