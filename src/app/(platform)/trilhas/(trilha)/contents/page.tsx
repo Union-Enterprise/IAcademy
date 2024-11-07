@@ -1,7 +1,10 @@
+"use client";
+
 import { ContentsSection } from "@/app/ui/trilha/ContentsSection";
-import { modulosData } from "@/app/ui/components/modulos/data";
+import { getModulosData } from "@/app/ui/components/modulos/data";
 import normalizeString from "@/app/ui/components/modulos/normalizeString";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface ModuloProps {
   title: string;
@@ -15,6 +18,38 @@ interface ModuloProps {
 }
 
 export default function Modulos() {
+  const [modulosData, setModulosData] = useState<Record<string, ModuloProps> | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchModulosData = async () => {
+      try {
+        const data = await getModulosData();
+        setModulosData(data);
+      } catch (err) {
+        setError("Erro ao carregar os dados dos módulos.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchModulosData();
+  }, []);
+
+  if (loading) {
+    return <p>Carregando...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!modulosData) {
+    return <p>Nenhum dado disponível.</p>;
+  }
+
   return (
     <section className="flex flex-col items-center gap-14 relative mt-14 *:w-full">
       {Object.entries(modulosData).map(([moduloLink, modulo]) => (
@@ -48,17 +83,18 @@ function Modulo({ title, index, unidades, link }: ModuloProps) {
               {unidade.description}
             </p>
           </Link>
-          {unidade.topicos.map((topico, topicoIdx) => (
-            <ContentsSection
-              key={topicoIdx}
-              title={topico.title}
-              href={`/trilhas/${link}/${normalizeString(
-                unidade.title
-              )}/${normalizeString(topico.title)}`}
-            >
-              <p>{topico.description}</p>
-            </ContentsSection>
-          ))}
+
+          {unidade.topicos.map((topico, topicoIdx) => {
+            return (
+              <ContentsSection
+                key={topicoIdx}
+                title={topico.title}
+                href={`/trilhas/${link}/${normalizeString(unidade.title)}/${normalizeString(topico.title)}`}
+              >
+                <p>{topico.description}</p>
+              </ContentsSection>
+            );
+          })}
         </div>
       ))}
     </div>

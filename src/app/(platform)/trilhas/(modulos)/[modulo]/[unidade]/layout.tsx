@@ -3,11 +3,11 @@
 import { usePageTitle } from "@/app/hooks/usePageTitle";
 import Header from "@/app/ui/components/trilhas/Header";
 import { useParams, usePathname } from "next/navigation";
-import { modulosData } from "@/app/ui/components/modulos/data";
+import { getModulosData } from "@/app/ui/components/modulos/data"; 
 import normalizeString from "@/app/ui/components/modulos/normalizeString";
 import { useEffect, useState } from "react";
 
-type ModuloKey = keyof typeof modulosData;
+type ModuloKey = string;
 
 export default function UnidadeTemplate({
   children,
@@ -20,11 +20,32 @@ export default function UnidadeTemplate({
   const [isPathnameLoaded, setIsPathnameLoaded] = useState(false);
 
   const params = useParams();
-  const moduloKey = params.modulo;
-  const unidadeKey = params.unidade;
+  const moduloKey = decodeURIComponent(params.modulo);
+  const unidadeKey = decodeURIComponent(params.unidade);
   const moduloLink = params.modulo as string;
   const unidadeLink = params.unidade as string;
-  const modulo = modulosData[moduloKey as ModuloKey];
+
+  const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  console.log(moduloKey)
+
+  useEffect(() => {
+    const fetchModulosData = async () => {
+      try {
+        const data = await getModulosData();
+        setModulosData(data);
+      } catch (err) {
+        setError("Erro ao carregar os dados dos módulos.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchModulosData();
+  }, []);
 
   useEffect(() => {
     if (pathname) {
@@ -32,24 +53,30 @@ export default function UnidadeTemplate({
     }
   }, [pathname]);
 
-  if (!isPathnameLoaded) {
+  if (!isPathnameLoaded || loading) {
     return <p>Carregando...</p>;
   }
 
-  // Verifica se o pathname termina com unidadeLink ou unidadeLink + "/topicos"
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!modulosData || !(moduloKey in modulosData)) {
+    console.log(modulosData)
+    return <p>Módulo não encontrado2.</p>;
+  }
+
+  const modulo = modulosData[moduloKey as ModuloKey];
+
   const isUnidadeOrTopicosPath =
     pathname.endsWith(unidadeLink) || pathname.endsWith(`${unidadeLink}/topicos`);
 
   if (!isUnidadeOrTopicosPath) {
-    return children; // Renderiza apenas o conteúdo sem o layout
-  }
-
-  if (!modulo) {
-    return <p>Modulo não encontrado</p>;
+    return children;
   }
 
   const unidade = modulo.unidades.find(
-    (unidade) => normalizeString(unidade.title) === unidadeKey
+    (unidade: any) => normalizeString(unidade.title) === unidadeKey
   );
 
   if (!unidade) {

@@ -3,10 +3,9 @@
 import Link from "next/link";
 import GenericIA from "@/app/ui/components/flows/GenericIA";
 import { useParams } from "next/navigation";
-import { modulosData } from "@/app/ui/components/modulos/data";
+import { getModulosData } from "@/app/ui/components/modulos/data";
 import Header from "@/app/ui/components/trilhas/Header";
-
-type ModuloKey = keyof typeof modulosData;
+import { useState, useEffect } from "react";
 
 export default function Overview({
   children,
@@ -14,12 +13,42 @@ export default function Overview({
   children: React.ReactNode;
 }>) {
   const params = useParams();
-  const modulo = params.modulo as string;
+  const modulo = decodeURIComponent(params.modulo);
+  const unidadeKey = decodeURIComponent(params.unidade);
 
-  if (!modulo || !(modulo in modulosData)) {
-    return <div>Módulo não encontrado.</div>;
+  const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchModulosData = async () => {
+      try {
+        const data = await getModulosData();
+        setModulosData(data);
+      } catch (err) {
+        setError("Erro ao obter os dados dos módulos.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchModulosData();
+  }, []);
+
+  if (loading) {
+    return <div>Carregando...</div>;
   }
 
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!modulo || !modulosData || !(modulo in modulosData)) {
+    return <div>Módulo não encontrado1.</div>;
+  }
+
+  type ModuloKey = keyof typeof modulosData;
   const moduleData = modulosData[modulo as ModuloKey];
 
   return (

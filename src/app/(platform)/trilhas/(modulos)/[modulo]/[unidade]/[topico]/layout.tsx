@@ -2,13 +2,13 @@
 
 import { usePageTitle } from "@/app/hooks/usePageTitle";
 import { useParams } from "next/navigation";
-import { modulosData } from "@/app/ui/components/modulos/data";
+import { getModulosData } from "@/app/ui/components/modulos/data";
 import normalizeString from "@/app/ui/components/modulos/normalizeString";
 import Link from "next/link";
 import { ArrowUpFromDot, MessageCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-type ModuloKey = keyof typeof modulosData;
+type ModuloKey = string;
 
 export default function TopicoLayout({
   children,
@@ -18,33 +18,32 @@ export default function TopicoLayout({
   usePageTitle();
 
   const params = useParams();
-  const moduloKey = params.modulo as ModuloKey;
-  const unidadeKey = params.unidade;
+  const moduloKey = decodeURIComponent(params.modulo); 
+  const unidadeKey = decodeURIComponent(params.unidade); 
   const topicoKey = params.topico;
 
-  const modulo = modulosData[moduloKey];
-  if (!modulo) {
-    return <p>Módulo não encontrado.</p>;
-  }
-
-  const unidade = modulo.unidades.find(
-    (unidade) => normalizeString(unidade.title) === unidadeKey
-  );
-
-  if (!unidade) {
-    return <p>Unidade não encontrada.</p>;
-  }
-
-  const topico = unidade.topicos.find(
-    (topico) => normalizeString(topico.title) === topicoKey
-  );
-
-  if (!topico) {
-    return <p>Tópico não encontrado.</p>;
-  }
+  const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [message, setMessage] = useState('');
   const [chatVisible, setChatVisible] = useState(true);
+
+  useEffect(() => {
+    const fetchModulosData = async () => {
+      try {
+        const data = await getModulosData();
+        setModulosData(data);
+      } catch (err) {
+        setError("Erro ao carregar os dados dos módulos.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchModulosData();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -61,10 +60,43 @@ export default function TopicoLayout({
     setChatVisible(!chatVisible);
   };
 
+  if (loading) {
+    return <p>Carregando...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!modulosData || !(moduloKey in modulosData)) {
+    console.log(moduloKey)
+    return <p>Módulo não encontrado5.</p>;
+  }
+
+  const modulo = modulosData[moduloKey];
+  const unidade = modulo.unidades.find(
+    (unidade: any) => normalizeString(unidade.title) === unidadeKey
+  );
+
+  if (!unidade) {
+    return <p>Unidade não encontrada.</p>;
+  }
+
+  const topico = unidade.topicos.find(
+    (topico: any) => normalizeString(topico.title) === topicoKey
+  );
+
+  if (!topico) {
+    return <p>Tópico não encontrado.</p>;
+  }
+
   return (
     <section className="grid grid-cols-3 gap-5 h-full overflow-x-hidden">
       <div className="col-span-2 w-full m-10 overflow-auto pr-5 flex flex-col gap-5">
-        <Link href={`/trilhas/${moduloKey}/${unidadeKey}`} className="text-mainBlue opacity-60 hover:opacity-100 flex gap-2 items-center duration-100 w-fit mb-3">
+        <Link
+          href={`/trilhas/${moduloKey}/${unidadeKey}`}
+          className="text-mainBlue opacity-60 hover:opacity-100 flex gap-2 items-center duration-100 w-fit mb-3"
+        >
           Voltar
         </Link>
         {children}
