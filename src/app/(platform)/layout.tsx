@@ -9,8 +9,50 @@ import { UserProvider, useUser } from "../context/UserContext";
 import { ToastProvider } from "../context/ToastContext";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { useState, useEffect } from "react";
+import { MessageCircleQuestion, X, SquareChartGantt } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
+
+const questions = [
+  {
+    title: "Questão 1 - Estatística",
+    question:
+      "Um professor aplicou uma prova para 10 alunos e obteve as seguintes notas: 6, 8, 5, 7, 9, 8, 5, 10, 6, 7. Qual é a média aritmética das notas desses alunos?",
+    options: ["6", "7", "8", "9"],
+  },
+  {
+    title: "Questão 2 - Geometria Plana",
+    question:
+      "Um triângulo equilátero possui cada lado medindo 6 cm. Qual é a área desse triângulo?",
+    options: ["9 cm²", "12 cm²", "15 cm²", "18 cm²"],
+  },
+  {
+    title: "Questão 3 - Equação de Primeiro Grau",
+    question:
+      "João tinha R$50 e gastou R$x em uma compra. Se ele ficou com R$20, qual o valor de x?",
+    options: ["10", "15", "20", "30"],
+  },
+  {
+    title: "Questão 4 - Operações Básicas",
+    question:
+      "Maria foi à feira e comprou 3 kg de laranja por R$5/kg e 2 kg de maçã por R$8/kg. Qual foi o valor total da compra?",
+    options: ["R$31", "R$33", "R$35", "R$36"],
+  },
+  {
+    title: "Questão 5 - Geometria",
+    question:
+      "Qual é o volume de uma esfera cujo raio mede 3 cm? (Use π ≈ 3,14)",
+    options: ["60 cm³", "80 cm³", "100 cm³", "120 cm³"],
+  },
+  { title: "Questão 6 - Fatorial", question: "Calcule o fatorial de 5 (5!).", options: ["120", "150", "100", "130"] },
+  {
+    title: "Questão 7 - Equação de Terceiro Grau",
+    question:
+      "Resolva a equação x³ - 3x² - 4x + 12 = 0 encontrando uma de suas raízes reais.",
+    options: ["1", "2", "-1", "-2"],
+  },
+];
 
 export default function RootLayout({
   children,
@@ -18,8 +60,81 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   usePageTitle();
+  const router = useRouter();
 
- 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [modalStep, setModalStep] = useState<"confirmation" | "quiz">("confirmation");
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [quizAnswered, setQuizAnswered] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [showFloatingIcon, setShowFloatingIcon] = useState(false);
+  const { user } = useUser();
+
+  const userQuizKey = `quizAnswered_${user?.email}`;
+
+  useEffect(() => {
+    
+    if (user) {
+      const isQuizCompleted = localStorage.getItem(userQuizKey);
+      if (isQuizCompleted) {
+        setQuizAnswered(true);
+      } else {
+        setIsConfirmModalOpen(true); 
+      }
+    }
+  }, [user]);
+
+  const handleNext = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion((prev) => prev + 1);
+      setSelectedAnswer(""); 
+    } else {
+      localStorage.setItem(userQuizKey, "true");
+      setQuizAnswered(true);
+      closeModal();
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion((prev) => prev - 1);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setIsConfirmModalOpen(false);
+    setShowFloatingIcon(true);
+  };
+
+  const handleAnswerChange = (answer: string) => {
+    setSelectedAnswer(answer);
+
+    const savedAnswers = JSON.parse(localStorage.getItem("answers") || "{}");
+    savedAnswers[currentQuestion] = answer;
+    localStorage.setItem("answers", JSON.stringify(savedAnswers));
+  };
+
+  const handleConfirmStart = () => {
+    setIsConfirmModalOpen(false);
+    setModalStep("quiz");
+    setIsModalOpen(true);
+  };
+
+  const handleCancelStart = () => {
+    setIsConfirmModalOpen(false);
+    setShowFloatingIcon(true);
+  };
+
+  const reopenModal = () => {
+    if (modalStep === "quiz") {
+      setIsModalOpen(true);
+    } else {
+      setIsConfirmModalOpen(true);
+    }
+    setShowFloatingIcon(false);
+  };
 
   return (
     <html lang="pt-br" className="scroll-smooth">
@@ -39,7 +154,112 @@ export default function RootLayout({
           </SidebarProvider>
         </UserProvider>
       </body>
-      
+
+      {isConfirmModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-1/2">
+            <div className="flex justify-end pb-2">
+              <X className="hover:text-red-500" onClick={handleCancelStart} />
+            </div>
+            <h2 className="text-xl font-bold mb-4">Iniciar o Quiz?</h2>
+            <p className="mb-4">
+              Olá, nós somos a IAcademy e queremos saber se você quer fazer o nosso quiz para termos um mapeamento no seu método de desenvolvimento.
+            </p>
+            <div className="flex justify-between">
+              <button onClick={handleCancelStart} className="py-2 px-4 rounded-md bg-gray-300 text-black">
+                Cancelar
+              </button>
+              <button onClick={handleConfirmStart} className="py-2 px-4 rounded-md bg-mainBlue text-white">
+                Iniciar Quiz
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-1/2">
+            <div className="flex justify-end pb-2">
+              <X className="hover:text-red-500" onClick={closeModal} />
+            </div>
+
+            {currentQuestion < questions.length ? (
+              <>
+                <h2 className="text-xl font-bold mb-4">{questions[currentQuestion].title}</h2>
+                <p className="mb-4">{questions[currentQuestion].question}</p>
+
+                <div className="space-y-4 pb-3">
+                  {questions[currentQuestion].options.map((option, index) => (
+                    <label
+                      key={index}
+                      className="flex items-center space-x-3 cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-all"
+                    >
+                      <input
+                        type="radio"
+                        name={`question-${currentQuestion}`}
+                        value={option}
+                        checked={selectedAnswer === option}
+                        onChange={() => handleAnswerChange(option)}
+                        className="hidden"
+                      />
+                      <span
+                        className={`w-6 h-6 rounded-full border-2 transition-all ${selectedAnswer === option ? "bg-mainBlue border-mainBlue" : " border-gray-400"}`}
+                      >
+                        <span className={`block w-4 h-4 rounded-full transition-all ${selectedAnswer === option ? "" : "bg-transparent"}`}></span>
+                      </span>
+                      <span className="text-lg">{option}</span>
+                    </label>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <button
+                    onClick={handlePrevious}
+                    className={`py-2 px-4 rounded-md ${currentQuestion === 0 ? "bg-gray-300" : "bg-mainBlue text-white"}`}
+                    disabled={currentQuestion === 0}
+                  >
+                    Voltar
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    className={`py-2 px-4 rounded-md ${currentQuestion === questions.length - 1 ? "bg-mainBlue text-white" : "bg-mainBlue text-white"} ${!selectedAnswer ? "!bg-gray-500 text-black cursor-not-allowed" : ""}`}
+                    disabled={!selectedAnswer}
+                  >
+                    {currentQuestion === questions.length - 1 ? "Finalizar" : "Próxima"}
+                  </button>
+                </div>
+
+                <div className="flex justify-center gap-2 mt-4">
+                  {questions.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`w-4 h-4 rounded-full ${index === currentQuestion ? "bg-blue-500" : "bg-gray-300"}`}
+                    ></div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="text-center">
+                <h2 className="text-xl font-bold mb-4">Quiz Finalizado</h2>
+                <p className="mb-4">Obrigado por participar do nosso quiz!</p>
+                <button onClick={closeModal} className="py-2 px-4 rounded-md bg-mainBlue text-white">
+                  Fechar
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {showFloatingIcon && !quizAnswered && (
+        <div
+          className="fixed bottom-10 right-10 bg-mainBlue text-white p-4 rounded-full shadow-lg cursor-pointer z-50"
+          onClick={reopenModal}
+        >
+          <SquareChartGantt size={32} />
+        </div>
+      )}
     </html>
   );
 }
