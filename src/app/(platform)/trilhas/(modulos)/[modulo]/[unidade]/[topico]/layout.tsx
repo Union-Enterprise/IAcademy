@@ -7,6 +7,7 @@ import normalizeString from "@/app/ui/components/modulos/normalizeString";
 import Link from "next/link";
 import { ArrowUpFromDot, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
+import axios from 'axios';
 
 type ModuloKey = string;
 
@@ -49,11 +50,31 @@ export default function TopicoLayout({
     setMessage(e.target.value);
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (message) {
-      console.log("Mensagem enviada:", message);
       setMessage('');
+      let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+  
+      chatHistory.push({ user: message });
+  
+      try {
+        const response = await axios.post("http://localhost:5000/answer_user_questions", {
+          "content": "A geometria espacial, também conhecida como geometria tridimensional, é a área da matemática que estuda as propriedades e relações de figuras no espaço tridimensional.", // isso ficará dinamico conforme a pagina
+          "chat": chatHistory,
+          "prompt": message
+        });
+        chatHistory.push({ ai: response.data.response });
+        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+        console.log(response.data.response);
+      } catch (error) {
+        console.error("Erro ao enviar a mensagem:", error);
+      }
     }
+  };
+  
+  const clearChatHistory = () => { // implementar um botao para limpar o chat
+    localStorage.removeItem('chatHistory');
+    console.log("Histórico de chat limpo.");
   };
 
   const toggleChat = () => {
@@ -106,21 +127,26 @@ export default function TopicoLayout({
           <>
             <p>Chat do PT</p>
             <div className="mt-auto relative"> 
-              <input
-                type="text"
-                placeholder="Mensagem IAcademy"
-                value={message}
-                onChange={handleInputChange}
-                className="w-full p-4 border border-gray-300 rounded-xl pr-16 focus:outline-none focus:ring-2 focus:ring-mainBlue"
-              />
-              <button
-                onClick={handleSend}
-                disabled={!message}
-                className={`absolute right-1 top-1/2 transform -translate-y-1/2 bg-mainBlue text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-mainBlue/90 ${!message ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <ArrowUpFromDot />
-              </button>
-            </div>
+            <input
+              type="text"
+              placeholder="Mensagem IAcademy"
+              value={message}
+              onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSend();
+                }
+              }}
+              className="w-full p-4 border border-gray-300 rounded-xl pr-16 focus:outline-none focus:ring-2 focus:ring-mainBlue"
+            />
+            <button
+              onClick={handleSend}
+              disabled={!message}
+              className={`absolute right-1 top-1/2 transform -translate-y-1/2 bg-mainBlue text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-mainBlue/90 ${!message ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <ArrowUpFromDot />
+            </button>
+          </div>
             <p className="mt-2 text-sm text-gray-500 flex justify-center">
               A IAcademy pode cometer erros. Considere verificar informações importantes.
             </p>
