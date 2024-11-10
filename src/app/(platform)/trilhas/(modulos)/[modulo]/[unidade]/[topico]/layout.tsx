@@ -1,5 +1,4 @@
 "use client";
-
 import { usePageTitle } from "@/app/hooks/usePageTitle";
 import { useParams } from "next/navigation";
 import { getModulosData } from "@/app/ui/components/modulos/data";
@@ -11,6 +10,11 @@ import axios from 'axios';
 
 type ModuloKey = string;
 
+interface ChatMessage {
+  sender: 'user' | 'bot';
+  content: string;
+}
+
 export default function TopicoLayout({
   children,
 }: {
@@ -19,8 +23,8 @@ export default function TopicoLayout({
   usePageTitle();
 
   const params = useParams();
-  const moduloKey = decodeURIComponent(params.modulo); 
-  const unidadeKey = decodeURIComponent(params.unidade); 
+  const moduloKey = decodeURIComponent(params.modulo);
+  const unidadeKey = decodeURIComponent(params.unidade);
   const topicoKey = params.topico;
 
   const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
@@ -28,7 +32,10 @@ export default function TopicoLayout({
   const [error, setError] = useState<string | null>(null);
 
   const [message, setMessage] = useState('');
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatVisible, setChatVisible] = useState(true);
+  const [isBotTyping, setIsBotTyping] = useState(false);
+  const [botTypingContent, setBotTypingContent] = useState("");
 
   useEffect(() => {
     const fetchModulosData = async () => {
@@ -46,35 +53,50 @@ export default function TopicoLayout({
     fetchModulosData();
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 
   const handleSend = async () => {
     if (message) {
+      const userMessage: ChatMessage = { sender: 'user', content: message };
+      setChatMessages((prevMessages) => [...prevMessages, userMessage]);
       setMessage('');
-      let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
-  
-      chatHistory.push({ user: message });
-  
+
+      setIsBotTyping(true);
+      setBotTypingContent("");
+
       try {
         const response = await axios.post("http://localhost:5000/answer_user_questions", {
-          "content": "A geometria espacial, também conhecida como geometria tridimensional, é a área da matemática que estuda as propriedades e relações de figuras no espaço tridimensional.", // isso ficará dinamico conforme a pagina
-          "chat": chatHistory,
-          "prompt": message
+          content: "A geometria espacial, também conhecida como geometria tridimensional, é a área da matemática que estuda as propriedades e relações de figuras no espaço tridimensional.",
+          chat: chatMessages,
+          prompt: message,
         });
-        chatHistory.push({ ai: response.data.response });
-        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-        console.log(response.data.response);
+
+        animateTyping(response.data.response);
       } catch (error) {
         console.error("Erro ao enviar a mensagem:", error);
+        setIsBotTyping(false);
       }
     }
   };
-  
-  const clearChatHistory = () => { // implementar um botao para limpar o chat
-    localStorage.removeItem('chatHistory');
-    console.log("Histórico de chat limpo.");
+
+  const animateTyping = (fullMessage: string) => {
+    let currentIndex = 0;
+    const typingInterval = setInterval(() => {
+      if (currentIndex < fullMessage.length) {
+        setBotTypingContent((prevContent) => prevContent + fullMessage[currentIndex]);
+        currentIndex += 1;
+      } else {
+        clearInterval(typingInterval);
+        setChatMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: 'bot', content: fullMessage }
+        ]);
+        setIsBotTyping(false);
+        setBotTypingContent("");
+      }
+    }, 10);
   };
 
   const toggleChat = () => {
@@ -90,8 +112,7 @@ export default function TopicoLayout({
   }
 
   if (!modulosData || !(moduloKey in modulosData)) {
-    console.log(moduloKey)
-    return <p>Módulo não encontrado5.</p>;
+    return <p>Módulo não encontrado.</p>;
   }
 
   const modulo = modulosData[moduloKey];
@@ -125,40 +146,63 @@ export default function TopicoLayout({
       <div className={`col-span-1 bg-bg-lightA border-2 border-borders-lightA rounded-lg p-10 flex flex-col relative transition-transform duration-300 ${chatVisible ? 'translate-x-0' : 'translate-x-full'}`}>
         {chatVisible && (
           <>
-            <p>Chat do PT</p>
-            <div className="mt-auto relative"> 
-            <input
-              type="text"
-              placeholder="Mensagem IAcademy"
-              value={message}
-              onChange={handleInputChange}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSend();
-                }
-              }}
-              className="w-full p-4 border border-gray-300 rounded-xl pr-16 focus:outline-none focus:ring-2 focus:ring-mainBlue"
-            />
-            <button
-              onClick={handleSend}
-              disabled={!message}
-              className={`absolute right-1 top-1/2 transform -translate-y-1/2 bg-mainBlue text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-mainBlue/90 ${!message ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              <ArrowUpFromDot />
-            </button>
-          </div>
+            <p className="text-xl">IAcademy bot</p>
+            <div className="flex flex-col gap-3 h-96 flex-grow overflow-y-auto mb-4">
+              {chatMessages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`flex ${msg.sender === 'user' ? 'justify-end mt-7' : 'justify-start'}`}
+                >
+                  <div
+                    className={`p-3 rounded-lg ${msg.sender === 'user' ? 'bg-mainBlue text-white' : 'bg-gray-300 text-black'} max-w-xs`}
+                  >
+                    {msg.content}
+                  </div>
+                </div>
+              ))}
+              {isBotTyping && (
+                <div className="flex justify-start mt-7">
+                  <div className="flex">
+                    <div className="typing-ball"></div>
+                    <div className="typing-ball"></div>
+                    <div className="typing-ball"></div>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="mt-auto relative">
+              <textarea
+                placeholder="Mensagem IAcademy"
+                value={message}
+                onChange={handleTextareaChange}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
+                className="w-full p-4 border border-gray-300 rounded-xl pr-16 focus:outline-none focus:ring-2 focus:ring-mainBlue resize-none"
+                rows={1}
+              />
+              <button
+                onClick={handleSend}
+                disabled={!message}
+                className={`absolute right-1 top-1/3 mt-2 transform -translate-y-1/2 bg-mainBlue text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-mainBlue/90 ${!message ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <ArrowUpFromDot />
+              </button>
+            </div>
             <p className="mt-2 text-sm text-gray-500 flex justify-center">
               A IAcademy pode cometer erros. Considere verificar informações importantes.
             </p>
           </>
         )}
       </div>
-      {/* Ícone fixo */}
-      <div 
-        onClick={toggleChat} 
-        className="fixed mt-5 right-4 bg-gray-200 rounded-full p-2 flex items-center justify-center hover:bg-gray-300 cursor-pointer z-50"
+      <div
+        onClick={toggleChat}
+        className="fixed mt-5 right-4 bg-mainBlue rounded-full p-2 flex items-center justify-center hover:bg-mainBlue/80 cursor-pointer z-50"
       >
-        <MessageCircle className="text-mainBlue w-9 h-9" />
+        <MessageCircle className="text-white w-9 h-9" />
       </div>
     </section>
   );
