@@ -100,7 +100,7 @@ export default function Topico() {
                   className="mb-4"
                   tabIndex={0}
                   dangerouslySetInnerHTML={{
-                    __html: renderContent(data.content[key]) // Função para renderizar Markdown e LaTeX
+                    __html: renderContent(data.content[key])
                   }}
                 ></p>
               </section>
@@ -152,17 +152,13 @@ export default function Topico() {
   );
 }
 
-// Função para renderizar Markdown e LaTeX
 function renderContent(content: string) {
-  // Primeiro, converter o markdown em HTML
   const markdownHtml = marked(content);
 
-  // Renderizar expressões inline (entre '$' símbolos)
   const inlineLatexRenderedHtml = markdownHtml.replace(/\$(.+?)\$/g, (match, expr) => {
     return katex.renderToString(expr, { throwOnError: false, displayMode: false });
   });
 
-  // Renderizar expressões de bloco (entre '$$' símbolos)
   const blockLatexRenderedHtml = inlineLatexRenderedHtml.replace(/\$\$(.+?)\$\$/g, (match, expr) => {
     return katex.renderToString(expr, { throwOnError: false, displayMode: true });
   });
