@@ -68,7 +68,7 @@ export default function TopicoLayout({
 
       try {
         const response = await axios.post("http://localhost:5000/answer_user_questions", {
-          content: topicoKey,
+          content: `${moduloKey} - ${unidadeKey} - ${topicoKey}`,
           chat: chatMessages,
           prompt: message,
         });
