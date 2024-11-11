@@ -8,6 +8,7 @@ import { marked } from "marked";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 
+
 export default function Topico() {
   const [showOtherFeedback, setShowOtherFeedback] = useState(false);
   const [otherFeedback, setOtherFeedback] = useState("");
@@ -151,19 +152,21 @@ export default function Topico() {
     </div>
   );
 }
-
 function renderContent(content: string) {
+
   const markdownHtml = marked(content);
 
-  const inlineLatexRenderedHtml = markdownHtml.replace(/\$(.+?)\$/g, (match, expr) => {
-    return katex.renderToString(expr, { throwOnError: false, displayMode: false });
-  });
-
-  const blockLatexRenderedHtml = inlineLatexRenderedHtml.replace(/\$\$(.+?)\$\$/g, (match, expr) => {
+ 
+  const blockLatexRenderedHtml = markdownHtml.replace(/\$\$(.+?)\$\$/g, (match, expr) => {
     return katex.renderToString(expr, { throwOnError: false, displayMode: true });
   });
 
-  return blockLatexRenderedHtml;
+
+  const inlineLatexRenderedHtml = blockLatexRenderedHtml.replace(/\$(.+?)\$/g, (match, expr) => {
+    return katex.renderToString(expr, { throwOnError: false, displayMode: false });
+  });
+
+  return inlineLatexRenderedHtml;
 }
 
 function FeedbackButton({ text = "Motivo aqui", onClick }) {

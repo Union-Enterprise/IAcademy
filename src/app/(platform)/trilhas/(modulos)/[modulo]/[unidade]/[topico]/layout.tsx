@@ -7,6 +7,9 @@ import Link from "next/link";
 import { ArrowUpFromDot, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from 'axios';
+import { useUser } from "@/app/context/UserContext";
+
+const botProfilePicUrl = "/blueIcon.svg";
 
 type ModuloKey = string;
 
@@ -26,6 +29,9 @@ export default function TopicoLayout({
   const moduloKey = decodeURIComponent(params.modulo);
   const unidadeKey = decodeURIComponent(params.unidade);
   const topicoKey = decodeURIComponent(params.topico);
+
+  const { user } = useUser();
+  console.log(user.img);
 
   const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -103,6 +109,13 @@ export default function TopicoLayout({
     setChatVisible(!chatVisible);
   };
 
+  
+  const getInitials = (name: string) => {
+    const firstName = name.split(' ')[0]; 
+    const initials = firstName.charAt(0).toUpperCase(); 
+    return initials;
+  };
+
   if (loading) {
     return <p>Carregando...</p>;
   }
@@ -146,17 +159,39 @@ export default function TopicoLayout({
       <div className={`col-span-1 bg-bg-lightA border-2 border-borders-lightA rounded-lg p-10 flex flex-col relative transition-transform duration-300 ${chatVisible ? 'translate-x-0' : 'translate-x-full'}`}>
         {chatVisible && (
           <>
-            <p className="text-xl">IAcademy bot</p>
-            <div className="flex flex-col gap-3 h-96 flex-grow overflow-y-auto mb-4">
+            <p className="text-2xl text-gray-500">IAcademy bot</p>
+            <div className="flex flex-col gap-3 h-96 flex-grow overflow-y-auto overflow-hidden mb-4">
               {chatMessages.map((msg, index) => (
                 <div
                   key={index}
                   className={`flex ${msg.sender === 'user' ? 'justify-end mt-7' : 'justify-start'}`}
                 >
-                  <div
-                    className={`p-3 rounded-lg ${msg.sender === 'user' ? 'bg-mainBlue text-white' : 'bg-gray-300 text-black'} max-w-xs`}
-                  >
-                    {msg.content}
+                  <div className="flex items-center gap-3">
+                    {msg.sender === 'bot' && (
+                      <img
+                        src={botProfilePicUrl}
+                        alt="Bot profile"
+                        className="w-14 h-20 rounded-full"
+                      />
+                    )}
+                    <div
+                      className={`p-3 rounded-lg ${msg.sender === 'user' ? 'bg-mainBlue text-white' : 'bg-gray-300 text-black'} max-w-xs`}
+                    >
+                      {msg.content}
+                    </div>
+                    {msg.sender === 'user' && (
+                      user.img ? (
+                        <img
+                          src={user.img} 
+                          alt="User profile"
+                          className="w-14 h-14 rounded-full"
+                        />
+                      ) : (
+                        <div className="w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center">
+                          {getInitials(user.name)}
+                        </div>
+                      )
+                    )}
                   </div>
                 </div>
               ))}

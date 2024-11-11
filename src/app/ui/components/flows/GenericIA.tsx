@@ -31,10 +31,9 @@ const ENEMRoadmap: React.FC = () => {
 
         const newNodes: Node[] = [];
         const newEdges: Edge[] = [];
-        let currentY = 50; // Início da trilha no eixo Y
-        const xOffset = 200; // Largura entre nós em cada zig-zag
-
-        // Nó principal: Estatística
+        let currentY = 50;
+        const xOffset = 200; 
+    // Nó principal: Estatística
         const parentNodeId = `topic-Estatistica`;
         newNodes.push({
           id: parentNodeId,
@@ -52,15 +51,15 @@ const ENEMRoadmap: React.FC = () => {
           },
         });
 
-        currentY += 150; // Espaçamento vertical após o nó principal
+        currentY += 150; 
 
-        // Subtópicos organizados como uma trilha
+     
         const statisticsSubjects = roadmap["Aritmética"];
         if (statisticsSubjects && Array.isArray(statisticsSubjects)) {
           statisticsSubjects.forEach((subject, index) => {
             const childNodeId = `subject-${index + 1}`;
             const isEven = index % 2 === 0;
-            const positionX = isEven ? -xOffset : xOffset; // Alterna entre esquerda e direita
+            const positionX = isEven ? -xOffset : xOffset; 
 
             newNodes.push({
               id: childNodeId,
