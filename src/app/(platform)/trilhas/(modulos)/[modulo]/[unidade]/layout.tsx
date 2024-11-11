@@ -62,7 +62,6 @@ export default function UnidadeTemplate({
   }
 
   if (!modulosData || !(moduloKey in modulosData)) {
-    console.log(modulosData)
     return <p>Módulo não encontrado2.</p>;
   }
 

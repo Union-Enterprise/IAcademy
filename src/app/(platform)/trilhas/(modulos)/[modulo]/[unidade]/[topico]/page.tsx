@@ -1,12 +1,66 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { getModulosData } from "@/app/ui/components/modulos/data";
+import normalizeString from "@/app/ui/components/modulos/normalizeString";
+import { marked } from "marked";
+import katex from "katex";
+import "katex/dist/katex.min.css";
 
 export default function Topico() {
   const [showOtherFeedback, setShowOtherFeedback] = useState(false);
   const [otherFeedback, setOtherFeedback] = useState("");
+  const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const params = useParams();
+
+  const moduloKey = decodeURIComponent(params.modulo);
+  const unidadeKey = decodeURIComponent(params.unidade);
+  const topicoKey = decodeURIComponent(params.topico);
+
+  useEffect(() => {
+    const fetchModulosData = async () => {
+      try {
+        const data = await getModulosData();
+        setModulosData(data);
+      } catch (err) {
+        setError("Erro ao carregar os dados dos tópicos.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchModulosData();
+  }, []);
+
+  if (loading) {
+    return <p>Carregando...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!modulosData || !(moduloKey in modulosData)) {
+    return <p>Módulo não encontrado.</p>;
+  }
+
+  const modulo = modulosData[moduloKey];
+  if (!modulo) {
+    return <p>Módulo não encontrado.</p>;
+  }
+
+  const unidade = modulo.unidades.find(
+    (unidade: any) => normalizeString(unidade.title) === unidadeKey
+  );
+
+  if (!unidade) {
+    return <p>Unidade não encontrada.</p>;
+  }
 
   const handleOtherFeedbackSubmit = () => {
     console.log("Feedback enviado:", otherFeedback);
@@ -14,97 +68,55 @@ export default function Topico() {
     setShowOtherFeedback(false);
   };
 
+
+  let index;
+  for (let topicos in unidade['topicos']) {
+    if (normalizeString(unidade['topicos'][topicos].title) == topicoKey) {
+      index = topicos;
+      break;
+    }
+  }
+
+  const data = unidade['topicos'][index];
+
   return (
     <div>
       <article aria-live="polite">
-        <h1 className="text-2xl font-bold mb-4" tabIndex={0}>
-          Geometria Espacial
+        <h1 className="text-5xl font-bold mb-4" tabIndex={0}>
+          {data.title}
         </h1>
         <p className="mb-4" tabIndex={0}>
-          A geometria espacial, também conhecida como geometria tridimensional,
-          é a área da matemática que estuda as propriedades e relações de
-          figuras no espaço tridimensional.
+          {data.description}
         </p>
-        <p className="mb-4" tabIndex={0}>
-          Diferente da geometria plana, que trata de figuras bidimensionais como
-          triângulos e círculos, a geometria espacial lida com sólidos e figuras
-          que possuem três dimensões: comprimento, largura e altura.
-        </p>
-        <section aria-labelledby="principais-conceitos">
-          <h2
-            id="principais-conceitos"
-            className="text-xl font-semibold mb-2"
+
+        {Object.keys(data.content).map((key) => {
+          if (key !== "images_google_search") {
+            return (
+              <section key={key} aria-labelledby={key}>
+                <h2 id={key} className="text-xl font-semibold mb-2" tabIndex={0}>
+                  {key}
+                </h2>
+                <p
+                  className="mb-4"
+                  tabIndex={0}
+                  dangerouslySetInnerHTML={{
+                    __html: renderContent(data.content[key]) // Função para renderizar Markdown e LaTeX
+                  }}
+                ></p>
+              </section>
+            );
+          }
+        })}
+
+        <div className="flex justify-center mb-10 pt-10">
+          <img
+            src={data.content.images_google_search.replace('<img href="', '').replace('">', '')}
+            alt={`Imagem relacionada a ${data.title}`}
             tabIndex={0}
-          >
-            Principais Conceitos da Geometria Espacial
-          </h2>
-          <div className="flex justify-center mb-10 pt-10">
-            <img 
-              src="https://static.mundoeducacao.uol.com.br/mundoeducacao/2022/07/principais-prismas.jpg" 
-              alt="Ícone representando a geometria espacial, com formas tridimensionais em destaque" 
-              tabIndex={0}
-            />
-          </div>
-          <ul className="list-disc list-inside mb-4">
-            <li tabIndex={0}>
-              <strong>Ponto:</strong> Indica uma posição no espaço e não possui
-              dimensões.
-            </li>
-            <li tabIndex={0}>
-              <strong>Linha:</strong> Conjunto infinito de pontos alinhados em
-              uma única direção. Pode ser reta ou curva.
-            </li>
-            <li tabIndex={0}>
-              <strong>Plano:</strong> Superfície bidimensional que se estende
-              infinitamente em todas as direções.
-            </li>
-          </ul>
-        </section>
-        <section aria-labelledby="solidos-geometricos">
-          <h2
-            id="solidos-geometricos"
-            className="text-xl font-semibold mb-2"
-            tabIndex={0}
-          >
-            Sólidos Geométricos
-          </h2>
-          <p className="mb-4" tabIndex={0}>
-            Os sólidos geométricos são as figuras tridimensionais estudadas na
-            geometria espacial. Alguns exemplos comuns incluem:
-          </p>
-          <ul className="list-disc list-inside mb-4">
-            <li tabIndex={0}>
-              <strong>Cubo:</strong> Seis faces quadradas iguais, doze arestas e
-              oito vértices.
-            </li>
-            <li tabIndex={0}>
-              <strong>Paralelepípedo:</strong> Seis faces retangulares, doze
-              arestas e oito vértices.
-            </li>
-            <li tabIndex={0}>
-              <strong>Pirâmide:</strong> Base poligonal e faces triangulares que
-              se encontram em um vértice comum. A mais comum é a pirâmide de
-              base quadrada.
-            </li>
-            <li tabIndex={0}>
-              <strong>Prisma:</strong> Duas bases poligonais paralelas e faces
-              laterais retangulares.
-            </li>
-            <li tabIndex={0}>
-              <strong>Cilindro:</strong> Duas bases circulares paralelas e uma
-              superfície lateral curva.
-            </li>
-            <li tabIndex={0}>
-              <strong>Cone:</strong> Base circular e uma superfície lateral que
-              se afunila até um ponto (vértice).
-            </li>
-            <li tabIndex={0}>
-              <strong>Esfera:</strong> Superfície totalmente curva onde todos os
-              pontos estão a uma distância constante do centro.
-            </li>
-          </ul>
-        </section>
+          />
+        </div>
       </article>
+
       <div className="w-full bg-bg-lightA p-5 rounded-md shadow-md">
         <h2 className="text-xl font-semibold mb-4" tabIndex={0}>
           Conte-nos o motivo:
@@ -140,9 +152,27 @@ export default function Topico() {
   );
 }
 
+// Função para renderizar Markdown e LaTeX
+function renderContent(content: string) {
+  // Primeiro, converter o markdown em HTML
+  const markdownHtml = marked(content);
+
+  // Renderizar expressões inline (entre '$' símbolos)
+  const inlineLatexRenderedHtml = markdownHtml.replace(/\$(.+?)\$/g, (match, expr) => {
+    return katex.renderToString(expr, { throwOnError: false, displayMode: false });
+  });
+
+  // Renderizar expressões de bloco (entre '$$' símbolos)
+  const blockLatexRenderedHtml = inlineLatexRenderedHtml.replace(/\$\$(.+?)\$\$/g, (match, expr) => {
+    return katex.renderToString(expr, { throwOnError: false, displayMode: true });
+  });
+
+  return blockLatexRenderedHtml;
+}
+
 function FeedbackButton({ text = "Motivo aqui", onClick }) {
   return (
-    <button 
+    <button
       className="bg-bg-lightA text-sm text-gray-800 px-8 py-3 rounded-md hover:bg-gray-300 duration-200"
       onClick={onClick}
     >

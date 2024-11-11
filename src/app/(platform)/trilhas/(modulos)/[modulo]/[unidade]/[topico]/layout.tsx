@@ -25,7 +25,7 @@ export default function TopicoLayout({
   const params = useParams();
   const moduloKey = decodeURIComponent(params.modulo);
   const unidadeKey = decodeURIComponent(params.unidade);
-  const topicoKey = params.topico;
+  const topicoKey = decodeURIComponent(params.topico);
 
   const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -68,7 +68,7 @@ export default function TopicoLayout({
 
       try {
         const response = await axios.post("http://localhost:5000/answer_user_questions", {
-          content: "A geometria espacial, também conhecida como geometria tridimensional, é a área da matemática que estuda as propriedades e relações de figuras no espaço tridimensional.",
+          content: topicoKey,
           chat: chatMessages,
           prompt: message,
         });

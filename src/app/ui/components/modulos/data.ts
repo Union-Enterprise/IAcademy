@@ -3,6 +3,7 @@ import axios from 'axios';
 interface Topico {
   title: string;
   description: string;
+  content: Object
 }
 
 interface Unidade {
@@ -51,6 +52,7 @@ const transformData = (data: any): ModulosData => {
         const transformedTopic: Topico = {
           title: topicKey,
           description: topic.description,
+          content: topic.content
         };
 
         transformedUnit.topicos.push(transformedTopic);
