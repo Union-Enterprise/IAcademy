@@ -30,7 +30,7 @@ const transformData = (data: any): ModulosData => {
 
   for (const moduleKey in data) {
     const module = data[moduleKey];
-    console.log(module)
+    // console.log(module)
     const transformedModule: Modulo = {
       title: module.title,
       description: module.description,
@@ -40,7 +40,7 @@ const transformData = (data: any): ModulosData => {
 
     for (const unitKey in module.unidades) {
       const unit = module.unidades[unitKey];
-      console.log(unit)
+      // console.log(unit)
       const transformedUnit: Unidade = {
         title: unit.title,
         description: unit.description,

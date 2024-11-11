@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import ReactFlow, { Controls, Node, Edge } from "reactflow";
 import "reactflow/dist/style.css";
 import { useUser } from "@/app/context/UserContext";
+import { useParams } from "next/navigation";
 
 interface RoadmapData {
   [topic: string]: string[];
@@ -14,31 +15,44 @@ const ENEMRoadmap: React.FC = () => {
   const [edges, setEdges] = useState<Edge[]>([]);
   const { user, loading } = useUser();
 
+  const params = useParams();
+  const modulo = decodeURIComponent(params.modulo);
+  const unidadeKey = decodeURIComponent(params.unidade);
+
+  console.log(modulo)
+
+  function capitalizeWords(text) {
+    return text
+      .toLowerCase()
+      .split(' ') 
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
+      .join(' ');
+  }
+  
+
   useEffect(() => {
     const fetchRoadmap = async () => {
       try {
-        const response = await axios.post<{ roadmap: RoadmapData[] }>(
-          "http://localhost:5002/roadmap",
-          { email: user.email } //deixar esse email dinamico a depender do usuario - tá feito, se n funcionar a culpa n é minha.
+        const response = await axios.post(
+          "http://localhost:5002/roadmap", {}, { withCredentials: true }
         );
 
-        const roadmapData = response.data[0];
-        const roadmap = roadmapData.roadmap;
-
+        const roadmap = response.data[modulo];
         if (typeof roadmap !== "object" || roadmap === null) {
           throw new Error("Roadmap is not a valid object");
         }
 
         const newNodes: Node[] = [];
         const newEdges: Edge[] = [];
+        const xOffset = 400; 
         let currentY = 50;
-        const xOffset = 200; 
-    // Nó principal: Estatística
-        const parentNodeId = `topic-Estatistica`;
+
+        const parentNodeId = `topic-${modulo}`;
+        const parentNodeX = 0; 
         newNodes.push({
           id: parentNodeId,
-          data: { label: "Estatística" },
-          position: { x: 0, y: currentY },
+          data: { label: capitalizeWords(modulo) },
+          position: { x: parentNodeX, y: currentY },
           style: {
             backgroundColor: "#1865F2",
             color: "#fff",
@@ -51,45 +65,86 @@ const ENEMRoadmap: React.FC = () => {
           },
         });
 
-        currentY += 150; 
+        currentY += 150;
 
-     
-        const statisticsSubjects = roadmap["Aritmética"];
-        if (statisticsSubjects && Array.isArray(statisticsSubjects)) {
-          statisticsSubjects.forEach((subject, index) => {
-            const childNodeId = `subject-${index + 1}`;
-            const isEven = index % 2 === 0;
-            const positionX = isEven ? -xOffset : xOffset; 
+        const unidadeKeys = Object.keys(roadmap.unidades);
+        const totalUnidades = unidadeKeys.length;
+        let currentX = -(xOffset * (totalUnidades - 1)) / 2;
+
+        unidadeKeys.forEach((unidadeKey, index) => {
+          const unidade = roadmap.unidades[unidadeKey];
+          const unidadeNodeId = `unidade-${unidadeKey}`;
+
+          newNodes.push({
+            id: unidadeNodeId,
+            data: { label: unidade.title },
+            position: { x: currentX, y: currentY },
+            style: {
+              backgroundColor: "#E3EFFF",
+              border: "2px solid #1865F2",
+              borderRadius: "8px",
+              padding: "20px",
+              width: "300px",
+              fontSize: "22px",
+              textAlign: "center",
+            },
+          });
+
+          newEdges.push({
+            id: `${parentNodeId}-${unidadeNodeId}`,
+            source: parentNodeId,
+            target: unidadeNodeId,
+            type: "smoothstep",
+            animated: true,
+            style: { stroke: "#1865F2", strokeWidth: 2 },
+          });
+
+          let topicY = currentY + 150;
+          let previousTopicNodeId = null;
+          Object.keys(unidade.topicos).forEach((topicoKey, topicIndex) => {
+            const topicoNodeId = `topico-${unidadeKey}-${topicoKey}`;
 
             newNodes.push({
-              id: childNodeId,
-              data: { label: subject },
-              position: { x: positionX, y: currentY },
+              id: topicoNodeId,
+              data: { label: topicoKey },
+              position: { x: currentX, y: topicY },
               style: {
-                backgroundColor: "#E3EFFF",
-                border: "2px solid #1865F2",
+                backgroundColor: "#F5FAFF",
+                border: "1px solid #1865F2",
                 borderRadius: "8px",
                 padding: "20px",
-                width: "300px",
-                fontSize: "22px",
+                width: "250px",
+                fontSize: "18px",
                 textAlign: "center",
               },
             });
 
-            // Conexão do nó anterior com o próximo na trilha
-            const sourceId = index === 0 ? parentNodeId : `subject-${index}`;
-            newEdges.push({
-              id: `${sourceId}-${childNodeId}`,
-              source: sourceId,
-              target: childNodeId,
-              type: "smoothstep",
-              animated: true,
-              style: { stroke: "#1865F2", strokeWidth: 2 },
-            });
+            if (topicIndex === 0) {
+              newEdges.push({
+                id: `${unidadeNodeId}-${topicoNodeId}`,
+                source: unidadeNodeId,
+                target: topicoNodeId,
+                type: "smoothstep",
+                animated: true,
+                style: { stroke: "#1865F2", strokeWidth: 2 },
+              });
+            } else if (previousTopicNodeId) {
+              newEdges.push({
+                id: `${previousTopicNodeId}-${topicoNodeId}`,
+                source: previousTopicNodeId,
+                target: topicoNodeId,
+                type: "smoothstep",
+                animated: true,
+                style: { stroke: "#1865F2", strokeWidth: 2 },
+              });
+            }
 
-            currentY += 120; // Incrementa o Y para dar continuidade na trilha
+            previousTopicNodeId = topicoNodeId;
+            topicY += 150;
           });
-        }
+
+          currentX += xOffset;
+        });
 
         setNodes(newNodes);
         setEdges(newEdges);
@@ -102,13 +157,13 @@ const ENEMRoadmap: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ height: "80vh", width: "140vh" }}>
+    <div style={{ height: "80vh", width: "100vw" }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
         fitView
-        onNodeClick={(_, node) => node.data?.onClick && node.data.onClick()}
-        defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
+        fitViewOptions={{ padding: 0.2 }}
+        defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
       >
         <Controls />
       </ReactFlow>
