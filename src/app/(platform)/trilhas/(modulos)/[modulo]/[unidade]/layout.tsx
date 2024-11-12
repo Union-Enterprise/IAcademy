@@ -6,6 +6,7 @@ import { useParams, usePathname } from "next/navigation";
 import { getModulosData } from "@/app/ui/components/modulos/data"; 
 import normalizeString from "@/app/ui/components/modulos/normalizeString";
 import { useEffect, useState } from "react";
+import HeaderUnidade from "@/app/ui/components/trilhas/HeaderUnidade";
 
 type ModuloKey = string;
 
@@ -84,7 +85,7 @@ export default function UnidadeTemplate({
 
   return (
     <section className="flex flex-col gap-5">
-      <Header
+      <HeaderUnidade
         title={unidade.title}
         description={unidade.description}
         hrefs={[

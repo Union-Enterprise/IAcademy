@@ -13,6 +13,8 @@ export default function Questionnaires() {
   const [questao, setQuestao] = useState("");
   const [tema, setTema] = useState("");
   const [questionToDelete, setQuestionToDelete] = useState(null);
+  const [alternativas, setAlternativas] = useState([]);
+  const [alternativaCorreta, setAlternativaCorreta] = useState("");
 
   useEffect(() => {
     const fetchQuestionnaires = async () => {
@@ -23,6 +25,8 @@ export default function Questionnaires() {
           titulo: question.titulo,
           questao: question.questao,
           tema: question.tema,
+          alternativas: question.alternativas || [],
+          alternativaCorreta: question.alternativaCorreta || "",
         }));
         setQuestionnaires(formattedData);
       } catch (error) {
@@ -40,11 +44,15 @@ export default function Questionnaires() {
       setTitulo(question.titulo || "");
       setQuestao(question.questao || "");
       setTema(question.tema || "");
+      setAlternativas(question.alternativas || []);
+      setAlternativaCorreta(question.alternativaCorreta || "");
     } else {
       setSelectedQuestion(null);
       setTitulo("");
       setQuestao("");
       setTema("");
+      setAlternativas([]);
+      setAlternativaCorreta("");
     }
   };
 
@@ -54,11 +62,19 @@ export default function Questionnaires() {
     setTitulo("");
     setQuestao("");
     setTema("");
+    setAlternativas([]);
+    setAlternativaCorreta("");
   };
 
   const handleSaveQuestionnaire = async (e) => {
     e.preventDefault();
-    const newQuestionnaire = { titulo, questao, tema };
+    const newQuestionnaire = {
+      titulo,
+      questao,
+      tema,
+      alternativas,
+      alternativaCorreta,
+    };
 
     try {
       if (selectedQuestion) {
@@ -80,6 +96,8 @@ export default function Questionnaires() {
           titulo,
           questao,
           tema,
+          alternativas,
+          alternativaCorreta,
         };
         setQuestionnaires([...questionnaires, createdQuestion]);
       }
@@ -102,6 +120,24 @@ export default function Questionnaires() {
       setQuestionnaires(updatedQuestions);
     } catch (error) {
       console.error("Erro ao deletar a questão:", error);
+    }
+  };
+
+  const handleAddAlternative = () => {
+    setAlternativas([...alternativas, ""]);
+  };
+
+  const handleAlternativeChange = (index, value) => {
+    const updatedAlternatives = [...alternativas];
+    updatedAlternatives[index] = value;
+    setAlternativas(updatedAlternatives);
+  };
+
+  const handleDeleteAlternative = (index) => {
+    const updatedAlternatives = alternativas.filter((_, i) => i !== index);
+    setAlternativas(updatedAlternatives);
+    if (alternativaCorreta === alternativas[index]) {
+      setAlternativaCorreta("");
     }
   };
 
@@ -205,6 +241,59 @@ export default function Questionnaires() {
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
                     required
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Alternativas
+                  </label>
+                  {alternativas.map((alt, index) => (
+                    <div key={index} className="flex items-center gap-2 mb-2">
+                      <input
+                        type="text"
+                        value={alt}
+                        onChange={(e) => handleAlternativeChange(index, e.target.value)}
+                        className="flex-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteAlternative(index)}
+                        className="bg-red-500 text-white p-2 rounded hover:bg-red-600 duration-150"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={handleAddAlternative}
+                    className="bg-mainBlue text-white py-1 px-3 rounded-md flex items-center gap-2 hover:bg-mainBlue/80 duration-150 mt-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Adicionar Alternativa
+                  </button>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Alternativa Correta
+                  </label>
+                  <select
+                    value={alternativaCorreta}
+                    onChange={(e) => setAlternativaCorreta(e.target.value)}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
+                    required
+                  >
+                    <option value="" disabled>
+                      Selecione a alternativa correta
+                    </option>
+                    {alternativas.map((alt, index) => (
+                      <option key={index} value={alt}>
+                        {alt}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <button

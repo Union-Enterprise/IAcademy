@@ -1,4 +1,3 @@
-"use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ReactFlow, { Controls, Node, Edge } from "reactflow";
@@ -19,8 +18,6 @@ const ENEMRoadmap: React.FC = () => {
   const modulo = decodeURIComponent(params.modulo);
   const unidadeKey = decodeURIComponent(params.unidade);
 
-  console.log(modulo)
-
   function capitalizeWords(text) {
     return text
       .toLowerCase()
@@ -28,7 +25,6 @@ const ENEMRoadmap: React.FC = () => {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
       .join(' ');
   }
-  
 
   useEffect(() => {
     const fetchRoadmap = async () => {
@@ -44,28 +40,29 @@ const ENEMRoadmap: React.FC = () => {
 
         const newNodes: Node[] = [];
         const newEdges: Edge[] = [];
-        const xOffset = 400; 
+        const xOffset = 500; // Ajuste do espaçamento horizontal
         let currentY = 50;
 
         const parentNodeId = `topic-${modulo}`;
-        const parentNodeX = 0; 
+        const parentNodeX = 0;
         newNodes.push({
           id: parentNodeId,
           data: { label: capitalizeWords(modulo) },
           position: { x: parentNodeX, y: currentY },
           style: {
-            backgroundColor: "#1865F2",
+            backgroundColor: "#0057B7",
             color: "#fff",
             borderRadius: "8px",
             padding: "20px",
-            width: "300px",
+            width: "320px",
             fontWeight: "bold",
-            fontSize: "28px",
+            fontSize: "24px",
             textAlign: "center",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.15)"
           },
         });
 
-        currentY += 150;
+        currentY += 200;
 
         const unidadeKeys = Object.keys(roadmap.unidades);
         const totalUnidades = unidadeKeys.length;
@@ -80,13 +77,14 @@ const ENEMRoadmap: React.FC = () => {
             data: { label: unidade.title },
             position: { x: currentX, y: currentY },
             style: {
-              backgroundColor: "#E3EFFF",
-              border: "2px solid #1865F2",
+              backgroundColor: "#E6F2FF",
+              border: "2px solid #0057B7",
               borderRadius: "8px",
               padding: "20px",
-              width: "300px",
-              fontSize: "22px",
+              width: "320px",
+              fontSize: "20px",
               textAlign: "center",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.1)"
             },
           });
 
@@ -96,10 +94,10 @@ const ENEMRoadmap: React.FC = () => {
             target: unidadeNodeId,
             type: "smoothstep",
             animated: true,
-            style: { stroke: "#1865F2", strokeWidth: 2 },
+            style: { stroke: "#0057B7", strokeWidth: 2 },
           });
 
-          let topicY = currentY + 150;
+          let topicY = currentY + 200; // Aumenta o espaçamento vertical entre tópicos
           let previousTopicNodeId = null;
           Object.keys(unidade.topicos).forEach((topicoKey, topicIndex) => {
             const topicoNodeId = `topico-${unidadeKey}-${topicoKey}`;
@@ -109,13 +107,14 @@ const ENEMRoadmap: React.FC = () => {
               data: { label: topicoKey },
               position: { x: currentX, y: topicY },
               style: {
-                backgroundColor: "#F5FAFF",
-                border: "1px solid #1865F2",
+                backgroundColor: "#F0F8FF",
+                border: "1px solid #0057B7",
                 borderRadius: "8px",
-                padding: "20px",
-                width: "250px",
+                padding: "10px",
+                width: "280px",
                 fontSize: "18px",
                 textAlign: "center",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.1)"
               },
             });
 
@@ -126,7 +125,7 @@ const ENEMRoadmap: React.FC = () => {
                 target: topicoNodeId,
                 type: "smoothstep",
                 animated: true,
-                style: { stroke: "#1865F2", strokeWidth: 2 },
+                style: { stroke: "#0057B7", strokeWidth: 2 },
               });
             } else if (previousTopicNodeId) {
               newEdges.push({
@@ -135,15 +134,15 @@ const ENEMRoadmap: React.FC = () => {
                 target: topicoNodeId,
                 type: "smoothstep",
                 animated: true,
-                style: { stroke: "#1865F2", strokeWidth: 2 },
+                style: { stroke: "#0057B7", strokeWidth: 2 },
               });
             }
 
             previousTopicNodeId = topicoNodeId;
-            topicY += 150;
+            topicY += 200; // Ajusta o espaçamento vertical entre os tópicos
           });
 
-          currentX += xOffset;
+          currentX += xOffset; // Incrementa o espaçamento horizontal entre as unidades
         });
 
         setNodes(newNodes);
@@ -157,7 +156,7 @@ const ENEMRoadmap: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ height: "80vh", width: "100vw" }}>
+    <div style={{ height: "80vh", width: "100%", overflow: "hidden" }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
