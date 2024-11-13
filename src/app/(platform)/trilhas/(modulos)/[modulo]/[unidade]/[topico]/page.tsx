@@ -7,15 +7,17 @@ import normalizeString from "@/app/ui/components/modulos/normalizeString";
 import { marked } from "marked";
 import katex from "katex";
 import "katex/dist/katex.min.css";
+import { useUser } from "@/app/context/UserContext";
+import axios from "axios";
+
 
 
 export default function Topico() {
   const [showOtherFeedback, setShowOtherFeedback] = useState(false);
-  const [otherFeedback, setOtherFeedback] = useState("");
   const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const { user } = useUser();
   const params = useParams();
 
   const moduloKey = decodeURIComponent(params.modulo);
@@ -34,9 +36,31 @@ export default function Topico() {
         setLoading(false);
       }
     };
-
     fetchModulosData();
   }, []);
+
+  const [reportData, setReportData] = useState({
+    sender: user.name,
+    topic: topicoKey,
+    complaint: "",
+    message: "",
+  });
+
+  const sendReport = () => {
+    const {sender, topic, complaint, message} = reportData;
+    axios
+      .post(
+        "http://localhost:5002/report",
+        {sender, topic, complaint, message},
+        { withCredentials: true }
+      )
+      .then((response)=>{
+        console.log("Denuncia recebida com sucesso");
+      })
+      .catch((error)=>{
+        console.error(error);
+      })
+  }
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -64,9 +88,15 @@ export default function Topico() {
   }
 
   const handleOtherFeedbackSubmit = () => {
-    console.log("Feedback enviado:", otherFeedback);
-    setOtherFeedback("");
+    console.log("Feedback enviado:", reportData);
+    sendReport();
+    setReportData({...reportData, message:""});
     setShowOtherFeedback(false);
+  };
+
+  const openFeedback = (chosen: string) => {
+    setShowOtherFeedback(true);
+    setReportData({...reportData, complaint: chosen})
   };
 
 
@@ -79,7 +109,7 @@ export default function Topico() {
   }
 
   const data = unidade['topicos'][index];
-
+  
   return (
     <div>
       <article aria-live="polite">
@@ -123,19 +153,19 @@ export default function Topico() {
           Conte-nos o motivo:
         </h2>
         <div className="flex flex-wrap w-full h-fit justify-center gap-2">
-          <FeedbackButton text="Não gostei do estilo" onClick={() => setShowOtherFeedback(true)} />
-          <FeedbackButton text="Conteúdo incoerente"  onClick={() => setShowOtherFeedback(true)} />
-          <FeedbackButton text="Não correspondeu às expectativas"  onClick={() => setShowOtherFeedback(true)} />
-          <FeedbackButton text="Confuso"  onClick={() => setShowOtherFeedback(true)} />
-          <FeedbackButton text="Entediante"  onClick={() => setShowOtherFeedback(true)} />
-          <FeedbackButton text="Outro" onClick={() => setShowOtherFeedback(true)} />
+          <FeedbackButton text="Não gostei do estilo" onClick={() => openFeedback("Estilo")} />
+          <FeedbackButton text="Conteúdo incoerente"  onClick={() => openFeedback("Conteúdo incoerente")} />
+          <FeedbackButton text="Não correspondeu às expectativas"  onClick={() => openFeedback("Decepcionante")} />
+          <FeedbackButton text="Confuso"  onClick={() => openFeedback("Confuso")} />
+          <FeedbackButton text="Entediante"  onClick={() => openFeedback("Entediante")} />
+          <FeedbackButton text="Outro" onClick={() => openFeedback("Outro")} />
         </div>
 
         {showOtherFeedback && (
           <div className="mt-4">
             <textarea
-              value={otherFeedback}
-              onChange={(e) => setOtherFeedback(e.target.value)}
+              value={reportData.message}
+              onChange={(e) => setReportData({...reportData, message:e.target.value})}
               placeholder="Seu feedback aqui"
               className="border border-gray-300 rounded-md p-2 w-full focus:border-mainBlue focus:shadow-md focus:outline-none hover:border-mainBlue hover:shadow-md"
               rows={2}
