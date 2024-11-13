@@ -123,11 +123,11 @@ export default function Topico() {
           Conte-nos o motivo:
         </h2>
         <div className="flex flex-wrap w-full h-fit justify-center gap-2">
-          <FeedbackButton text="Não gostei do estilo" onClick={undefined} />
-          <FeedbackButton text="Conteúdo incoerente" onClick={undefined} />
-          <FeedbackButton text="Não correspondeu às expectativas" onClick={undefined} />
-          <FeedbackButton text="Confuso" onClick={undefined} />
-          <FeedbackButton text="Entediante" onClick={undefined} />
+          <FeedbackButton text="Não gostei do estilo" onClick={() => setShowOtherFeedback(true)} />
+          <FeedbackButton text="Conteúdo incoerente"  onClick={() => setShowOtherFeedback(true)} />
+          <FeedbackButton text="Não correspondeu às expectativas"  onClick={() => setShowOtherFeedback(true)} />
+          <FeedbackButton text="Confuso"  onClick={() => setShowOtherFeedback(true)} />
+          <FeedbackButton text="Entediante"  onClick={() => setShowOtherFeedback(true)} />
           <FeedbackButton text="Outro" onClick={() => setShowOtherFeedback(true)} />
         </div>
 
