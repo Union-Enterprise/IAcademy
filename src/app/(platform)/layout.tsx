@@ -224,113 +224,114 @@ export default function RootLayout({
         </div>
       )}
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-1/2">
-            <div className="flex justify-end pb-2">
-              <X className="hover:text-red-500" onClick={closeModal} />
-            </div>
+{isModalOpen && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg shadow-lg p-6 w-1/2 max-h-[80vh] overflow-hidden">
+      <div className="flex justify-end pb-2">
+        <X className="hover:text-red-500" onClick={closeModal} />
+      </div>
 
-            {currentQuestion < questions.length ? (
-              <>
-                <h2 className="text-xl font-bold mb-4">{questions[currentQuestion].title}</h2>
-                <p className="mb-4">{questions[currentQuestion].question}</p>
+      {currentQuestion < questions.length ? (
+        <>
+          <h2 className="text-xl font-bold mb-4">{questions[currentQuestion].title}</h2>
+          <p className="mb-4">{questions[currentQuestion].question}</p>
 
-                <div className="space-y-4 pb-3">
-                  {questions[currentQuestion].options.map((option, index) => (
-                    <label
-                      key={index}
-                      className="flex items-center space-x-3 cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-all"
-                    >
-                      <input
-                        type="radio"
-                        name={`question-${currentQuestion}`}
-                        value={option}
-                        checked={selectedAnswer === option}
-                        onChange={() => handleAnswerChange(option)}
-                        className="hidden"
-                      />
-                      <span
-                        className={`w-6 h-6 rounded-full border-2 transition-all ${selectedAnswer === option ? "bg-mainBlue border-mainBlue" : " border-gray-400"}`}></span>
-                      <span className="text-lg">{option}</span>
-                    </label>
-                  ))}
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <button
-                    onClick={handlePrevious}
-                    className={`py-2 px-4 rounded-md ${currentQuestion === 0 ? "bg-gray-300" : "bg-mainBlue text-white"}`}
-                    disabled={currentQuestion === 0}
-                  >
-                    Voltar
-                  </button>
-                  <button
-                    onClick={handleNext}
-                    className={`py-2 px-4 rounded-md ${currentQuestion === questions.length ? "bg-mainBlue text-white" : "bg-mainBlue text-white"} ${!selectedAnswer ? "!bg-gray-500 text-black cursor-not-allowed" : ""}`}
-                    disabled={!selectedAnswer}
-                  >
-                    {currentQuestion === questions.length - 1 ? "Finalizar" : "Próxima"}
-                  </button>
-                </div>
-
-                <div className="flex justify-center gap-2 mt-4">
-                  {questions.map((_, index) => (
-                    <div
-                      key={index}
-                      className={`w-4 h-4 rounded-full ${index === currentQuestion ? "bg-blue-500" : "bg-gray-300"}`}
-                    ></div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="text-center p-3">
-              <h2 className="text-lg font-semibold mb-2 text-gray-800">Quiz Finalizado</h2>
-              <p className="text-xs text-gray-600 mb-3">Obrigado por participar do nosso quiz!</p>
-              <p className="text-sm text-gray-700 mb-3">
-                Você acertou <span className="font-bold text-mainBlue">{calculateResults().correctAnswersCount}</span> de{" "}
-                <span className="font-bold text-mainBlue">{questions.length}</span> questões.
-              </p>
-            
-              <div className="space-y-2">
-                {calculateResults().results.map((result, index) => (
-                  <div
-                    key={index}
-                    className={`p-2 rounded-md border-l-2 ${result.isCorrect ? 'bg-green-100 border-green-500' : 'bg-red-100 border-red-500'}`}
-                  >
-                    <h3 className="text-xs font-medium text-gray-800">{result.question}</h3>
-                    <p className="text-xs mt-1">
-                      {result.isCorrect ? (
-                        <span className="text-green-600">Correto</span>
-                      ) : (
-                        <span className="text-red-600">Errado</span>
-                      )}
-                    </p>
-                 
-                    <p className="text-xs text-gray-500 mt-1">
-                      Sua resposta: <strong>{result.userAnswer}</strong>
-                    </p>
-                 
-                    {!result.isCorrect && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        Resposta correta: <strong>{result.correctAnswer}</strong>
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            
-              <button
-                onClick={closeModal}
-                className="mt-3 py-1 px-3 rounded-md bg-mainBlue text-white font-semibold text-xs hover:bg-mainBlueDark transition-all"
+          <div className="space-y-4 pb-3">
+            {questions[currentQuestion].options.map((option, index) => (
+              <label
+                key={index}
+                className="flex items-center space-x-3 cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-all"
               >
-                Fechar
-              </button>
-            </div>
-            )}
+                <input
+                  type="radio"
+                  name={`question-${currentQuestion}`}
+                  value={option}
+                  checked={selectedAnswer === option}
+                  onChange={() => handleAnswerChange(option)}
+                  className="hidden"
+                />
+                <span
+                  className={`w-6 h-6 rounded-full border-2 transition-all ${selectedAnswer === option ? "bg-mainBlue border-mainBlue" : " border-gray-400"}`}></span>
+                <span className="text-lg">{option}</span>
+              </label>
+            ))}
           </div>
+
+          <div className="flex items-center justify-between">
+            <button
+              onClick={handlePrevious}
+              className={`py-2 px-4 rounded-md ${currentQuestion === 0 ? "bg-gray-300" : "bg-mainBlue text-white"}`}
+              disabled={currentQuestion === 0}
+            >
+              Voltar
+            </button>
+            <button
+              onClick={handleNext}
+              className={`py-2 px-4 rounded-md ${currentQuestion === questions.length ? "bg-mainBlue text-white" : "bg-mainBlue text-white"} ${!selectedAnswer ? "!bg-gray-500 text-black cursor-not-allowed" : ""}`}
+              disabled={!selectedAnswer}
+            >
+              {currentQuestion === questions.length - 1 ? "Finalizar" : "Próxima"}
+            </button>
+          </div>
+
+          <div className="flex justify-center gap-2 mt-4">
+            {questions.map((_, index) => (
+              <div
+                key={index}
+                className={`w-4 h-4 rounded-full ${index === currentQuestion ? "bg-blue-500" : "bg-gray-300"}`}
+              ></div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div className="text-center p-20 max-h-[60vh] overflow-y-auto">
+          <h2 className="text-lg font-semibold mb-2 text-gray-800">Quiz Finalizado</h2>
+          <p className="text-xs text-gray-600 mb-3">Obrigado por participar do nosso quiz!</p>
+          <p className="text-sm text-gray-700 mb-3">
+            Você acertou <span className="font-bold text-mainBlue">{calculateResults().correctAnswersCount}</span> de{" "}
+            <span className="font-bold text-mainBlue">{questions.length}</span> questões.
+          </p>
+
+          <div className="space-y-1 ">
+            {calculateResults().results.map((result, index) => (
+              <div
+                key={index}
+                className={`p-2 rounded-md border-l-2 ${result.isCorrect ? 'bg-green-100 border-green-500' : 'bg-red-100 border-red-500'}`}
+              >
+                <h3 className="text-xs font-medium text-gray-800">{result.question}</h3>
+                <p className="text-xs mt-1">
+                  {result.isCorrect ? (
+                    <span className="text-green-600">Correto</span>
+                  ) : (
+                    <span className="text-red-600">Errado</span>
+                  )}
+                </p>
+
+                <p className="text-xs text-gray-500 mt-1">
+                  Sua resposta: <strong>{result.userAnswer}</strong>
+                </p>
+
+                {!result.isCorrect && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Resposta correta: <strong>{result.correctAnswer}</strong>
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={closeModal}
+            className="mt-3 py-1 px-3 rounded-md bg-mainBlue text-white font-semibold text-xs hover:bg-mainBlueDark transition-all"
+          >
+            Fechar
+          </button>
         </div>
       )}
+    </div>
+  </div>
+)}
+
 
       {showFloatingIcon && !quizAnswered && (
         <div

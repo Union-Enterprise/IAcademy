@@ -9,7 +9,7 @@ import {
   BellRing,
   Library,
   FileQuestion,
-  CircleHelp,
+  BookOpenCheck,
   BookX,
 } from "lucide-react";
 import Link from "next/link";
@@ -80,7 +80,6 @@ const Sidebar = ({ isUserLayout = true }) => {
             lucideIcon={Library}
             isOpen={isOpen}
             href="/student"
-          
             isSelected={selectedItem.startsWith("/student")}
             onClick={() => setSelectedItem("/student")}
           />
@@ -91,6 +90,14 @@ const Sidebar = ({ isUserLayout = true }) => {
             href="/trilhas"
             isSelected={selectedItem.startsWith("/trilhas")}
             onClick={() => setSelectedItem("/trilhas")}
+          />
+          <Item
+            title="Simulados"
+            lucideIcon={BookOpenCheck}
+            isOpen={isOpen}
+            href="/simulados"
+            isSelected={selectedItem.startsWith("/simulados")}
+            onClick={() => setSelectedItem("/simulados")}
           />
           <Item
             title="Premium"
