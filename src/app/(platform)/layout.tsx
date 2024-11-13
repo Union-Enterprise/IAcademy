@@ -284,8 +284,8 @@ export default function RootLayout({
           </div>
         </>
       ) : (
-        <div className="text-center p-20 max-h-[60vh] overflow-y-auto">
-          <h2 className="text-lg font-semibold mb-2 text-gray-800">Quiz Finalizado</h2>
+        <div className="text-center p-3 max-h-[70vh] overflow-y-auto">
+          <h2 className="text-lg font-semibold  text-gray-800">Quiz Finalizado</h2>
           <p className="text-xs text-gray-600 mb-3">Obrigado por participar do nosso quiz!</p>
           <p className="text-sm text-gray-700 mb-3">
             Você acertou <span className="font-bold text-mainBlue">{calculateResults().correctAnswersCount}</span> de{" "}
@@ -322,7 +322,7 @@ export default function RootLayout({
 
           <button
             onClick={closeModal}
-            className="mt-3 py-1 px-3 rounded-md bg-mainBlue text-white font-semibold text-xs hover:bg-mainBlueDark transition-all"
+            className="mt-3 py-1 px-3 rounded-md bg-mainBlue text-white font-semibold text-xs hover:bg-mainBlueDark transition-all w-full h-12 hover:bg-mainBlue/90"
           >
             Fechar
           </button>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Edit, Trash2, Plus, File } from "lucide-react";
+import { Edit, Trash2, Plus, File, Bot } from "lucide-react";
 import dynamic from "next/dynamic";
 import axios from "axios";
 
@@ -160,13 +160,19 @@ export default function Questionnaires() {
     <div className="p-6 bg-white rounded-md shadow-md">
       <h1 className="text-2xl font-bold mb-4">Lista de Questões</h1>
 
-      <div className="flex justify-end items-center mb-4">
+      <div className="flex justify-end items-center mb-4 ">
         <button
           onClick={() => handleOpenModal(null)}
           className="bg-green-500 text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-green-600 duration-150"
         >
           <Plus className="w-4 h-4" />
           Nova questão
+        </button>
+        <button
+          className="bg-purple-500  text-white py-2 px-4 ml-4 rounded-md flex items-center gap-2 hover:bg-green-600 duration-150"
+        >
+          <Bot className="w-4 h-4" />
+         Criar com IA
         </button>
 
         <label className="ml-4 bg-blue-500 text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-blue-600 duration-150 cursor-pointer">
