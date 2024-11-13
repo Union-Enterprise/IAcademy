@@ -23,6 +23,9 @@ export default function Questionnaires() {
   const [ID, setID] = useState("");
   const [selectedPdf, setSelectedPdf] = useState(null);
   const [questionToDelete, setQuestionToDelete] = useState(null);
+  const [imagem, setImagem] = useState(null);
+  
+
 
   useEffect(() => {
     const fetchQuestionnaires = async () => {
@@ -45,6 +48,17 @@ export default function Questionnaires() {
 
     fetchQuestionnaires();
   }, []);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagem(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleOpenModal = (question) => {
     setIsModalOpen(true);
@@ -77,6 +91,7 @@ export default function Questionnaires() {
     setAlternativa_correta("");
     setAlternativas([""]);
     setTema("");
+    setImagem(null);
   };
 
   const handlePdfUpload = (e) => {
@@ -102,6 +117,7 @@ export default function Questionnaires() {
 
   const handleSaveQuestionnaire = async (e) => {
     e.preventDefault();
+  
     const newQuestionnaire = {
       ID,
       titulo,
@@ -110,8 +126,9 @@ export default function Questionnaires() {
       alternativa_correta,
       alternativas,
       tema,
+      imagem,
     };
-
+  
     try {
       if (selectedQuestion) {
         await axios.put("http://localhost:5002/question/" + selectedQuestion.id, newQuestionnaire);
@@ -129,18 +146,18 @@ export default function Questionnaires() {
           alternativa_correta,
           alternativas,
           tema,
+          imagem,
         };
-
+  
         setQuestionnaires([...questionnaires, createdQuestion]);
         setSelectedQuestion(createdQuestion);
       }
     } catch (error) {
       console.error("Erro ao salvar a questão:", error);
     }
-
+  
     handleCloseModal();
   };
-
   const confirmDeleteQuestion = (id) => {
     setQuestionToDelete(id);
     setIsDeleteModalOpen(true);
@@ -172,7 +189,7 @@ export default function Questionnaires() {
           className="bg-purple-500  text-white py-2 px-4 ml-4 rounded-md flex items-center gap-2 hover:bg-green-600 duration-150"
         >
           <Bot className="w-4 h-4" />
-         Criar com IA
+          Criar com IA
         </button>
 
         <label className="ml-4 bg-blue-500 text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-blue-600 duration-150 cursor-pointer">
@@ -294,15 +311,29 @@ export default function Questionnaires() {
                   <small className="text-gray-500">Separe as alternativas por linhas.</small>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Tema *</label>
+                {imagem && !selectedQuestion && (
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Imagem</label>
+                    <img src={imagem} alt="Imagem carregada" className="h-96 mt-2" />
+                  </div>
+                )}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Imagem (Opcional)</label>
                   <input
-                    type="text"
-                    value={tema}
-                    onChange={(e) => setTema(e.target.value)}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
-                    required
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="mt-1 block  p-2 border border-gray-300 rounded-md shadow-sm focus:ring-mainBlue focus:border-mainBlue"
                   />
+                  {selectedQuestion && selectedQuestion.imagem && !imagem && (
+                    <div className="mt-2">
+                      <img
+                        src={selectedQuestion.imagem}
+                        alt="Imagem original"
+                        className=""
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <button

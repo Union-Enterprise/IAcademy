@@ -323,7 +323,7 @@ export default function Users() {
               </th>
             </tr>
           </thead>
-          <tbody>dev
+          <tbody>
           
             {users.length > 0 ? (
               users.map((user: any, index: number) => (
@@ -335,7 +335,7 @@ export default function Users() {
                   category={user.is_adm ? "Administrador" : "Usuário"}
                   plan={user.is_premium ? "Premium" : "Básico"}
                   status={user.is_banned ? "Suspenso" : "Ativo"}
-                  onEdit={(id) => handleEditUser(id)}
+                  onEdit={() =>handleSubmit} 
                   onDelete={(email) => handleDeleteUser(email)}
                   onUnban={(email) => handleRestoreUser(email)}
                 />

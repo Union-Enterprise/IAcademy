@@ -1,9 +1,18 @@
 "use client";
 import React from 'react';
-
+import { ArrowLeft } from "lucide-react"
+import Link from 'next/link';
 export default function Quizzes() {
     return (
         <div className="p-6 min-h-screen">
+             <Link
+            href="/trilhas/contentQuizzes"
+            className="text-mainBlue opacity-60 hover:opacity-100 flex gap-2 items-center duration-100 w-fit mb-3"
+            aria-label="Voltar para o conteúdo de trilhas"
+          >
+            <ArrowLeft />
+            <p className="text-lg">Voltar</p>
+          </Link>
             <h1 className="text-2xl font-bold mb-6 mt-10 text-center text-gray-800">Análise de Dados em um Estudo de Saúde Pública</h1>
             <p className="mb-6 text-gray-700 leading-relaxed text-lg">
                 Um estudo foi realizado para avaliar o impacto da atividade física na saúde cardiovascular de adultos. Para isso, foram coletados dados de 200 participantes, incluindo a frequência semanal de exercícios e a pressão arterial sistólica.
