@@ -9,6 +9,21 @@ import { TimeChart } from "@/app/ui/components/Student/TimeChart";
 import { UtilizationChart } from "@/app/ui/components/Student/UtilizationChart";
 import { useUser } from "@/app/context/UserContext";
 import { X } from "lucide-react";
+import { getModulosData } from "@/app/ui/components/modulos/data";
+
+
+interface ModuloProps {
+  title: string;
+  index: string;
+  link: string;
+  unidades: {
+    title: string;
+    description: string;
+    topicos: { title: string; description: string }[];
+  }[];
+}
+
+
 
 const questions = [
   {
@@ -52,12 +67,58 @@ const Student = () => {
   const [answer, setAnswer] = useState(""); 
   const { user } = useUser();
 
- 
+
+  const [modulosData, setModulosData] = useState<Record<string, ModuloProps> | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [totalTopicsCount, setTotalTopicsCount] = useState<number>(0);
+
+  const getTotalTopicsCount = (data: Record<string, ModuloProps> | null): number => {
+    if (!data) return 0;
+
+    let totalTopics = 0;
+    for (const moduleKey in data) {
+      const module = data[moduleKey];
+      for (const unidade of module.unidades) {
+        totalTopics += unidade.topicos.length;
+      }
+    }
+    return totalTopics;
+  };
+
   useEffect(() => {
     if (user && !quizAnswered) {
       setIsConfirmModalOpen(true);
     }
+    const fetchModulosData = async () => {
+      try {
+        const data = await getModulosData();
+        setModulosData(data);
+        const count = getTotalTopicsCount(data);
+        setTotalTopicsCount(count);
+      } catch (err) {
+        setError("Erro ao carregar os dados dos módulos.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchModulosData();
   }, [user, quizAnswered]);
+
+  
+  if (loading) {
+    return;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!modulosData) {
+    return <p>Não foi possível encontrar os tópicos.</p>;
+  }
 
   const questionsLeft = questions.length - currentQuestion - 1;
 
@@ -119,13 +180,13 @@ const Student = () => {
             />
             <CardsStudent
               title="Tópicos lidos"
-              value={"00/00"}
+              value={"00/"+totalTopicsCount}
               lucideIcon={Layers}
               iconBg="bg-[#438FFB]"
             />
             <CardsStudent
               title="Tópicos Restantes"
-              value={"0"}
+              value={""+totalTopicsCount}
               lucideIcon={Split}
             />
           </div>
