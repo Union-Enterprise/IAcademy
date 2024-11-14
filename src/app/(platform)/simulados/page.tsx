@@ -1,9 +1,10 @@
 import Link from "next/link";
+import { Sparkles } from "lucide-react";
 
 export default function Simulados() {
   return (
-    <section className="*:px-[250px] flex flex-col gap-10 pb-10">
-      <div className="w-full bg-mainBlue py-[85px] flex flex-col gap-5">
+    <section className="*:px-[100px] flex flex-col gap-10 pb-10">
+      <div className="w-full bg-blue-300 py-[60px] flex flex-col gap-5 bg-[url('/wave2.svg')] bg-no-repeat bg-center bg-cover">
         <h1 className="text-4xl font-semibold text-white max-w-[38%]">
           Lista de simulados para o Enem
         </h1>
@@ -30,14 +31,14 @@ export default function Simulados() {
             usuário tem mais dificuldade"
           </h3>
           <div className="flex gap-5">
-            <SimuladoCard isFromAI={true} text="Trigonometria no Enem" />
-            <SimuladoCard isFromAI={true} text="Estatística no Enem" />
-            <SimuladoCard isFromAI={true} text="Geometria no Enem" />
+            <SimuladoCard isFromAI={true} text="Trigonometria" />
+            <SimuladoCard isFromAI={true} text="Estatística" />
+            <SimuladoCard isFromAI={true} text="Geometria" />
           </div>
         </div>
         <div className="flex flex-col mt-5 gap-5">
           <h3 className="text-xl font-semibold">Simulados Enem</h3>
-          <div className="flex gap-5">
+          <div className="grid grid-cols-3 gap-5">
             <SimuladoCard text="Enem 2022" />
             <SimuladoCard text="Enem 2021" />
             <SimuladoCard text="Enem 2020" />
@@ -53,19 +54,26 @@ function SimuladoCard({ isFromAI = false, text = "" }) {
   return (
     <Link
       href={"simulados/simulado"}
-      className="bg-bg-lightCard p-6 rounded-lg shadow-sm w-[280px] flex flex-col gap-5 hover:shadow-lg duration-100"
+      className="bg-bg-lightCard p-6 rounded-lg shadow-sm w-full flex flex-col gap-5 hover:shadow-lg duration-100 group hover:bg-mainBlue"
     >
       <div className="flex flex-col gap-2">
         {isFromAI && (
-          <span className="bg-mainBlue text-white w-fit p-1 text-sm rounded-sm">
-            Gerado por IA
-          </span>
+          <Sparkles
+            className="text-mainBlue self-end group-hover:text-white"
+            size={30}
+          />
         )}
-        <h4 className="text-3xl font-semibold">{text}</h4>
+        <h4 className="text-3xl font-semibold group-hover:text-white">
+          {text}
+        </h4>
       </div>
       <div className="border-t-borders-lightB border-t-2 pt-4">
-        <p className="text-sm font-semibold">x unidades, x questões</p>
-        <p className="text-xs">Duração máxima de x horas por unidade</p>
+        <p className="text-sm font-semibold group-hover:text-white">
+          x unidades, x questões
+        </p>
+        <p className="text-xs group-hover:text-white">
+          Duração máxima de x horas por unidade
+        </p>
       </div>
     </Link>
   );

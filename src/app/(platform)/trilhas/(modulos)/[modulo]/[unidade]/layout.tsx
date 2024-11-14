@@ -3,7 +3,7 @@
 import { usePageTitle } from "@/app/hooks/usePageTitle";
 import Header from "@/app/ui/components/trilhas/Header";
 import { useParams, usePathname } from "next/navigation";
-import { getModulosData } from "@/app/ui/components/modulos/data"; 
+import { getModulosData } from "@/app/ui/components/modulos/data";
 import normalizeString from "@/app/ui/components/modulos/normalizeString";
 import { useEffect, useState } from "react";
 import HeaderUnidade from "@/app/ui/components/trilhas/HeaderUnidade";
@@ -26,11 +26,11 @@ export default function UnidadeTemplate({
   const moduloLink = params.modulo as string;
   const unidadeLink = params.unidade as string;
 
-  const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
+  const [modulosData, setModulosData] = useState<Record<string, any> | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  console.log(moduloKey)
 
   useEffect(() => {
     const fetchModulosData = async () => {
@@ -69,7 +69,8 @@ export default function UnidadeTemplate({
   const modulo = modulosData[moduloKey as ModuloKey];
 
   const isUnidadeOrTopicosPath =
-    pathname.endsWith(unidadeLink) || pathname.endsWith(`${unidadeLink}/topicos`);
+    pathname.endsWith(unidadeLink) ||
+    pathname.endsWith(`${unidadeLink}/topicos`);
 
   if (!isUnidadeOrTopicosPath) {
     return children;

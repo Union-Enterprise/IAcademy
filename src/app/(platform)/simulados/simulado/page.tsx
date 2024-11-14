@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Simulado() {
   return (
     <div className="flex flex-col px-[100px] my-[80px] gap-20">
@@ -54,9 +56,12 @@ export default function Simulado() {
               <h5 className="text-xl font-semibold">Trigonometria - A</h5>
               <p className="opacity-60">X questões Duração Máxima de Y horas</p>
             </div>
-            <button className="px-10 py-2 text-white h-fit bg-mainBlue rounded-md">
+            <Link
+              href={"/simulados/simulado/qualquer-prova"}
+              className="px-10 py-2 text-white h-fit bg-mainBlue rounded-md"
+            >
               Começar
-            </button>
+            </Link>
           </div>
         </div>
       </section>
