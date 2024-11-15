@@ -18,7 +18,10 @@ interface ModuloProps {
 }
 
 export default function Modulos() {
-  const [modulosData, setModulosData] = useState<Record<string, ModuloProps> | null>(null);
+  const [modulosData, setModulosData] = useState<Record<
+    string,
+    ModuloProps
+  > | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -89,7 +92,9 @@ function Modulo({ title, index, unidades, link }: ModuloProps) {
               <ContentsSection
                 key={topicoIdx}
                 title={topico.title}
-                href={`/trilhas/${link}/${normalizeString(unidade.title)}/${normalizeString(topico.title)}`}
+                href={`/trilhas/${link}/${normalizeString(
+                  unidade.title
+                )}/${normalizeString(topico.title)}`}
               >
                 <p>{topico.description}</p>
               </ContentsSection>

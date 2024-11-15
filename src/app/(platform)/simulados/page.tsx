@@ -5,11 +5,11 @@ export default function Simulados() {
   return (
     <section className="*:px-[100px] flex flex-col gap-10 pb-10">
       <div className="w-full bg-blue-300 py-[60px] flex flex-col gap-5 bg-[url('/wave2.svg')] bg-no-repeat bg-center bg-cover">
-        <h1 className="text-4xl font-semibold text-white max-w-[38%]">
+        <h1 className="text-5xl font-semibold text-white max-w-[45%]">
           Lista de simulados para o Enem
         </h1>
         <p className="max-w-[40%] text-white">
-          Alunos que realizam e treinam simulados têm maiores chances de
+          Alunos que realizam e treinam com simulados têm maiores chances de
           aprovação.
         </p>
         <button className="bg-white w-fit px-10 py-3 rounded-lg border-2 border-transparent hover:text-white hover:bg-transparent hover:border-white duration-100">

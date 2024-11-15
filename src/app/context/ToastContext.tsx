@@ -31,14 +31,14 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
     <ToastContext.Provider value={addToast}>
       {children}
 
-      <div className="fixed bottom-5 right-5 space-y-2">
+      <div className="fixed bottom-5 left-5 space-y-2 z-50">
         <AnimatePresence>
           {toasts.map((toast, index) => (
             <motion.div
               key={index}
-              initial={{ x: 300, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 300, opacity: 0 }}
+              initial={{ x: 0, opacity: 0 }}
+              animate={{ x: 10, opacity: 1 }}
+              exit={{ x: 0, opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               className={`p-3 rounded shadow-md text-white ${
                 toast.type === "success" ? "bg-green-500" : "bg-red-500"

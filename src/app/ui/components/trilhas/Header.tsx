@@ -10,12 +10,15 @@ interface HeaderProps {
 }
 
 export default function Header({
-        title = "Preparando-se para os vestibulares",
+  title = "Preparando-se para os vestibulares",
   description = "Aprenda tudo que você precisa para passar nos vestibulares.",
   linkLabel = "Conteúdos",
   hrefs = ["/trilhas/overview", "/trilhas/modulos", "/trilhas"],
 }: HeaderProps) {
   const pathname = usePathname();
+
+  console.log(pathname);
+  console.log(hrefs);
 
   return (
     <div className="h-fit flex flex-col justify-between px-[200px] pt-[60px] bg-bg-lightA gap-5">
@@ -34,7 +37,7 @@ export default function Header({
         <Link
           href={hrefs[0]}
           className={`${
-            pathname === hrefs[0]
+            pathname.endsWith(hrefs[0].replaceAll(" ", "%20"))
               ? "border-b-mainBlue font-semibold"
               : "opacity-50 hover:opacity-100 hover:border-opacity-75 hover:border-b-mainBlue "
           } *:text-text-light border-b-2 p-2 text-lg duration-100`}
@@ -44,7 +47,7 @@ export default function Header({
         <Link
           href={hrefs[1]}
           className={`${
-            pathname === hrefs[1]
+            pathname.endsWith(hrefs[1].replaceAll(" ", "%20"))
               ? "border-b-mainBlue font-semibold"
               : "opacity-50 hover:opacity-100 hover:border-opacity-75 hover:border-b-mainBlue "
           } *:text-text-light border-b-2 p-2 text-lg duration-100`}

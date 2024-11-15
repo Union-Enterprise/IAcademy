@@ -11,7 +11,7 @@ import { usePageTitle } from "../hooks/usePageTitle";
 import { useState, useEffect } from "react";
 import { MessageCircleQuestion, X, SquareChartGantt } from "lucide-react";
 import { useRouter } from "next/navigation";
-import axios from "axios";  // Adicionando axios
+import axios from "axios"; // Adicionando axios
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,13 +25,15 @@ export default function RootLayout({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [modalStep, setModalStep] = useState<"confirmation" | "quiz">("confirmation");
+  const [modalStep, setModalStep] = useState<"confirmation" | "quiz">(
+    "confirmation"
+  );
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [quizAnswered, setQuizAnswered] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [showFloatingIcon, setShowFloatingIcon] = useState(false);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
-  const [questions, setQuestions] = useState([]);  // Estado para armazenar as questões
+  const [questions, setQuestions] = useState([]); // Estado para armazenar as questões
   const { user } = useUser();
 
   const userQuizKey = `quizAnswered_${user?.email}`;
@@ -41,12 +43,12 @@ export default function RootLayout({
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("http://localhost:5002/quizzes");  // Fazendo a requisição à API
+        const response = await axios.get("http://localhost:5002/quizzes"); // Fazendo a requisição à API
         const quizzes = response.data.map((quiz: any) => ({
           title: `${quiz.titulo} - ${quiz.tema}`,
           question: quiz.questao,
-          options: quiz.alternativas,  // Adapte as opções conforme necessário
-          correctAnswer: quiz.resposta,  // Substitua pela resposta correta se vier da API
+          options: quiz.alternativas, // Adapte as opções conforme necessário
+          correctAnswer: quiz.resposta, // Substitua pela resposta correta se vier da API
         }));
         setQuestions(quizzes);
       } catch (error) {
@@ -60,7 +62,9 @@ export default function RootLayout({
   useEffect(() => {
     if (user) {
       const isQuizCompleted = localStorage.getItem(userQuizKey);
-      const areModalsClosed = JSON.parse(localStorage.getItem(userModalKey) || "false");
+      const areModalsClosed = JSON.parse(
+        localStorage.getItem(userModalKey) || "false"
+      );
 
       if (isQuizCompleted) {
         setQuizAnswered(true);
@@ -73,20 +77,29 @@ export default function RootLayout({
   }, [user]);
 
   const handleNext = async () => {
-    console.log('prox')
-    if (currentQuestion < questions.length-1) {
+    console.log("prox");
+    if (currentQuestion < questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
       setSelectedAnswer("");
     } else {
-      console.log(questions)
+      console.log(questions);
       const data = [];
       let count = 0;
-      for (let question of questions){
-        data[count] = { "titulo": question.title, "questao": question.question, "alternativa_escolhida": userAnswers[count], "resposta_correta": question.correctAnswer}
+      for (let question of questions) {
+        data[count] = {
+          titulo: question.title,
+          questao: question.question,
+          alternativa_escolhida: userAnswers[count],
+          resposta_correta: question.correctAnswer,
+        };
         count++;
       }
-      console.log(data)
-      axios.post("http://localhost:5002/quiz/register/user", { quiz: data }, { withCredentials: true })
+      console.log(data);
+      axios.post(
+        "http://localhost:5002/quiz/register/user",
+        { quiz: data },
+        { withCredentials: true }
+      );
       localStorage.setItem(userQuizKey, "true");
       setQuizAnswered(true);
       setCurrentQuestion((prev) => prev + 1);
@@ -117,7 +130,9 @@ export default function RootLayout({
 
   useEffect(() => {
     const savedAnswers = JSON.parse(localStorage.getItem("answers") || "{}");
-    const userAnswersArray = questions.map((_, index) => savedAnswers[index] || "");
+    const userAnswersArray = questions.map(
+      (_, index) => savedAnswers[index] || ""
+    );
     setUserAnswers(userAnswersArray);
   }, [questions]);
 
@@ -187,13 +202,21 @@ export default function RootLayout({
             </div>
             <h2 className="text-xl font-bold mb-4">Iniciar o Quiz?</h2>
             <p className="mb-4">
-              Olá, nós somos a IAcademy e queremos saber se você quer fazer o nosso quiz para termos um mapeamento no seu método de desenvolvimento.
+              Olá, nós somos a IAcademy e queremos saber se você quer fazer o
+              nosso quiz para termos um mapeamento no seu método de
+              desenvolvimento.
             </p>
             <div className="flex justify-between">
-              <button onClick={handleCancelStart} className="py-2 px-4 rounded-md bg-gray-300 text-black">
+              <button
+                onClick={handleCancelStart}
+                className="py-2 px-4 rounded-md bg-gray-300 text-black"
+              >
                 Cancelar
               </button>
-              <button onClick={handleConfirmStart} className="py-2 px-4 rounded-md bg-mainBlue text-white">
+              <button
+                onClick={handleConfirmStart}
+                className="py-2 px-4 rounded-md bg-mainBlue text-white"
+              >
                 Iniciar
               </button>
             </div>
@@ -210,7 +233,9 @@ export default function RootLayout({
 
             {currentQuestion < questions.length ? (
               <>
-                <h2 className="text-xl font-bold mb-4">{questions[currentQuestion].title}</h2>
+                <h2 className="text-xl font-bold mb-4">
+                  {questions[currentQuestion].title}
+                </h2>
                 <p className="mb-4">{questions[currentQuestion].question}</p>
 
                 <div className="space-y-4 pb-3">
@@ -228,7 +253,11 @@ export default function RootLayout({
                         className="hidden"
                       />
                       <span
-                        className={`w-6 h-6 rounded-full border-2 transition-all ${selectedAnswer === option ? "bg-mainBlue border-mainBlue" : " border-gray-400"}`}
+                        className={`w-6 h-6 rounded-full border-2 transition-all ${
+                          selectedAnswer === option
+                            ? "bg-mainBlue border-mainBlue"
+                            : " border-gray-400"
+                        }`}
                       ></span>
                       <span className="text-lg">{option}</span>
                     </label>
@@ -238,17 +267,27 @@ export default function RootLayout({
                 <div className="flex items-center justify-between">
                   <button
                     onClick={handlePrevious}
-                    className={`py-2 px-4 rounded-md ${currentQuestion === 0 ? "bg-gray-300" : "bg-mainBlue text-white"}`}
+                    className={`py-2 px-4 rounded-md ${
+                      currentQuestion === 0
+                        ? "bg-gray-300"
+                        : "bg-mainBlue text-white"
+                    }`}
                     disabled={currentQuestion === 0}
                   >
                     Voltar
                   </button>
                   <button
                     onClick={handleNext}
-                    className={`py-2 px-4 rounded-md ${!selectedAnswer ? "!bg-gray-500 text-black cursor-not-allowed" : "bg-mainBlue text-white"}`}
+                    className={`py-2 px-4 rounded-md ${
+                      !selectedAnswer
+                        ? "!bg-gray-500 text-black cursor-not-allowed"
+                        : "bg-mainBlue text-white"
+                    }`}
                     disabled={!selectedAnswer}
                   >
-                    {currentQuestion === questions.length - 1 ? "Finalizar" : "Próxima"}
+                    {currentQuestion === questions.length - 1
+                      ? "Finalizar"
+                      : "Próxima"}
                   </button>
                 </div>
 
@@ -256,27 +295,48 @@ export default function RootLayout({
                   {questions.map((_, index) => (
                     <div
                       key={index}
-                      className={`w-4 h-4 rounded-full ${index === currentQuestion ? "bg-blue-500" : "bg-gray-300"}`}
+                      className={`w-4 h-4 rounded-full ${
+                        index === currentQuestion
+                          ? "bg-blue-500"
+                          : "bg-gray-300"
+                      }`}
                     ></div>
                   ))}
                 </div>
               </>
             ) : (
               <div className="text-center p-3 max-h-[70vh] overflow-y-auto">
-                <h2 className="text-lg font-semibold  text-gray-800">Quiz Finalizado</h2>
-                <p className="text-xs text-gray-600 mb-3">Obrigado por participar do nosso quiz!</p>
+                <h2 className="text-lg font-semibold  text-gray-800">
+                  Quiz Finalizado
+                </h2>
+                <p className="text-xs text-gray-600 mb-3">
+                  Obrigado por participar do nosso quiz!
+                </p>
                 <p className="text-sm text-gray-700 mb-3">
-                  Você acertou <span className="font-bold text-mainBlue">{calculateResults().correctAnswersCount}</span> de{" "}
-                  <span className="font-bold text-mainBlue">{questions.length}</span> questões.
+                  Você acertou{" "}
+                  <span className="font-bold text-mainBlue">
+                    {calculateResults().correctAnswersCount}
+                  </span>{" "}
+                  de{" "}
+                  <span className="font-bold text-mainBlue">
+                    {questions.length}
+                  </span>{" "}
+                  questões.
                 </p>
 
                 <div className="space-y-1 ">
                   {calculateResults().results.map((result, index) => (
                     <div
                       key={index}
-                      className={`p-2 rounded-md border-l-2 ${result.isCorrect ? 'bg-green-100 border-green-500' : 'bg-red-100 border-red-500'}`}
+                      className={`p-2 rounded-md border-l-2 ${
+                        result.isCorrect
+                          ? "bg-green-100 border-green-500"
+                          : "bg-red-100 border-red-500"
+                      }`}
                     >
-                      <h3 className="text-xs font-medium text-gray-800">{result.question}</h3>
+                      <h3 className="text-xs font-medium text-gray-800">
+                        {result.question}
+                      </h3>
                       <p className="text-xs mt-1">
                         {result.isCorrect ? (
                           <span className="text-green-600">Correto</span>
@@ -291,7 +351,8 @@ export default function RootLayout({
 
                       {!result.isCorrect && (
                         <p className="text-xs text-gray-500 mt-1">
-                          Resposta correta: <strong>{result.correctAnswer}</strong>
+                          Resposta correta:{" "}
+                          <strong>{result.correctAnswer}</strong>
                         </p>
                       )}
                     </div>

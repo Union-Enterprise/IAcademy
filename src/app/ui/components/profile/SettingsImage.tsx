@@ -3,17 +3,22 @@ import SubmitButton from "../authenticationForm/SubmitButton";
 import { useState, useEffect } from "react";
 import { useUser } from "@/app/context/UserContext";
 import axios from "axios";
+import { useToast } from "@/app/context/ToastContext";
+import Image from "next/image";
 
 export default function SetImage({ closeModal }: { closeModal: () => void }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { user, setAuth } = useUser();
   const [loading, setLoading] = useState(false);
+  const addToast = useToast();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
     }
   };
+
+  console.log(user.img);
 
   const sendData = async () => {
     if (!selectedFile) {
@@ -34,8 +39,7 @@ export default function SetImage({ closeModal }: { closeModal: () => void }) {
         const updatedUser = { ...user, img: response.data.user.img };
         setAuth(true, updatedUser);
         closeModal();
-
-        console.log("Imagem alterada com sucesso.");
+        addToast("Foto de perfil alterada com sucesso!", "success");
       })
       .catch(function (error) {
         console.error("Erro ao alterar a imagem:", error);
@@ -63,7 +67,7 @@ export default function SetImage({ closeModal }: { closeModal: () => void }) {
             {selectedFile ? (
               <img
                 src={URL.createObjectURL(selectedFile)}
-                alt="Imagem selecionada"
+                alt="Foto de Perfil"
                 className="rounded-full w-full h-full object-cover"
               />
             ) : (

@@ -10,7 +10,7 @@ export default function RootLayout({
 }>) {
   usePageTitle();
   return (
-    <section className="my-10 mx-[400px]">
+    <section className="my-[50px] mx-[100px]">
       <TrilhaMenu />
       {children}
     </section>

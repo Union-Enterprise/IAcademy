@@ -16,7 +16,9 @@ export default function Overview({
   const modulo = decodeURIComponent(params.modulo);
   const unidadeKey = decodeURIComponent(params.unidade);
 
-  const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
+  const [modulosData, setModulosData] = useState<Record<string, any> | null>(
+    null
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,10 +65,8 @@ export default function Overview({
           "/trilhas/overview",
         ]}
       />
-      <section className="grid grid-cols-3 mb-10 gap-10 relative h-full">
-        <div className="col-span-2">
-          <GenericIA />
-        </div>
+      <section className="mb-10 gap-10 relative h-full">
+        <GenericIA />
       </section>
     </>
   );

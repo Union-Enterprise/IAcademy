@@ -385,24 +385,8 @@ export default function User() {
             placeholder="Nome do usuário"
             isRequired={false}
             onChange={handleUserInputChange}
-            cols="col-span-4"
+            cols="col-span-3"
             error={state.formErrors.username}
-          />
-          <RestrictInput
-            label="CPF"
-            value={user.cpf || "999.999.999-99"}
-            onChangeClick={() => setModalType("cpf")}
-            cols="col-span-2"
-          />
-          <InputGroup
-            label="Nascimento"
-            labelFor="birth"
-            inputType="date"
-            value={state.userFormData.birth}
-            isRequired={false}
-            onChange={handleUserInputChange}
-            error={state.formErrors.birth}
-            cols="col-span-2"
           />
           <Select
             label="Gênero"
@@ -418,6 +402,22 @@ export default function User() {
             value={state.userFormData.genero}
             onChange={handleUserInputChange}
             error={state.formErrors.genero}
+            cols="col-span-3"
+          />
+          <InputGroup
+            label="Nascimento"
+            labelFor="birth"
+            inputType="date"
+            value={state.userFormData.birth}
+            isRequired={false}
+            onChange={handleUserInputChange}
+            error={state.formErrors.birth}
+            cols="col-span-2"
+          />
+          <RestrictInput
+            label="CPF"
+            value={user.cpf || "999.999.999-99"}
+            onChangeClick={() => setModalType("cpf")}
             cols="col-span-2"
           />
           <InputGroup
@@ -429,7 +429,7 @@ export default function User() {
             isRequired={false}
             onChange={handleUserInputChange}
             error={state.formErrors.phone}
-            cols="col-span-3 ml-24"
+            cols="col-span-2"
           />
         </SettingsSection>
         <SubmitButton
@@ -563,9 +563,7 @@ export default function User() {
             className="flex flex-col gap-5"
             onSubmit={(e) => {
               e.preventDefault();
-              // fazer comparação da "confirmPassword" com a senha no banco de dados
               if (cpf.isValid(userCpf) && confirmPassword) {
-                //requisição que altera o cpf
                 sendCPF();
                 handleModalClose();
               }
