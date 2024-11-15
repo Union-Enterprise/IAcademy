@@ -1,11 +1,12 @@
 "use client";
 
-import { ChevronRight, NotebookPen, Search } from "lucide-react";
+import { ChevronRight, Dot, Sparkles } from "lucide-react";
 import { useUser } from "../../context/UserContext";
 import { Flame } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import UtilizationChart from "@/app/ui/components/Student/UtilizationChart";
+import { RadarHabilidades } from "@/app/ui/components/charts/RadarHabilidades";
+import React, { useState } from "react";
 
 export default function Home() {
   const { user, isAuthenticated } = useUser();
@@ -84,11 +85,138 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <div className="grid grid-cols-7 gap-2">
+        <h3 className="font-semibold text-lg col-span-7 shadow-sm border-2 border-borders-light p-5 rounded-tl-xl rounded-tr-xl">
+          Seu radar habilidades
+        </h3>
+        <div className="col-span-4">
+          <RadarHabilidades />
+        </div>
+        <div className="col-span-3 p-5 shadow-sm border-2 border-borders-light rounded-bl-xl rounded-br-xl">
+          <div className="flex gap-5 pb-3 border-b-2 border-borders-light *:text-mainBlue">
+            <Sparkles />
+            <h3 className="text-lg font-bold">Análise de perfil e feedbacks</h3>
+          </div>
+          <div className="py-5 flex flex-col gap-3">
+            <AccordionItem
+              title="Gestão de Tempo"
+              priority="Importante"
+              description="No vestibular, saber distribuir o tempo de forma eficaz é
+                crucial para responder todas as questões."
+              hints={[
+                "Tente cronometrar seus simulados, dividindo o tempo por questão.",
+                "Avalie o tempo gasto em cada tipo de pergunta e priorize as mais rápidas.",
+              ]}
+            >
+              <Link
+                href={"/simulados"}
+                className="mt-3 inline-block py-2 bg-mainBlue text-white w-fit rounded-md border-2 border-transparent px-4 hover:bg-transparent hover:text-mainBlue hover:border-mainBlue duration-100"
+              >
+                Praticar Simulados
+              </Link>
+            </AccordionItem>
+            <AccordionItem
+              title="Aprendizado Contínuo"
+              priority="Secundário"
+              description="Procure revisar e treinar mais o que você já sabe"
+              hints={[
+                "Utilize métodos como resumos e mapas mentais para reforçar seu aprendizado.",
+                "Priorize revisar conteúdos antes de dormir para melhor retenção.",
+              ]}
+            >
+              <Link
+                href={"#"}
+                className="text-mainBlue hover:underline duration-100"
+              >
+                Como fazer mapas mentais
+              </Link>
+            </AccordionItem>
+            <AccordionItem
+              title="Revisar conceitos básicos"
+              priority="Opcional"
+              description="Você está com uma consistência muito boa, ou seja, consegue responder questões semelhantes com facilidade."
+              hints={[
+                "Experimente técnicas como mindfulness para manter o foco durante os estudos.",
+                "Priorize revisar conteúdos antes de dormir para melhor retenção.",
+              ]}
+            />
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
 
-{
-  /* <p>Avaliações realizadas</p>
-            <p>Trilhas iniciadas</p> */
+function AccordionItem({
+  title,
+  priority,
+  description,
+  hints,
+  children,
+}: {
+  title: string;
+  priority: string;
+  description: string;
+  hints: string[];
+  children?: React.ReactNode;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [maxHeight, setMaxHeight] = useState<string>("0px");
+
+  const contentRef = React.useRef<HTMLDivElement>(null);
+
+  const toggleAccordion = () => {
+    setIsOpen(!isOpen);
+    if (contentRef.current) {
+      setMaxHeight(!isOpen ? `${contentRef.current.scrollHeight}px` : "0px");
+    }
+  };
+
+  return (
+    <div className="border-b border-borders-light">
+      <button
+        onClick={toggleAccordion}
+        className="flex justify-between items-center w-full py-3 px-4 text-left"
+      >
+        <div className="flex flex-col gap-1">
+          <span
+            className={`text-xs ${
+              priority === "Importante"
+                ? "bg-red-500"
+                : priority === "Secundário"
+                ? "bg-orange-500"
+                : "bg-gray-400"
+            } rounded-md text-center text-white w-fit px-3 py-1`}
+          >
+            {priority}
+          </span>
+          <h4 className="font-semibold">{title}</h4>
+        </div>
+        <ChevronRight
+          className={`transform transition-transform duration-200 ${
+            isOpen ? "rotate-90" : ""
+          }`}
+        />
+      </button>
+      <div
+        ref={contentRef}
+        style={{
+          maxHeight: maxHeight,
+          transition: "max-height 0.3s ease",
+          overflow: "hidden",
+        }}
+        className="px-4 text-text-lightSub"
+      >
+        {description}
+        <div className="pb-3">
+          <ul className="pb-2 list-disc list-inside mt-2">
+            {hints.map((hint, index) => (
+              <li key={index}>{hint}</li>
+            ))}
+          </ul>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
 }
