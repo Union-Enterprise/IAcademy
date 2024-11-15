@@ -1,7 +1,7 @@
 "use client";
 
 import { Plus, Trash2, Edit } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 interface Question {
@@ -19,6 +19,20 @@ export default function SimuladosAdm() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deletingId, setDeletingId] = useState<string | null>(null);
 
+    
+    useEffect(() => {
+        const storedQuestionnaires = localStorage.getItem("questionnaires");
+        if (storedQuestionnaires) {
+            setQuestionnaires(JSON.parse(storedQuestionnaires));
+        }
+    }, []);
+
+   
+    const saveToLocalStorage = (data: Question[]) => {
+        localStorage.setItem("questionnaires", JSON.stringify(data));
+    };
+
+    
     const handleOpenModal = (id?: string) => {
         if (id) {
             const questionnaireToEdit = questionnaires.find((q) => q.id === id);
@@ -31,12 +45,14 @@ export default function SimuladosAdm() {
         setIsModalOpen(true);
     };
 
+ 
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setTitulo("");
         setTema("");
         setEditingId(null);
     };
+
 
     const handleSaveQuestionnaire = (e: React.FormEvent) => {
         e.preventDefault();
@@ -48,29 +64,42 @@ export default function SimuladosAdm() {
         };
 
         if (editingId) {
-            setQuestionnaires((prev) =>
-                prev.map((q) => (q.id === editingId ? newQuestionnaire : q))
-            );
+            setQuestionnaires((prev) => {
+                const updatedQuestionnaires = prev.map((q) =>
+                    q.id === editingId ? newQuestionnaire : q
+                );
+                saveToLocalStorage(updatedQuestionnaires);
+                return updatedQuestionnaires;
+            });
         } else {
-            setQuestionnaires((prev) => [...prev, newQuestionnaire]);
+            setQuestionnaires((prev) => {
+                const updatedQuestionnaires = [...prev, newQuestionnaire];
+                saveToLocalStorage(updatedQuestionnaires); 
+                return updatedQuestionnaires;
+            });
         }
 
         handleCloseModal();
     };
 
+   
     const handleDeleteQuestionnaire = () => {
         if (deletingId) {
-            setQuestionnaires((prev) =>
-                prev.filter((q) => q.id !== deletingId)
-            );
+            setQuestionnaires((prev) => {
+                const updatedQuestionnaires = prev.filter((q) => q.id !== deletingId);
+                saveToLocalStorage(updatedQuestionnaires);
+                return updatedQuestionnaires;
+            });
             setIsDeleteModalOpen(false);
         }
     };
+
 
     const handleOpenDeleteModal = (id: string) => {
         setDeletingId(id);
         setIsDeleteModalOpen(true);
     };
+
 
     const handleCloseDeleteModal = () => {
         setIsDeleteModalOpen(false);
@@ -110,7 +139,7 @@ export default function SimuladosAdm() {
                             <button
                                 className="p-2 bg-green-500 rounded-full hover:bg-green-600 transition transform group-hover:scale-100 scale-0 duration-300"
                                 onClick={(e) => {
-                                    e.stopPropagation(); // Impede a navegação ao clicar nos botões
+                                    e.stopPropagation(); 
                                     handleOpenModal(questionnaire.id);
                                 }}
                             >
@@ -119,7 +148,7 @@ export default function SimuladosAdm() {
                             <button
                                 className="p-2 bg-red-500 rounded-full hover:bg-red-600 transition transform group-hover:scale-100 scale-0 duration-300"
                                 onClick={(e) => {
-                                    e.stopPropagation(); // Impede a navegação ao clicar nos botões
+                                    e.stopPropagation(); 
                                     handleOpenDeleteModal(questionnaire.id);
                                 }}
                             >
@@ -130,7 +159,6 @@ export default function SimuladosAdm() {
                 ))}
             </div>
 
-            {/* Modais para criação, edição e exclusão */}
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg w-1/2 max-h-[80vh] overflow-y-auto">

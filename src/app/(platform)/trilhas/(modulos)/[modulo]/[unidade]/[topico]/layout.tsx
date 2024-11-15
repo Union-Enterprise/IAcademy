@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { getModulosData } from "@/app/ui/components/modulos/data";
 import normalizeString from "@/app/ui/components/modulos/normalizeString";
 import Link from "next/link";
-import { ArrowUpFromDot, MessageCircle } from "lucide-react";
+import { ArrowUpFromDot } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useUser } from "@/app/context/UserContext";
@@ -233,12 +233,7 @@ export default function TopicoLayout({
           </>
         )}
       </div>
-      <div
-        onClick={toggleChat}
-        className="fixed mt-5 right-4 bg-mainBlue rounded-full p-2 flex items-center justify-center hover:bg-mainBlue/80 cursor-pointer z-50"
-      >
-        <MessageCircle className="text-white w-9 h-9" />
-      </div>
+    
     </section>
   );
 }

@@ -26,7 +26,20 @@ export default function SimuladoQuestao() {
     const [imagem, setImagem] = useState<File | null>(null);
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-    useEffect(() => {}, []);
+ 
+    useEffect(() => {
+        const storedQuestoes = localStorage.getItem("questoes");
+        if (storedQuestoes) {
+            setQuestoes(JSON.parse(storedQuestoes));
+        }
+    }, []);
+
+  
+    useEffect(() => {
+        if (questoes.length > 0) {
+            localStorage.setItem("questoes", JSON.stringify(questoes));
+        }
+    }, [questoes]);
 
     const handleOpenQuestionModal = (questionIndex: number | null = null) => {
         if (questionIndex !== null) {
