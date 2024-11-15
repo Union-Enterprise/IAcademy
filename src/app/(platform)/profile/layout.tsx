@@ -19,11 +19,18 @@ export default function ProfileLayout({
   const router = useRouter();
   const [modalType, setModalType] = useState<"image" | null>(null);
   const [visible, setVisible] = useState(false);
+  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
 
   const handleModalClose = () => {
     setVisible(false);
     setTimeout(() => {
       setModalType(null);
+      setShowSuccessNotification(true); // Exibe a notificação de sucesso
+
+      // Oculta a notificação automaticamente após 3 segundos
+      setTimeout(() => {
+        setShowSuccessNotification(false);
+      }, 3000);
     }, 300);
   };
 
@@ -38,7 +45,7 @@ export default function ProfileLayout({
 
   return (
     <>
-      <div className=" grid grid-cols-3 gap-5 px-[200px] pt-[70px] pb-[150px]">
+      <div className="grid grid-cols-3 gap-5 px-[200px] pt-[70px] pb-[150px]">
         <div className="col-span-1 flex flex-col gap-5">
           <div className="border-2 flex flex-col items-center pt-[70px] border-border-light bg-bg-lightCard rounded-md relative">
             <div className="absolute left-0 top-0 w-full h-[40%] bg-white p-3 flex justify-end">
@@ -87,6 +94,11 @@ export default function ProfileLayout({
         >
           <SettingsImage closeModal={handleModalClose} />
         </Modal>
+      )}
+      {showSuccessNotification && (
+        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-md">
+          Foto alterada com sucesso!
+        </div>
       )}
     </>
   );

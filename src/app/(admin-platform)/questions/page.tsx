@@ -186,7 +186,7 @@ export default function Questionnaires() {
           Nova questão
         </button>
         <button
-          className="bg-purple-500  text-white py-2 px-4 ml-4 rounded-md flex items-center gap-2 hover:bg-green-600 duration-150"
+          className="bg-purple-500  text-white py-2 px-4 ml-4 rounded-md flex items-center gap-2 hover:bg-purple-600 duration-150"
         >
           <Bot className="w-4 h-4" />
           Criar com IA

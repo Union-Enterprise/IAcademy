@@ -136,7 +136,7 @@ const Sidebar = ({ isUserLayout = true }) => {
             onClick={() => setSelectedItem("/notifications")}
           />
           <Item
-            title="Questões"
+            title="Quizzes"
             lucideIcon={FileQuestion}
             isOpen={isOpen}
             href="/questions"
@@ -150,6 +150,14 @@ const Sidebar = ({ isUserLayout = true }) => {
             href="/inicialQuestion"
             isSelected={selectedItem === "/inicialQuestion"}
             onClick={() => setSelectedItem("/inicialQuestion")}
+          />
+          <Item
+            title="Criar simulados"
+            lucideIcon={BookOpenCheck}
+            isOpen={isOpen}
+            href="/simuladosAdm"
+            isSelected={selectedItem === "/simuladosAdm"}
+            onClick={() => setSelectedItem("/simuladosAdm")}
           />
         </>
       )}
