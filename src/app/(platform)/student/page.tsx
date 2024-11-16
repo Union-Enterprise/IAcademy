@@ -1,16 +1,83 @@
 "use client";
 
-import { ChevronRight, Dot, Sparkles } from "lucide-react";
+import { ChevronRight, Dot, Router, Sparkles } from "lucide-react";
 import { useUser } from "../../context/UserContext";
 import { Flame } from "lucide-react";
 import Link from "next/link";
 import UtilizationChart from "@/app/ui/components/Student/UtilizationChart";
 import { RadarHabilidades } from "@/app/ui/components/charts/RadarHabilidades";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getModulosData } from "@/app/ui/components/modulos/data";
+import { useRouter } from "next/navigation";
+import LoadingFrame from "@/app/ui/components/LoadingFrame";
+
+interface ModuloProps {
+  title: string;
+  index: string;
+  link?: string;
+  unidades: {
+    title: string;
+    description: string;
+    topicos: { title: string; description: string }[];
+  }[];
+}
 
 export default function Home() {
   const { user, isAuthenticated } = useUser();
+  const router = useRouter();
   const now = new Date().getHours();
+  const [modulosData, setModulosData] = useState<Record<
+    string,
+    ModuloProps
+  > | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [totalTopicsCount, setTotalTopicsCount] = useState<number>(0);
+
+  const getTotalTopicsCount = (
+    data: Record<string, ModuloProps> | null
+  ): number => {
+    if (!data) return 0;
+
+    let totalTopics = 0;
+    for (const moduleKey in data) {
+      const module = data[moduleKey];
+      for (const unidade of module.unidades) {
+        totalTopics += unidade.topicos.length;
+      }
+    }
+    return totalTopics;
+  };
+
+  useEffect(() => {
+    const fetchModulosData = async () => {
+      try {
+        const data = await getModulosData();
+        setModulosData(data);
+        const count = getTotalTopicsCount(data);
+        setTotalTopicsCount(count);
+      } catch (err) {
+        setError("Erro ao carregar os dados dos módulos.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchModulosData();
+  }, [user]);
+
+  if (loading) {
+    return <LoadingFrame />;
+  }
+
+  if (!isAuthenticated) {
+    router.push("/login");
+  }
+
+  if (!modulosData) {
+    return <p>Não foi possível encontrar os tópicos.</p>;
+  }
 
   return (
     <section className="p-10 flex flex-col gap-10">
@@ -29,7 +96,7 @@ export default function Home() {
             </h3>
             <div className="grid grid-cols-3 gap-2">
               <div className="p-5 flex flex-col gap-1 rounded-xl border-2 border-borders-light">
-                <h4 className="text-3xl font-black">00/00</h4>
+                <h4 className="text-3xl font-black">00/{totalTopicsCount}</h4>
                 <p>Tópicos Estudados</p>
               </div>
               <div className="p-5 flex flex-col gap-1 rounded-xl border-2 border-borders-light">

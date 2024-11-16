@@ -1,11 +1,11 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronRight, Dot } from "lucide-react";
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 
 export default function Simulado() {
   return (
-    <div className="flex flex-col px-[100px] my-[80px] gap-20">
-      <div className="flex flex-col w-full">
+    <div className="flex flex-col px-[100px] my-[80px] gap-16">
+      <div className="flex flex-col w-full gap-5">
         <div>
           <Link
             href={"/simulados"}
@@ -74,27 +74,70 @@ export default function Simulado() {
               IA para cada questão.
             </p>
           </div>
-          <div>
-            <h5 className="text-xl font-semibold">Construção</h5>
-            <p className="leading-7 mt-5"></p>
-          </div>
-        </div>
-        <h4 className="text-2xl font-bold mb-5">Provas Disponíveis</h4>
-        <div>
-          <div className="shadow-md rounded-md p-8 flex justify-between items-center">
-            <div className="flex flex-col gap-3">
-              <h5 className="text-xl font-semibold">Trigonometria - A</h5>
-              <p className="opacity-60">X questões Duração Máxima de Y horas</p>
-            </div>
-            <Link
-              href={"/simulados/simulado/qualquer-prova"}
-              className="px-10 py-2 text-white h-fit bg-mainBlue rounded-md"
-            >
-              Começar
-            </Link>
-          </div>
         </div>
       </section>
+      <section className="flex flex-col gap-5">
+        <h4 className="text-2xl font-bold mb-5">Provas Disponíveis</h4>
+        <Prova />
+        <Prova />
+        <Prova />
+      </section>
+      <section className="flex flex-col gap-5">
+        <h4 className="text-2xl font-bold">Provas Concluídas</h4>
+        <ProvaConcluida />
+        <ProvaConcluida />
+        <ProvaConcluida />
+      </section>
     </div>
+  );
+}
+
+function Prova() {
+  return (
+    <Link
+      href={"#"}
+      className="shadow-sm rounded-xl p-8 flex justify-between items-center gap-5 border-2 border-borders-light hover:shadow-md duration-100"
+    >
+      <div className="flex flex-col gap-3">
+        <h5 className="font-semibold text-xl">Trigonometria - A</h5>
+        <div className="flex items-center *:text-text-lightSub *:font-medium">
+          <Dot size={30} />
+          <p>10 questões</p>
+          <Dot size={30} />
+          <p>Duração Máxima de 2h35m</p>
+        </div>
+      </div>
+      <Link
+        href={"/simulados/simulado/qualquer-prova"}
+        className="px-10 py-2 text-white h-fit bg-mainBlue rounded-md border-2 border-transparent hover:bg-transparent hover:text-mainBlue hover:border-mainBlue duration-100"
+      >
+        Começar
+      </Link>
+    </Link>
+  );
+}
+
+function ProvaConcluida() {
+  return (
+    <Link
+      href={"#"}
+      className="shadow-sm rounded-xl p-8 flex flex-col gap-5 border-2 border-borders-light hover:shadow-md duration-100"
+    >
+      <div className="flex justify-between *:font-semibold *:text-xl items-center">
+        <h5>Trigonometria - A</h5>
+        <div className="flex gap-3 items-center">
+          <h5>7 pontos</h5>
+          <ArrowRight />
+        </div>
+      </div>
+      <div className="bg-gray-100 rounded-full w-full">
+        <div className="bg-mainBlue h-3 w-[7%] rounded-full" />
+      </div>
+      <div>
+        <h5 className="font-medium text-text-lightSub">
+          Você acertou 7/40 questões
+        </h5>
+      </div>
+    </Link>
   );
 }

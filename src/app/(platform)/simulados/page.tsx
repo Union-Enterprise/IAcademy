@@ -27,8 +27,7 @@ export default function Simulados() {
         </p>
         <div className="flex flex-col mt-5 gap-5">
           <h3 className="text-xl font-semibold">
-            Com base nas suas dificuldades em "Fazer a IA entender o que o
-            usuário tem mais dificuldade"
+            Com base nas suas maiores dificuldades
           </h3>
           <div className="flex gap-5">
             <SimuladoCard isFromAI={true} text="Trigonometria" />
