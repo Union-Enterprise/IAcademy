@@ -3,21 +3,37 @@
 import { Plus, Trash2, Edit } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import axios from "axios";
 
 interface Question {
     id: string;
     titulo: string;
-    tema: string;
+    desc: string;
 }
 
 export default function SimuladosAdm() {
     const [questionnaires, setQuestionnaires] = useState<Question[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [titulo, setTitulo] = useState("");
-    const [tema, setTema] = useState("");
+    const [desc, setDesc] = useState("");
     const [editingId, setEditingId] = useState<string | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deletingId, setDeletingId] = useState<string | null>(null);
+
+    const createSim = () => {
+        axios
+          .post(
+            "http://localhost:5002/simulado",
+            {titulo, desc},
+            { withCredentials: true }
+          )
+          .then((response)=>{
+            console.log("Simulado cadastrado com sucesso");
+          })
+          .catch((error)=>{
+            console.error(error);
+          })
+      }
 
     
     useEffect(() => {
@@ -38,7 +54,7 @@ export default function SimuladosAdm() {
             const questionnaireToEdit = questionnaires.find((q) => q.id === id);
             if (questionnaireToEdit) {
                 setTitulo(questionnaireToEdit.titulo);
-                setTema(questionnaireToEdit.tema);
+                setDesc(questionnaireToEdit.desc);
                 setEditingId(id);
             }
         }
@@ -49,7 +65,7 @@ export default function SimuladosAdm() {
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setTitulo("");
-        setTema("");
+        setDesc("");
         setEditingId(null);
     };
 
@@ -60,7 +76,7 @@ export default function SimuladosAdm() {
         const newQuestionnaire = {
             id: editingId ? editingId : Date.now().toString(),
             titulo,
-            tema,
+            desc,
         };
 
         if (editingId) {
@@ -78,6 +94,7 @@ export default function SimuladosAdm() {
                 return updatedQuestionnaires;
             });
         }
+        createSim();
 
         handleCloseModal();
     };
@@ -132,7 +149,7 @@ export default function SimuladosAdm() {
                       
                         <div className="border-b w-full" />
                         <p className="text-lg flex justify-center text-gray-600 mt-6 group-hover:text-white">
-                            {questionnaire.tema}
+                            {questionnaire.desc}
                         </p>
                         </Link>
                         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
@@ -185,12 +202,12 @@ export default function SimuladosAdm() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-medium">Tema</label>
+                                    <label className="block font-medium">Descrição</label>
                                     <input
                                         type="text"
                                         className="w-full mt-2 p-2 border rounded-md"
-                                        value={tema}
-                                        onChange={(e) => setTema(e.target.value)}
+                                        value={desc}
+                                        onChange={(e) => setDesc(e.target.value)}
                                     />
                                 </div>
                                 <div className="flex justify-end gap-4 mt-4">
