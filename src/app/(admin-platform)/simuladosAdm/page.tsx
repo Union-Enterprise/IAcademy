@@ -35,7 +35,7 @@ export default function SimuladosAdm() {
           })
       }
 
-    
+
     useEffect(() => {
         const storedQuestionnaires = localStorage.getItem("questionnaires");
         if (storedQuestionnaires) {
@@ -78,6 +78,7 @@ export default function SimuladosAdm() {
             titulo,
             desc,
         };
+        
 
         if (editingId) {
             setQuestionnaires((prev) => {
@@ -98,7 +99,6 @@ export default function SimuladosAdm() {
 
         handleCloseModal();
     };
-
    
     const handleDeleteQuestionnaire = () => {
         if (deletingId) {
@@ -142,7 +142,10 @@ export default function SimuladosAdm() {
                         key={questionnaire.id}
                         className="p-4 bg-white w-full h-72 border rounded-md shadow-md hover:bg-mainBlue hover:text-white transition-all hover:shadow-md group relative"
                     >
-                        <Link href={`/provaAdm`} className="h-[600px]" >
+                        <Link href={`/provaAdm`} className="h-[600px]" 
+                        onClick={() => {
+                            localStorage.setItem("simuladoTitulo", questionnaire.desc);
+                        }}>
                             <h3 className="text-2xl font-semibold flex justify-center pb-6 group-hover:text-white">
                                 {questionnaire.titulo}
                             </h3>
@@ -202,7 +205,7 @@ export default function SimuladosAdm() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-medium">Descrição</label>
+                                <label className="block font-medium">Descrição</label>
                                     <input
                                         type="text"
                                         className="w-full mt-2 p-2 border rounded-md"
@@ -234,7 +237,7 @@ export default function SimuladosAdm() {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg w-1/3">
                         <div className="p-4">
-                            <h3 className="text-xl font-bold">Tem certeza?</h3>
+                            <h3 className="text-xl font-bold">Excluir simulado</h3>
                             <p>Você realmente deseja excluir este simulado?</p>
                             <div className="flex justify-end gap-4 mt-4">
                                 <button

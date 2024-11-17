@@ -7,7 +7,7 @@ import Link from "next/link";
 interface Provas {
     titulo: string;
     tema: string;
- 
+
 }
 
 export default function SimuladoQuestao() {
@@ -19,15 +19,17 @@ export default function SimuladoQuestao() {
     const [uploadedPdf, setUploadedPdf] = useState<File | null>(null);
     const [questionToDelete, setQuestionToDelete] = useState<number | null>(null);
     const [quantidade, setQuantidade] = useState<number>(1);
-
+    const [tituloIa, setTituloIa] = useState("");
     const [questaoTitulo, setQuestaoTitulo] = useState("");
     const [tema, setTema] = useState("");
     const [alternativas, setAlternativas] = useState<string[]>(["", "", "", ""]);
     const [alternativaCorreta, setAlternativaCorreta] = useState<number | null>(null);
     const [imagem, setImagem] = useState<File | null>(null);
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
+    const [simuladoTitulo, setSimuladoTitulo] = useState<string | null>(null);
 
-   
+
+
     useEffect(() => {
         const storedProvas = localStorage.getItem("provas");
         if (storedProvas) {
@@ -35,19 +37,25 @@ export default function SimuladoQuestao() {
         }
     }, []);
 
-  
+
+    useEffect(() => {
+        const titulo = localStorage.getItem("simuladoTitulo");
+        setSimuladoTitulo(titulo);
+    }, []);
+
     useEffect(() => {
         if (provas.length > 0) {
             localStorage.setItem("provas", JSON.stringify(provas));
         }
     }, [provas]);
+    
 
     const handleOpenQuestionModal = (questionIndex: number | null = null) => {
         if (questionIndex !== null) {
             const question = provas[questionIndex];
             setQuestaoTitulo(question.titulo);
             setTema(question.tema);
-       
+
             setEditingIndex(questionIndex);
         } else {
             setQuestaoTitulo("");
@@ -123,7 +131,7 @@ export default function SimuladoQuestao() {
     return (
         <div className="p-6 bg-white rounded-md shadow-md">
             <h1 className="text-2xl font-bold">
-                Simulado - <span className="text-mainBlue">Estatística</span>
+                Simulado - <span className="text-mainBlue">{simuladoTitulo || "Carregando..."}</span>
             </h1>
 
             <div className="flex justify-end items-center mb-4 gap-4">
@@ -160,14 +168,19 @@ export default function SimuladoQuestao() {
             </div>
 
             <div>
-                {provas.map((questao, index) => (
+                {provas.map((questionnaire, index) => (
                     <div
                         key={index}
                         className="p-4 mb-4 border rounded-md shadow-md bg-gray-50 hover:bg-mainBlue hover:text-white transition-all duration-300"
                     >
-                        <Link href={"/simuladoQuestao"}>
-                            <h3 className="text-xl font-semibold">{questao.titulo}</h3>
-                            <p className="text-gray-700 mt-2 hover:text-white">{questao.tema}</p>
+                        <Link href={"/simuladoQuestao"}
+                            onClick={() => {
+                                localStorage.setItem("simuladoTema", questionnaire.tema);
+                            }}
+                        >
+                            <h3 className="text-xl font-semibold pb-4">{questionnaire.titulo}</h3>
+                            <div className="border-b w-80 border-zinc-400"/>
+                            <p className="text-gray-700 mt-2">{questionnaire.tema}</p>
                         </Link>
                         <div className="flex gap-4 mt-4">
                             <button
@@ -250,20 +263,21 @@ export default function SimuladoQuestao() {
 
             {isDeleteModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                        <h2 className="text-xl font-bold text-center">Tem certeza?</h2>
-                        <div className="flex justify-between mt-4">
+                    <div className="bg-white rounded-lg shadow-lg w-1/4 p-6">
+                        <h3 className="text-xl font-bold">Excluir prova</h3>
+                        <p className="pb-5">Você realmente deseja excluir esta prova?</p>
+                        <div className="flex justify-end gap-4">
+                            <button
+                                onClick={() => setIsDeleteModalOpen(false)}
+                                className="bg-gray-300 text-black py-2 px-4 rounded-md"
+                            >
+                                Cancelar
+                            </button>
                             <button
                                 onClick={handleDeleteQuestion}
                                 className="bg-red-500 text-white py-2 px-4 rounded-md"
                             >
-                                Deletar
-                            </button>
-                            <button
-                                onClick={() => setIsDeleteModalOpen(false)}
-                                className="bg-gray-500 text-white py-2 px-4 rounded-md"
-                            >
-                                Cancelar
+                                Excluir
                             </button>
                         </div>
                     </div>
@@ -272,35 +286,57 @@ export default function SimuladoQuestao() {
 
             {isIaModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                        <h2 className="text-xl font-bold text-center">
-                            Criar com IA - Quantidade de Questões
-                        </h2>
-                        <div className="flex justify-center items-center mt-4">
-                            <input
-                                type="number"
-                                value={quantidade}
-                                onChange={(e) => setQuantidade(Number(e.target.value))}
-                                className="w-16 p-2 border rounded-md"
-                            />
-                        </div>
-                        <div className="flex justify-between mt-4">
-                            <button
-                                onClick={handleCreateWithIA}
-                                className="bg-mainBlue text-white py-2 px-4 rounded-md"
-                            >
-                                Criar
-                            </button>
+                    <div className="bg-white rounded-lg shadow-lg w-2/4 max-h-[80vh] overflow-y-auto">
+                        <div className="bg-purple-500 text-white p-4 rounded-t-lg flex justify-between items-center">
+                            <h2 className="text-xl font-bold">Criar com IA</h2>
                             <button
                                 onClick={handleCloseIaModal}
-                                className="bg-gray-500 text-white py-2 px-4 rounded-md"
+                                className="text-white hover:text-gray-200"
                             >
-                                Cancelar
+                                <X className="w-5 h-5" />
                             </button>
+                        </div>
+                        <div className="p-6 space-y-6">
+                            <div>
+                                <label className="block font-medium">Título da Prova</label>
+                                <input
+                                    type="text"
+                                    value={tituloIa}
+                                    onChange={(e) => setTituloIa(e.target.value)}
+                                    className="w-full p-2 mt-2 border rounded-md"
+                                    placeholder="Digite o título da prova"
+                                />
+                            </div>
+                            <div>
+                                <label className="block font-medium">Quantidade de Questões</label>
+                                <input
+                                    type="number"
+                                    value={quantidade}
+                                    onChange={(e) => setQuantidade(Math.max(1, Number(e.target.value)))}
+                                    className="w-full p-2 mt-2 border rounded-md"
+                                    min="1"
+                                    placeholder="Digite a quantidade de questões"
+                                />
+                            </div>
+                            <div className="flex justify-end gap-4">
+                                <button
+                                    onClick={handleCreateWithIA}
+                                    className="bg-mainBlue text-white py-2 px-6 rounded-md hover:bg-blue-700"
+                                >
+                                    Criar
+                                </button>
+                                <button
+                                    onClick={handleCloseIaModal}
+                                    className="bg-gray-500 text-white py-2 px-6 rounded-md hover:bg-gray-600"
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             )}
+
         </div>
     );
 }
