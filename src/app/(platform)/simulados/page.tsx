@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
-import InputGroup, {
-  Input,
-} from "@/app/ui/components/authenticationForm/InputGroup";
+import InputGroup from "@/app/ui/components/authenticationForm/InputGroup";
 import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
 import { useState } from "react";
+import axios from "axios";
 import { useToast } from "@/app/context/ToastContext";
 
 export default function Simulados() {
@@ -14,13 +13,22 @@ export default function Simulados() {
   const [qtd, setQtd] = useState("");
   const [tema, setTema] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const sendData = () => {
-    console.log(qtd, tema);
-    setIsSubmitting(false);
-    addToast(
-      "Seu simulado será criado em breve, isso pode levar algum tempo. Por favor, aguarde.",
-      "success"
-    );
+
+  const sendData = async () => {
+    try {
+      setIsSubmitting(true);
+      const response = await axios.post("http://localhost:5000/gen_simulado_ia", { "tema": tema,"qtd": qtd });
+      console.log(response.data);
+      addToast(
+        "Simulado criado com sucesso",
+        "success"
+      );
+    } catch (error) {
+      console.error(error);
+      addToast("Ocorreu um erro ao gerar o simulado. Tente novamente.", "error");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -68,7 +76,7 @@ export default function Simulados() {
         <div className="flex flex-col mt-5 gap-5">
           <div>
             <h3 className="text-xl font-semibold flex gap-2 text-mainBlue">
-              <Sparkles /> Gere seus próprios simulado
+              <Sparkles /> Gere seus próprios simulados
             </h3>
             <p className="text-sm text-text-lightSub">
               Com a Inteligência Artificial da IAcademy, agora é possível criar
@@ -78,7 +86,6 @@ export default function Simulados() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              setIsSubmitting(true);
               sendData();
             }}
             className="flex items-end gap-5 pb-5 border-b-2 border-borders-light"
@@ -94,7 +101,7 @@ export default function Simulados() {
               labelFor="qtd"
               inputType="number"
               placeholder="Ex: 12"
-              onChange={(e) => setQtd(e.target.value)} // Só verificar se tá passando como string ou number
+              onChange={(e) => setQtd(e.target.value)}
             />
             <SubmitButton
               text="Gerar Simulado"
@@ -102,7 +109,6 @@ export default function Simulados() {
               loading={isSubmitting}
             />
           </form>
-          <div className="grid grid-cols-3 gap-5"></div>
         </div>
       </div>
     </section>
