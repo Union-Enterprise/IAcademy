@@ -1,7 +1,28 @@
+"use client";
+
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
+import InputGroup, {
+  Input,
+} from "@/app/ui/components/authenticationForm/InputGroup";
+import SubmitButton from "@/app/ui/components/authenticationForm/SubmitButton";
+import { useState } from "react";
+import { useToast } from "@/app/context/ToastContext";
 
 export default function Simulados() {
+  const addToast = useToast();
+  const [qtd, setQtd] = useState("");
+  const [tema, setTema] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const sendData = () => {
+    console.log(qtd, tema);
+    setIsSubmitting(false);
+    addToast(
+      "Seu simulado será criado em breve, isso pode levar algum tempo. Por favor, aguarde.",
+      "success"
+    );
+  };
+
   return (
     <section className="*:px-[100px] flex flex-col gap-10 pb-10">
       <div className="w-full bg-blue-300 py-[60px] flex flex-col gap-5 bg-[url('/wave2.svg')] bg-no-repeat bg-center bg-cover">
@@ -30,9 +51,9 @@ export default function Simulados() {
             Com base nas suas maiores dificuldades
           </h3>
           <div className="flex gap-5">
-            <SimuladoCard isFromAI={true} text="Trigonometria" />
-            <SimuladoCard isFromAI={true} text="Estatística" />
-            <SimuladoCard isFromAI={true} text="Geometria" />
+            <SimuladoCard geradoPorIA={true} text="Trigonometria" />
+            <SimuladoCard geradoPorIA={true} text="Estatística" />
+            <SimuladoCard geradoPorIA={true} text="Geometria" />
           </div>
         </div>
         <div className="flex flex-col mt-5 gap-5">
@@ -44,19 +65,58 @@ export default function Simulados() {
             <SimuladoCard text="Enem 2019" />
           </div>
         </div>
+        <div className="flex flex-col mt-5 gap-5">
+          <div>
+            <h3 className="text-xl font-semibold flex gap-2 text-mainBlue">
+              <Sparkles /> Gere seus próprios simulado
+            </h3>
+            <p className="text-sm text-text-lightSub">
+              Com a Inteligência Artificial da IAcademy, agora é possível criar
+              simulados feitos especialmente para você.
+            </p>
+          </div>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setIsSubmitting(true);
+              sendData();
+            }}
+            className="flex items-end gap-5 pb-5 border-b-2 border-borders-light"
+          >
+            <InputGroup
+              label="Tema do Simulado"
+              placeholder="Ex: Geometria Espacial"
+              labelFor="tema"
+              onChange={(e) => setTema(e.target.value)}
+            />
+            <InputGroup
+              label="Questões por prova"
+              labelFor="qtd"
+              inputType="number"
+              placeholder="Ex: 12"
+              onChange={(e) => setQtd(e.target.value)} // Só verificar se tá passando como string ou number
+            />
+            <SubmitButton
+              text="Gerar Simulado"
+              classname="w-fit"
+              loading={isSubmitting}
+            />
+          </form>
+          <div className="grid grid-cols-3 gap-5"></div>
+        </div>
       </div>
     </section>
   );
 }
 
-function SimuladoCard({ isFromAI = false, text = "" }) {
+function SimuladoCard({ geradoPorIA = false, text = "" }) {
   return (
     <Link
       href={"simulados/simulado"}
       className="bg-bg-lightCard p-6 rounded-lg shadow-sm w-full flex flex-col gap-5 hover:shadow-lg duration-100 group hover:bg-mainBlue"
     >
       <div className="flex flex-col gap-2">
-        {isFromAI && (
+        {geradoPorIA && (
           <Sparkles
             className="text-mainBlue self-end group-hover:text-white"
             size={30}

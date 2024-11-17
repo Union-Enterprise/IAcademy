@@ -31,10 +31,7 @@ export default function Login() {
         if (response.status === 200) {
           setErrorMessage("");
           setAuth(true, response.data);
-          
-          // is_first_access dentro de response.data para saber se é ou nao o primeiro acesso -> mostrar quiz de criação de roadmap
 
-          // console.log(response.data.is_first_access)
           router.push("/student");
         }
       })

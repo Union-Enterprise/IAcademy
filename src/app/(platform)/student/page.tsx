@@ -23,7 +23,7 @@ interface ModuloProps {
   }[];
 }
 
-export default function Home() {
+export default function Student() {
   const { user, isAuthenticated } = useUser();
   const router = useRouter();
   const now = new Date().getHours();
@@ -38,10 +38,14 @@ export default function Home() {
   const userId = user.id;
   async function updateStreak() {
     try {
-      const response = await axios.put('http://localhost:5002/update_streak', { userId }, { withCredentials: true });
+      const response = await axios.put(
+        "http://localhost:5002/update_streak",
+        { userId },
+        { withCredentials: true }
+      );
       streak = response.data;
       if (response.data.errors && response.data.errors.length > 0) {
-        console.log('Error:', response.data.errors);
+        console.log("Error:", response.data.errors);
       } else {
         console.log(response.data);
       }
@@ -147,12 +151,15 @@ export default function Home() {
           </div>
         </div>
         <div className="col-span-4 flex flex-col gap-10">
-          <div className="rounded-xl p-5 pr-44 flex relative items-center shadow-sm border-2 border-borders-light">
+          <div className="rounded-xl p-5 pr-48 flex relative items-center shadow-sm border-2 border-borders-light min-h-[260px]">
             <div>
-              <p className="text-xl font-bold text-[#FF9600]">Você está à</p>
-              <span className="text-8xl font-black text-[#FF9600]">{user.streak}</span>
+              <p className="text-xl font-bold text-[#FF9600]">Você está há</p>
+              <span className="text-8xl font-black text-[#FF9600]">
+                {user.streak || "1"}
+              </span>
               <p className="text-xl font-bold text-[#FF9600]">
-                dias se preparando para os vestibulares!
+                {user.streak ? "dias" : "dia"} se preparando para os
+                vestibulares!
               </p>
             </div>
             <Flame
