@@ -49,9 +49,6 @@ body {
   animation: blink 0.75s step-end infinite;
 }
 
-
-
-
 @keyframes typingBall {
   0% {
     transform: scale(0.6);
@@ -99,7 +96,6 @@ body {
     opacity: 0;
   }
 }
-
 
 @layer base {
   :root {

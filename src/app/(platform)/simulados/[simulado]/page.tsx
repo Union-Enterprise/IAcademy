@@ -1,8 +1,54 @@
+"use client";
+
 import { ArrowLeft, ArrowRight, ChevronRight, Dot } from "lucide-react";
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import LoadingFrame from "@/app/ui/components/LoadingFrame";
+
+interface Simulado {
+  _id: string;
+  titulo: string;
+  gerado_por_ia: boolean;
+  provas: { id: string; nome: string }[];
+  qtdQuestoes: number;
+}
 
 export default function Simulado() {
+  const router = useParams();
+  const simuladoId = router.simulado;
+  const [simulado, setSimulado] = useState<Simulado | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!simuladoId) return;
+
+    const fetchSimulado = async () => {
+      try {
+        const response = await axios.get<Simulado>(
+          `http://localhost:5002/simulado/${simuladoId}`
+        );
+        setSimulado(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar o simulado:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSimulado();
+  }, [simuladoId]);
+
+  if (isLoading) {
+    return <LoadingFrame />;
+  }
+
+  if (!simulado) {
+    return <p>Simulado não encontrado.{simuladoId}</p>;
+  }
+
   return (
     <div className="flex flex-col px-[100px] my-[80px] gap-16">
       <div className="flex flex-col w-full gap-5">
@@ -16,34 +62,39 @@ export default function Simulado() {
           </Link>
           <div className="flex gap-5 bg-mainBlue px-5 py-3 items-center *:text-white rounded-md">
             <Sparkles size={20} />
-            <div>
-              <p className="mb-1">
-                Esse simulado é gerado pela Inteligência Artifical da IAcademy
-                baseado nas áreas em que você possui menos afinidade.
-              </p>
-              <p className="text-xs opacity-80">
-                A Inteligência Artifical pode cometer erros, então considere
-                revisar e reportar informações se necessário.
-              </p>
-            </div>
+            {simulado.gerado_por_ia && (
+              <>
+                <div>
+                  <p className="mb-1">
+                    Esse simulado é gerado pela Inteligência Artifical da
+                    IAcademy baseado nas áreas em que você possui menos
+                    afinidade.
+                  </p>
+                  <p className="text-xs opacity-80">
+                    A Inteligência Artifical pode cometer erros, então considere
+                    revisar e reportar informações se necessário.
+                  </p>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="w-full flex">
           <div className="flex flex-col gap-5 w-full py-10">
-            <h2 className="text-4xl font-bold">Trigonometria no Enem</h2>
+            <h2 className="text-4xl font-bold">{simulado.titulo}</h2>
             <div>
               <p className="text-lg font-bold">Concluídas:</p>
+
               <div className="grid grid-cols-2 gap-x-10 *:opacity-60 gap-3 mt-2">
-                <p>Trigonometria - A</p>
-                <p>Trigonometria - B</p>
-                <p>Trigonometria - C</p>
-                <p>Trigonometria - D</p>
+                {simulado.provas.map((prova) => (
+                  <li key={prova.id}>{prova.nome}</li>
+                ))}
               </div>
             </div>
           </div>
           <div className="border-l-2 border-borders-lightB px-4 py-10 w-[300px]">
             <p className="text-lg uppercase font-medium">Feitas até agora:</p>
-            <h3 className="text-5xl font-black mt-1">0/185</h3>
+            <h3 className="text-5xl font-black mt-1">{simulado.qtdQuestoes}</h3>
           </div>
         </div>
       </div>

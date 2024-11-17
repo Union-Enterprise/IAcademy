@@ -11,6 +11,8 @@ import { getModulosData } from "@/app/ui/components/modulos/data";
 import { useRouter } from "next/navigation";
 import LoadingFrame from "@/app/ui/components/LoadingFrame";
 import axios from "axios";
+import { AtividadesChart } from "@/app/ui/components/charts/Atividades";
+import { AproveitamentoChart } from "@/app/ui/components/charts/Aproveitamento";
 
 interface ModuloProps {
   title: string;
@@ -144,10 +146,7 @@ export default function Student() {
             </div>
           </div>
           <div className="border-2 border-borders-light p-5 rounded-xl">
-            <h3 className="font-semibold text-lg">Aproveitamento de Estudos</h3>
-            <div className="bg-blue-300 flex">
-              <UtilizationChart />
-            </div>
+            <AtividadesChart />
           </div>
         </div>
         <div className="col-span-4 flex flex-col gap-10">
@@ -170,8 +169,8 @@ export default function Student() {
               strokeWidth={3}
             />
           </div>
-          <div className="border-2 border-borders-light p-5">
-            <h3>Feedbacks</h3>
+          <div className="border-2 border-borders-light p-5 rounded-xl">
+            <AproveitamentoChart />
           </div>
         </div>
       </div>
@@ -182,7 +181,7 @@ export default function Student() {
         <div className="col-span-4">
           <RadarHabilidades />
         </div>
-        <div className="col-span-3 p-5 shadow-sm border-2 border-borders-light rounded-bl-xl rounded-br-xl">
+        <div className="col-span-3 p-5 shadow-sm border-2 border-borders-light rounded-bl-xl rounded-br-xl h-fit">
           <div className="flex gap-5 pb-3 border-b-2 border-borders-light *:text-mainBlue">
             <Sparkles />
             <h3 className="text-lg font-bold">Análise de perfil e feedbacks</h3>
