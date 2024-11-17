@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { getModulosData } from "@/app/ui/components/modulos/data";
 import { useRouter } from "next/navigation";
 import LoadingFrame from "@/app/ui/components/LoadingFrame";
+import axios from "axios";
 
 interface ModuloProps {
   title: string;
@@ -33,6 +34,21 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalTopicsCount, setTotalTopicsCount] = useState<number>(0);
+  let streak = 0;
+  const userId = user.id;
+  async function updateStreak() {
+    try {
+      const response = await axios.put('http://localhost:5002/update_streak', { userId }, { withCredentials: true });
+      streak = response.data;
+      if (response.data.errors && response.data.errors.length > 0) {
+        console.log('Error:', response.data.errors);
+      } else {
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const getTotalTopicsCount = (
     data: Record<string, ModuloProps> | null
@@ -56,6 +72,7 @@ export default function Home() {
         setModulosData(data);
         const count = getTotalTopicsCount(data);
         setTotalTopicsCount(count);
+        updateStreak();
       } catch (err) {
         setError("Erro ao carregar os dados dos módulos.");
         console.error(err);
@@ -63,7 +80,6 @@ export default function Home() {
         setLoading(false);
       }
     };
-
     fetchModulosData();
   }, [user]);
 
@@ -134,7 +150,7 @@ export default function Home() {
           <div className="rounded-xl p-5 pr-44 flex relative items-center shadow-sm border-2 border-borders-light">
             <div>
               <p className="text-xl font-bold text-[#FF9600]">Você está à</p>
-              <span className="text-8xl font-black text-[#FF9600]">22</span>
+              <span className="text-8xl font-black text-[#FF9600]">{user.streak}</span>
               <p className="text-xl font-bold text-[#FF9600]">
                 dias se preparando para os vestibulares!
               </p>

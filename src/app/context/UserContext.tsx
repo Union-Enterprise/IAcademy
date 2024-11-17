@@ -20,6 +20,8 @@ interface User {
   birth?: string;
   cpf?: string;
   is_premium: boolean;
+  streak?: number;
+  latestStreak?: string;
   is_adm: boolean;
   createdAt: string;
   googleId?: string;
