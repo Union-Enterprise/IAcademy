@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { Plus, Trash2, Edit } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
+
 
 interface Question {
     titulo: string;
@@ -26,7 +28,7 @@ export default function SimuladoQuestao() {
     const [imagem, setImagem] = useState<File | null>(null);
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
- 
+
     useEffect(() => {
         const storedQuestoes = localStorage.getItem("questoes");
         if (storedQuestoes) {
@@ -34,7 +36,12 @@ export default function SimuladoQuestao() {
         }
     }, []);
 
-  
+    useEffect(() => {
+        const tema = localStorage.getItem("simuladoTema");
+        setSimuladoTitulo(tema);
+    }, []);
+
+
     useEffect(() => {
         if (questoes.length > 0) {
             localStorage.setItem("questoes", JSON.stringify(questoes));
@@ -119,8 +126,9 @@ export default function SimuladoQuestao() {
     return (
         <div className="p-6 bg-white rounded-md shadow-md">
             <h1 className="text-2xl font-bold">
-                Prova - <span className="text-mainBlue">Variavel</span>
+                Prova - <span className="text-mainBlue">{simuladoTitulo || "Carregando.."}</span>
             </h1>
+
 
             <div className="flex justify-end items-center mb-4">
                 <button
@@ -301,7 +309,8 @@ export default function SimuladoQuestao() {
             {isDeleteModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg w-1/4 p-6">
-                        <h2 className="text-lg font-semibold mb-4">Tem certeza que deseja excluir esta questão?</h2>
+                        <h3 className="text-xl font-bold">Excluir questão</h3>
+                        <p className="pb-5">Você realmente deseja excluir esta questão?</p>
                         <div className="flex justify-end gap-4">
                             <button
                                 onClick={() => setIsDeleteModalOpen(false)}
