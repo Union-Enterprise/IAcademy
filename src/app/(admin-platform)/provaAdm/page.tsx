@@ -48,7 +48,7 @@ export default function SimuladoQuestao() {
             localStorage.setItem("provas", JSON.stringify(provas));
         }
     }, [provas]);
-    
+
 
     const handleOpenQuestionModal = (questionIndex: number | null = null) => {
         if (questionIndex !== null) {
@@ -179,7 +179,7 @@ export default function SimuladoQuestao() {
                             }}
                         >
                             <h3 className="text-xl font-semibold pb-4">{questionnaire.titulo}</h3>
-                            <div className="border-b w-80 border-zinc-400"/>
+                            <div className="border-b w-80 border-zinc-400" />
                             <p className="text-gray-700 mt-2">{questionnaire.tema}</p>
                         </Link>
                         <div className="flex gap-4 mt-4">
@@ -250,7 +250,7 @@ export default function SimuladoQuestao() {
                                 <div className="flex justify-end">
                                     <button
                                         type="submit"
-                                        className="bg-mainBlue text-white py-2 px-6 rounded-md hover:bg-blue-700"
+                                        className="bg-mainBlue text-white py-2 px-6 rounded-md w-full hover:bg-blue-700"
                                     >
                                         Salvar
                                     </button>
@@ -314,28 +314,47 @@ export default function SimuladoQuestao() {
                                     value={quantidade}
                                     onChange={(e) => setQuantidade(Math.max(1, Number(e.target.value)))}
                                     className="w-full p-2 mt-2 border rounded-md"
-                                    min="1"
+                                   
                                     placeholder="Digite a quantidade de questões"
                                 />
                             </div>
                             <div className="flex justify-end gap-4">
                                 <button
                                     onClick={handleCreateWithIA}
-                                    className="bg-mainBlue text-white py-2 px-6 rounded-md hover:bg-blue-700"
+                                    className="bg-purple-500 text-white py-2 px-6 rounded-md w-full hover:bg-purple-600"
                                 >
                                     Criar
                                 </button>
-                                <button
-                                    onClick={handleCloseIaModal}
-                                    className="bg-gray-500 text-white py-2 px-6 rounded-md hover:bg-gray-600"
-                                >
-                                    Cancelar
-                                </button>
+
                             </div>
                         </div>
                     </div>
                 </div>
             )}
+
+            {isUploadModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg shadow-lg w-1/3 p-6">
+                        <h3 className="text-xl font-bold mb-4">Confirmar Upload</h3>
+                        <p className="text-gray-700 mb-6">Você deseja mesmo usar este PDF?</p>
+                        <div className="flex justify-end gap-4">
+                            <button
+                                onClick={handleCancelUpload}
+                                className="bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 duration-150"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={handleConfirmUpload}
+                                className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 duration-150"
+                            >
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
 
         </div>
     );

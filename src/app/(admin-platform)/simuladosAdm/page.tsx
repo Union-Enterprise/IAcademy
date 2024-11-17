@@ -214,15 +214,10 @@ export default function SimuladosAdm() {
                                     />
                                 </div>
                                 <div className="flex justify-end gap-4 mt-4">
-                                    <button
-                                        onClick={handleCloseModal}
-                                        className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600"
-                                    >
-                                        Cancelar
-                                    </button>
+                                   
                                     <button
                                         type="submit"
-                                        className="bg-mainBlue text-white py-2 px-4 rounded-md hover:bg-blue-800 duration-150"
+                                        className="bg-mainBlue text-white py-2 px-4 rounded-md w-full hover:bg-blue-800 duration-150"
                                     >
                                         Salvar
                                     </button>

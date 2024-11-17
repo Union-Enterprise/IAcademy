@@ -21,6 +21,7 @@ export default function SimuladoQuestao() {
     const [questionToDelete, setQuestionToDelete] = useState<number | null>(null);
 
     const [questaoTitulo, setQuestaoTitulo] = useState("");
+
     const [enunciado, setEnunciado] = useState("");
     const [alternativas, setAlternativas] = useState<string[]>(["", "", "", ""]);
     const [alternativaCorreta, setAlternativaCorreta] = useState<number | null>(null);
@@ -57,6 +58,7 @@ export default function SimuladoQuestao() {
             setImagem(question.imagem || null);
             setEditingIndex(questionIndex);
         } else {
+
             setQuestaoTitulo("");
             setEnunciado("");
             setAlternativas(["", "", "", ""]);
@@ -184,7 +186,9 @@ export default function SimuladoQuestao() {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg w-2/4 max-h-[80vh] overflow-y-auto">
                         <div className="bg-mainBlue text-white p-4 rounded-t-lg flex justify-between items-center">
-                            <h2 className="text-xl font-bold">{questaoTitulo ? "Editar Questão" : "Criar Questão"}</h2>
+                            <h2 className="text-xl font-bold">
+                                {editingIndex !== null ? "Editar Questão" : "Criar Questão"}
+                            </h2>
                             <button
                                 onClick={handleCloseQuestionModal}
                                 className="text-white hover:text-gray-200"
@@ -285,16 +289,10 @@ export default function SimuladoQuestao() {
                                     )}
                                 </div>
                                 <div className="flex justify-end gap-4 mt-6">
-                                    <button
-                                        type="button"
-                                        onClick={handleCloseQuestionModal}
-                                        className="bg-gray-300 text-black p-2 rounded-md"
-                                    >
-                                        Cancelar
-                                    </button>
+
                                     <button
                                         type="submit"
-                                        className="bg-mainBlue text-white p-2 rounded-md"
+                                        className="bg-mainBlue text-white p-2 rounded-md w-full"
                                     >
                                         {questaoTitulo ? "Salvar Alterações" : "Criar Questão"}
                                     </button>
