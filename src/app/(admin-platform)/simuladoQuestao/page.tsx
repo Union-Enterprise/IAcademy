@@ -5,7 +5,6 @@ import { Plus, Trash2, Edit } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
 
-
 interface Question {
     titulo: string;
     enunciado: string;
