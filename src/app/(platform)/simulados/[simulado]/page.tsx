@@ -12,7 +12,19 @@ interface Simulado {
   _id: string;
   titulo: string;
   gerado_por_ia: boolean;
-  provas: { id: string; nome: string }[];
+  provas: {
+    questoes: {
+      _id: string;
+      titulo: string;
+      enunciado: string;
+      alternativas: string[];
+      alternativa_correta: string;
+      explicacao: string;
+      radar_de_habilidades: string;
+    }[];
+    _id: string;
+    titulo: string;
+  }[];
   qtdQuestoes: number;
 }
 
@@ -21,6 +33,13 @@ export default function Simulado() {
   const simuladoId = router.simulado;
   const [simulado, setSimulado] = useState<Simulado | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const getTotalQuestoes = (provas: any[]) => {
+    return provas.reduce(
+      (total, prova) => total + (prova.questoes?.length || 0),
+      0
+    );
+  };
 
   useEffect(() => {
     if (!simuladoId) return;
@@ -87,14 +106,16 @@ export default function Simulado() {
 
               <div className="grid grid-cols-2 gap-x-10 *:opacity-60 gap-3 mt-2">
                 {simulado.provas.map((prova) => (
-                  <li key={prova.id}>{prova.nome}</li>
+                  <li key={prova._id}>{prova.titulo}</li>
                 ))}
               </div>
             </div>
           </div>
           <div className="border-l-2 border-borders-lightB px-4 py-10 w-[300px]">
             <p className="text-lg uppercase font-medium">Feitas até agora:</p>
-            <h3 className="text-5xl font-black mt-1">{simulado.qtdQuestoes}</h3>
+            <h3 className="text-5xl font-black mt-1">
+              0/{getTotalQuestoes(simulado.provas)}
+            </h3>
           </div>
         </div>
       </div>
@@ -129,9 +150,13 @@ export default function Simulado() {
       </section>
       <section className="flex flex-col gap-5">
         <h4 className="text-2xl font-bold mb-5">Provas Disponíveis</h4>
-        <Prova />
-        <Prova />
-        <Prova />
+        {simulado.provas.map((prova) => (
+          <Prova
+            titulo={prova.titulo}
+            qtdQuestoes={prova.questoes.length}
+            link={`${simuladoId}/${prova._id}`}
+          />
+        ))}
       </section>
       <section className="flex flex-col gap-5">
         <h4 className="text-2xl font-bold">Provas Concluídas</h4>
@@ -143,27 +168,32 @@ export default function Simulado() {
   );
 }
 
-function Prova() {
+function Prova({
+  titulo,
+  qtdQuestoes,
+  link,
+}: {
+  titulo: string;
+  qtdQuestoes: number;
+  link: string;
+}) {
   return (
     <Link
-      href={"#"}
+      href={link}
       className="shadow-sm rounded-xl p-8 flex justify-between items-center gap-5 border-2 border-borders-light hover:shadow-md duration-100"
     >
       <div className="flex flex-col gap-3">
-        <h5 className="font-semibold text-xl">Trigonometria - A</h5>
+        <h5 className="font-semibold text-xl">{titulo}</h5>
         <div className="flex items-center *:text-text-lightSub *:font-medium">
           <Dot size={30} />
-          <p>10 questões</p>
+          <p>{qtdQuestoes} questões</p>
           <Dot size={30} />
           <p>Duração Máxima de 2h35m</p>
         </div>
       </div>
-      <Link
-        href={"/simulados/simulado/qualquer-prova"}
-        className="px-10 py-2 text-white h-fit bg-mainBlue rounded-md border-2 border-transparent hover:bg-transparent hover:text-mainBlue hover:border-mainBlue duration-100"
-      >
+      <div className="px-10 py-2 text-white h-fit bg-mainBlue rounded-md border-2 border-transparent hover:bg-transparent hover:text-mainBlue hover:border-mainBlue duration-100">
         Começar
-      </Link>
+      </div>
     </Link>
   );
 }

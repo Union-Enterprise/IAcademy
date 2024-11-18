@@ -9,6 +9,13 @@ import axios from "axios";
 import { useToast } from "@/app/context/ToastContext";
 import Skeleton from "@/app/ui/components/Skeleton";
 
+export const getTotalQuestoes = (provas: any[]) => {
+  return provas.reduce(
+    (total, prova) => total + (prova.questoes?.length || 0),
+    0
+  );
+};
+
 export default function Simulados() {
   const addToast = useToast();
   const [qtd, setQtd] = useState("");
@@ -57,13 +64,6 @@ export default function Simulados() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const getTotalQuestoes = (provas: any[]) => {
-    return provas.reduce(
-      (total, prova) => total + (prova.questoes?.length || 0),
-      0
-    );
   };
 
   return (

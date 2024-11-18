@@ -8,7 +8,6 @@ import React from "react";
 
 export default function Prova() {
   const prova = useParams().prova[0];
-  console.log(prova);
   return (
     <section className=" px-[100px] my-[80px] grid grid-cols-3 relative gap-10">
       <div className="col-span-2 gap-16 flex flex-col">
@@ -123,7 +122,7 @@ export function Menu({ prova }: { prova: string }) {
       >
         <div>
           <h3 className="text-lg font-semibold">Tempo restante</h3>
-          <p className="w-fit">{isOpen ? "00h 00min 00s" : "__h __min __s"}</p>
+          <p className="w-fit">{isOpen ? "00h 00min 00s" : "-- : -- : --"}</p>
         </div>
         <ChevronDown
           className={`transform transition-transform duration-200 ${
