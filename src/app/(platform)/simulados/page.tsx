@@ -29,7 +29,6 @@ export default function Simulados() {
       try {
         const response = await axios.get("http://localhost:5002/simulado");
         setSimulados(response.data);
-        addToast("Simulado puxado com sucesso.", "success");
       } catch (error) {
         console.error("Erro ao buscar simulados:", error);
         addToast(

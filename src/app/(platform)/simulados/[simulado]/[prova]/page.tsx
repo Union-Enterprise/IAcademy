@@ -67,6 +67,7 @@ export default function Prova() {
             key={index}
             index={index + 1}
             enunciado={questao.enunciado}
+            titulo={questao.titulo}
             alternativas={questao.alternativas}
           />
         ))}
@@ -79,17 +80,22 @@ export default function Prova() {
 export function Questao({
   index,
   imagens,
+  titulo,
   enunciado,
   alternativas,
 }: {
   index: number;
   imagens?: string[];
+  titulo: string;
   enunciado: string;
   alternativas: string[];
 }) {
   return (
     <div className="flex flex-col gap-5" id={`questao-${index}`}>
-      <h2 className="text-xl font-semibold">Questão {index}</h2>
+      <div>
+        <h2 className="text-xl font-semibold mb-2">Questão {index}</h2>
+        <h3 className="text-lg font-medium text-text-lightSub">{titulo}</h3>
+      </div>
       {imagens && <p>"Aparecer imagem se tiver"</p>}
       <p>{enunciado}</p>
       <Respostas alternativas={alternativas} />
