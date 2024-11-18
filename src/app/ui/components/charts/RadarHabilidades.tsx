@@ -1,7 +1,7 @@
 "use client";
 
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
-
+import { useUser } from "@/app/context/UserContext";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -9,14 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { skill: "Raciocínio lógico", desktop: 21 },
-  { skill: "Criatividade", desktop: 43 },
-  { skill: "Conhecimento de Fórmulas", desktop: 23 },
-  { skill: "Interpretação de texto", desktop: 72 },
-  { skill: "Teoria", desktop: 41 },
-  { skill: "Cálculos Avançados", desktop: 74 },
-];
+
 
 const chartConfig = {
   desktop: {
@@ -25,7 +18,29 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+interface Skills {
+  Calculos: number;
+  Conhecimento: number;
+  Criatividade: number;
+  Raciocinio: number;
+  Teoria: number;
+  Texto: number;
+
+}
+
+
 export function RadarHabilidades() {
+  const { user, isAuthenticated } = useUser();
+  const { Calculos, Conhecimento, Criatividade, Raciocinio, Teoria, Texto } = user.skills ?? {};
+
+  let chartData = [
+    { skill: "Raciocínio lógico", desktop: Raciocinio },
+    { skill: "Criatividade", desktop: Criatividade },
+    { skill: "Conhecimento de Fórmulas", desktop: Conhecimento },
+    { skill: "Interpretação de texto", desktop: Texto },
+    { skill: "Teoria", desktop: Teoria },
+    { skill: "Cálculos Avançados", desktop: Calculos },
+  ];
   return (
     <Card className="p-0 m-0 *:p-0 *:m-0 bg-transparent shadow-none border-none">
       <CardContent className="pb-0">

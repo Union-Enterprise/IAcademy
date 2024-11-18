@@ -22,6 +22,7 @@ interface User {
   is_premium: boolean;
   streak?: number;
   latestStreak?: string;
+  skills?: Object;
   is_adm: boolean;
   createdAt: string;
   googleId?: string;
@@ -52,6 +53,8 @@ const defaultContext: UserContextType = {
 };
 
 const UserContext = createContext<UserContextType>(defaultContext);
+
+
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>(defaultUser);
