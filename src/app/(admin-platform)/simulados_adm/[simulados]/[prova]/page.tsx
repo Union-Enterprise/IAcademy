@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { Plus, Trash2, Edit, Upload, X } from "lucide-react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
+import { useParams, useRouter } from "next/navigation";
 
 interface Provas {
     titulo: string;
@@ -13,6 +13,8 @@ interface Provas {
 }
 
 export default function SimuladoQuestao() {
+    const params = useParams();
+
     const [provas, setProvas] = useState<Provas[]>([]);
     const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -28,21 +30,22 @@ export default function SimuladoQuestao() {
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [simuladoTitulo, setSimuladoTitulo] = useState<string | null>(null);
 
+    const simulados = decodeURIComponent(params.simulados);
+    const prova = decodeURIComponent(params.prova);
+
+    console.log(simulados, prova)
+
     useEffect(() => {
         const fetchQuestionnaires = async () => {
-            const storedQuestionnaires = await axios.get("http://localhost:5002/simulado/673b9c6e97599f9d1807e62e");// criar uma variavel para o id(cod praticamente igual ao arquivo [simulados] )
+            const storedQuestionnaires = await axios.get(`http://localhost:5002/simulado/${simulados}/${prova}`);// criar uma variavel para o id(cod praticamente igual ao arquivo [simulados] )
             console.log(storedQuestionnaires)
-            setProvas(storedQuestionnaires.data.provas);
+            setProvas(storedQuestionnaires.data.questoes);
         }
         // if (storedQuestionnaires) {
         // }
         fetchQuestionnaires();
 
     }, []);
-
-    const params = useParams();
-
-    const simulados = decodeURIComponent(params.simulados);
 
 
     useEffect(() => {
@@ -121,7 +124,7 @@ export default function SimuladoQuestao() {
     return (
         <div className="p-6 bg-white rounded-md shadow-md">
             <h1 className="text-2xl font-bold">
-                Simulado - <span className="text-mainBlue">{simuladoTitulo || "Carregando..."}</span>
+                Prova - <span className="text-mainBlue">{simuladoTitulo || "Carregando..."}</span>
             </h1>
 
             <div className="flex justify-end items-center mb-4 gap-4">
@@ -130,7 +133,7 @@ export default function SimuladoQuestao() {
                     onClick={() => handleOpenQuestionModal()}
                 >
                     <Plus className="w-4 h-4" />
-                    Criar Prova
+                    Criar Questão
                 </button>
 
             </div>
@@ -141,7 +144,7 @@ export default function SimuladoQuestao() {
                         key={index}
                         className="p-4 mb-4 border rounded-md shadow-md bg-gray-50 hover:bg-mainBlue hover:text-white transition-all duration-300"
                     >
-                        <Link href={"simulados_adm/"+ simulados + "/"+ index}
+                        <Link href={``}
                             onClick={() => {
                                 localStorage.setItem("simuladoTema", questionnaire.tema);
                             }}

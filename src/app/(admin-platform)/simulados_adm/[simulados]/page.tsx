@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Plus, Trash2, Edit, Upload, X } from "lucide-react";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import axios from "axios";
 
 interface Provas {
@@ -13,6 +13,12 @@ interface Provas {
 }
 
 export default function SimuladoQuestao() {
+    const params = useParams();
+
+    const simulados = decodeURIComponent(params.simulados);
+
+    console.log(simulados)
+
     const [provas, setProvas] = useState<Provas[]>([]);
     const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -30,7 +36,7 @@ export default function SimuladoQuestao() {
 
     useEffect(() => {
         const fetchQuestionnaires = async () => {
-            const storedQuestionnaires = await axios.get("http://localhost:5002/simulado/673b9c6e97599f9d1807e62e");// criar uma variavel para o id(cod praticamente igual ao arquivo [simulados] )
+            const storedQuestionnaires = await axios.get(`http://localhost:5002/simulado/${simulados}`);// criar uma variavel para o id(cod praticamente igual ao arquivo [simulados] )
             console.log(storedQuestionnaires)
             setProvas(storedQuestionnaires.data.provas);
         }
@@ -39,10 +45,6 @@ export default function SimuladoQuestao() {
         fetchQuestionnaires();
 
     }, []);
-
-    const params = useParams();
-
-    const simulados = decodeURIComponent(params.simulados);
 
 
     useEffect(() => {
@@ -141,7 +143,7 @@ export default function SimuladoQuestao() {
                         key={index}
                         className="p-4 mb-4 border rounded-md shadow-md bg-gray-50 hover:bg-mainBlue hover:text-white transition-all duration-300"
                     >
-                        <Link href={"simulados_adm/"+ simulados + "/"+ index}
+                        <Link href={simulados + "/"+ index}
                             onClick={() => {
                                 localStorage.setItem("simuladoTema", questionnaire.tema);
                             }}
