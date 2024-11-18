@@ -162,13 +162,6 @@ export default function SimuladoQuestao() {
                     Criar Prova
                 </button>
 
-
-                <button
-                    className="bg-purple-500 text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-purple-600 duration-150"
-                    onClick={handleOpenIaModal}
-                >
-                    Criar com IA
-                </button>
             </div>
 
             <div>
