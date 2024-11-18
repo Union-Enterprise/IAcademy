@@ -23,7 +23,7 @@ export default function SimuladosAdm() {
     const createSim = () => {
         axios
           .post(
-            "http://localhost:5002/simulado",
+            "http://localhost:5002/simulado", //criar uma variavel do id 
             {titulo, desc},
             { withCredentials: true }
           )
@@ -37,10 +37,15 @@ export default function SimuladosAdm() {
 
 
     useEffect(() => {
-        const storedQuestionnaires = localStorage.getItem("questionnaires");
-        if (storedQuestionnaires) {
-            setQuestionnaires(JSON.parse(storedQuestionnaires));
+        const fetchQuestionnaires = async () => {
+            const storedQuestionnaires = await axios.get("http://localhost:5002/simulado");
+            console.log(storedQuestionnaires)
+            setQuestionnaires(storedQuestionnaires.data);
         }
+        // if (storedQuestionnaires) {
+        // }
+        fetchQuestionnaires();
+
     }, []);
 
    
@@ -140,18 +145,18 @@ export default function SimuladosAdm() {
                 {questionnaires.map((questionnaire) => (
                     <div
                         key={questionnaire.id}
-                        className="p-4 bg-white w-full h-72 border rounded-md shadow-md hover:bg-mainBlue hover:text-white transition-all hover:shadow-md group relative"
+                        className="p-4 bg-white w-full h-80 border rounded-md shadow-md hover:bg-mainBlue hover:text-white transition-all hover:shadow-md group relative"
                     >
                         <Link href={`/provaAdm`} className="h-[600px]" 
                         onClick={() => {
-                            localStorage.setItem("simuladoTitulo", questionnaire.desc);
+                            localStorage.setItem("simuladoTitulo", questionnaire.titulo);
                         }}>
                             <h3 className="text-2xl font-semibold flex justify-center pb-6 group-hover:text-white">
                                 {questionnaire.titulo}
                             </h3>
                       
                         <div className="border-b w-full" />
-                        <p className="text-lg flex justify-center text-gray-600 mt-6 group-hover:text-white">
+                        <p className="text-sm flex  justify-center text-gray-600 mt-6 group-hover:text-white">
                             {questionnaire.desc}
                         </p>
                         </Link>

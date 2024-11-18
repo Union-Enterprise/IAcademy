@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Trash2, Edit, Upload, X } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
 
 interface Provas {
     titulo: string;
@@ -28,13 +29,16 @@ export default function SimuladoQuestao() {
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [simuladoTitulo, setSimuladoTitulo] = useState<string | null>(null);
 
-
-
     useEffect(() => {
-        const storedProvas = localStorage.getItem("provas");
-        if (storedProvas) {
-            setProvas(JSON.parse(storedProvas));
+        const fetchQuestionnaires = async () => {
+            const storedQuestionnaires = await axios.get("http://localhost:5002/simulado/673a9ee67c14998b91d37875");// criar uma variavel para o id(cod praticamente igual ao arquivo [simulados] )
+            console.log(storedQuestionnaires)
+            setProvas(storedQuestionnaires.data.provas);
         }
+        // if (storedQuestionnaires) {
+        // }
+        fetchQuestionnaires();
+
     }, []);
 
 
