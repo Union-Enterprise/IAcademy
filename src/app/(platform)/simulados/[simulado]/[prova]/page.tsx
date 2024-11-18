@@ -199,18 +199,84 @@ export function Menu({
   qtdQuestoes: number;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-
+  let acertos = 0;
+  let gabarito: string[] = [];
+  let acertadas: string[] = [];
+  let placeholder: string[] = []
   const toggle = () => {
     setIsOpen(!isOpen);
   };
+
+  let skills = {
+    Raciocinio: 0,
+    Criatividade: 0,
+    Calculos: 0,
+    Conhecimento: 0,
+    Texto: 0,
+    Teoria: 0
+  }
+
+  let resultados = {
+    simulado: simulado,
+    prova: prova,
+    respostas: placeholder,
+    gabarito: placeholder,
+    acertos: 0,
+  }
+
+  const sendData = () => {
+    axios
+    .put(
+      "http://localhost:5002/finish_test",
+      {
+        skills: skills,
+        resultados: resultados
+      },
+      {withCredentials: true}
+    )
+    .then((response)=>{
+      console.log(response.data);
+    })
+    .catch((error)=>{
+      console.error(error);
+    })
+    resultados.respostas = [];
+    resultados.gabarito = [];
+  }
+
+  const checkGabarito = (questoes : Record<string, any>) => {
+    for (let i = 0; i<qtdQuestoes; i++){
+      gabarito.push(questoes[i].alternativa_correta);
+      resultados.respostas.push(respostas[i]);
+      if(respostas[i]==undefined){
+        respostas[i] = "none";
+      }
+      if(gabarito[i]==respostas[i]){
+        acertos += 1;
+        acertadas.push("Questão "+(i+1)+": "+respostas[i]);
+        let skill = questoes[i].radar_de_habilidades;
+        if(skill=="Raciocínio lógico"){skills.Raciocinio+=1}
+        if(skill=="Criatividade"){skills.Criatividade+=1}
+        if(skill=="Conhecimento de fórmulas"){skills.Conhecimento+=1}
+        if(skill=="Interpretação de Texto"){skills.Texto+=1}
+        if(skill=="Calculos avançados"){skills.Calculos+=1}
+        if(skill=="Teoria"){skills.Teoria+=1}
+      }
+    }
+    resultados.acertos = acertos;
+    resultados.gabarito = gabarito;
+    console.log(resultados);
+    sendData();
+    gabarito = [];
+    acertadas = [];
+    acertos = 0;
+  }
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        console.log("Respostas:", respostas);
-        console.log(simulado, prova);
-        console.log(qtdQuestoes);
+        checkGabarito(questoes);
         // sendData();
       }}
       className="sticky top-28 h-fit justify-self-center rounded-md w-full border-2 border-black border-opacity-5"

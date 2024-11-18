@@ -80,6 +80,7 @@ export default function Student() {
         const count = getTotalTopicsCount(data);
         setTotalTopicsCount(count);
         updateStreak();
+        console.log(user.skills);
       } catch (err) {
         setError("Erro ao carregar os dados dos módulos.");
         console.error(err);
