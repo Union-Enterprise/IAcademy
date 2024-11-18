@@ -15,9 +15,7 @@ export default function SimuladoQuestao() {
     const [provas, setProvas] = useState<Provas[]>([]);
     const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [isIaModalOpen, setIsIaModalOpen] = useState(false);
-    const [uploadedPdf, setUploadedPdf] = useState<File | null>(null);
     const [questionToDelete, setQuestionToDelete] = useState<number | null>(null);
     const [quantidade, setQuantidade] = useState<number>(1);
     const [tituloIa, setTituloIa] = useState("");
@@ -31,7 +29,7 @@ export default function SimuladoQuestao() {
 
     useEffect(() => {
         const fetchQuestionnaires = async () => {
-            const storedQuestionnaires = await axios.get("http://localhost:5002/simulado/673a9ee67c14998b91d37875");// criar uma variavel para o id(cod praticamente igual ao arquivo [simulados] )
+            const storedQuestionnaires = await axios.get("http://localhost:5002/simulado/673b9c6e97599f9d1807e62e");// criar uma variavel para o id(cod praticamente igual ao arquivo [simulados] )
             console.log(storedQuestionnaires)
             setProvas(storedQuestionnaires.data.provas);
         }
@@ -101,23 +99,6 @@ export default function SimuladoQuestao() {
         }
     };
 
-    const handleUploadPdf = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            setUploadedPdf(e.target.files[0]);
-            setIsUploadModalOpen(true);
-        }
-    };
-
-    const handleConfirmUpload = () => {
-        console.log("PDF uploaded:", uploadedPdf);
-        setIsUploadModalOpen(false);
-    };
-
-    const handleCancelUpload = () => {
-        setUploadedPdf(null);
-        setIsUploadModalOpen(false);
-    };
-
     const handleOpenIaModal = () => {
         setIsIaModalOpen(true);
     };
@@ -139,21 +120,6 @@ export default function SimuladoQuestao() {
             </h1>
 
             <div className="flex justify-end items-center mb-4 gap-4">
-                <label
-                    htmlFor="uploadPdf"
-                    className="bg-green-500 text-white py-2 px-4 rounded-md flex items-center gap-2 cursor-pointer hover:bg-green-600 duration-150"
-                >
-                    <Upload className="w-4 h-4" />
-                    Upload PDF
-                </label>
-                <input
-                    type="file"
-                    id="uploadPdf"
-                    accept="application/pdf"
-                    onChange={handleUploadPdf}
-                    className="hidden"
-                />
-
                 <button
                     className="bg-mainBlue text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-blue-700 duration-150"
                     onClick={() => handleOpenQuestionModal()}
@@ -328,31 +294,6 @@ export default function SimuladoQuestao() {
                     </div>
                 </div>
             )}
-
-            {isUploadModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg shadow-lg w-1/3 p-6">
-                        <h3 className="text-xl font-bold mb-4">Confirmar Upload</h3>
-                        <p className="text-gray-700 mb-6">Você deseja mesmo usar este PDF?</p>
-                        <div className="flex justify-end gap-4">
-                            <button
-                                onClick={handleCancelUpload}
-                                className="bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 duration-150"
-                            >
-                                Cancelar
-                            </button>
-                            <button
-                                onClick={handleConfirmUpload}
-                                className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 duration-150"
-                            >
-                                Confirmar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-
         </div>
     );
 }
