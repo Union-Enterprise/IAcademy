@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Trash2, Edit } from "lucide-react";
+import { Plus, Trash2, Edit, Bot, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
@@ -19,6 +19,11 @@ export default function SimuladosAdm() {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
+    const [isIaModalOpen, setIsIaModalOpen] = useState(false);
+    const [quantidade, setQuantidade] = useState<number>(1);
+    const [tituloIa, setTituloIa] = useState("");
+
 
     const createSim = () => {
         axios
@@ -122,6 +127,25 @@ export default function SimuladosAdm() {
         setIsDeleteModalOpen(true);
     };
 
+    const handleOpenIaModal = () => {
+        setIsIaModalOpen(true);
+    };
+
+    const handleCloseIaModal = () => {
+        setIsIaModalOpen(false);
+    };
+
+    const handleCreateWithIA = async () => {
+        console.log("Criar", quantidade, "questões com IA");
+        setIsIaModalOpen(false);
+        
+        const response = await axios.post(
+            "http://localhost:5000/gen_simulado_ia",
+            { tema: tituloIa, qtd: quantidade }
+        );
+
+        console.log(response.data)
+    };
 
     const handleCloseDeleteModal = () => {
         setIsDeleteModalOpen(false);
@@ -139,7 +163,62 @@ export default function SimuladosAdm() {
                     <Plus className="w-4 h-4" />
                     Criar Simulados
                 </button>
+                <button
+                    className="bg-purple-500 text-white py-2 px-4 ml-4 rounded-md flex items-center gap-2 hover:bg-purple-600 duration-150"
+                    onClick={handleOpenIaModal}
+                >
+                    <Bot className="w-4 h-4" />
+                    Criar com IA
+                </button>
             </div>
+
+            {isIaModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg shadow-lg w-2/4 max-h-[80vh] overflow-y-auto">
+                        <div className="bg-purple-500 text-white p-4 rounded-t-lg flex justify-between items-center">
+                            <h2 className="text-xl font-bold">Criar com IA</h2>
+                            <button
+                                onClick={handleCloseIaModal}
+                                className="text-white hover:text-gray-200"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="p-6 space-y-6">
+                            <div>
+                                <label className="block font-medium">Tema do simulado</label>
+                                <input
+                                    type="text"
+                                    value={tituloIa}
+                                    onChange={(e) => setTituloIa(e.target.value)}
+                                    className="w-full p-2 mt-2 border rounded-md"
+                                    placeholder="Digite o tema do simulado"
+                                />
+                            </div>
+                            <div>
+                                <label className="block font-medium">Quantidade de Questões</label>
+                                <input
+                                    type="number"
+                                    value={quantidade}
+                                    onChange={(e) => setQuantidade(Math.max(1, Number(e.target.value)))}
+                                    className="w-full p-2 mt-2 border rounded-md"
+                                   
+                                    placeholder="Digite a quantidade de questões"
+                                />
+                            </div>
+                            <div className="flex justify-end gap-4">
+                                <button
+                                    onClick={handleCreateWithIA}
+                                    className="bg-purple-500 text-white py-2 px-6 rounded-md w-full hover:bg-purple-600"
+                                >
+                                    Criar
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {questionnaires.map((questionnaire) => (

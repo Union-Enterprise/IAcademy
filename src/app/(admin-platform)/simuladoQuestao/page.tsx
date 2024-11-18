@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Edit } from "lucide-react";
+import { Plus, Trash2, Edit, Upload } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
 
@@ -19,7 +19,8 @@ export default function SimuladoQuestao() {
     const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [questionToDelete, setQuestionToDelete] = useState<number | null>(null);
-
+    const [uploadedPdf, setUploadedPdf] = useState<File | null>(null);
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [questaoTitulo, setQuestaoTitulo] = useState("");
 
     const [enunciado, setEnunciado] = useState("");
@@ -47,6 +48,18 @@ export default function SimuladoQuestao() {
             localStorage.setItem("questoes", JSON.stringify(questoes));
         }
     }, [questoes]);
+
+    const handleUploadPdf = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setUploadedPdf(e.target.files[0]);
+            setIsUploadModalOpen(true);
+        }
+    };
+
+    const handleCancelUpload = () => {
+        setUploadedPdf(null);
+        setIsUploadModalOpen(false);
+    };
 
     const handleOpenQuestionModal = (questionIndex: number | null = null) => {
         if (questionIndex !== null) {
@@ -94,6 +107,17 @@ export default function SimuladoQuestao() {
         handleCloseQuestionModal();
     };
 
+    const handleConfirmUpload = async () => {
+        const formData = new FormData();
+        formData.append("file", uploadedPdf);
+
+        await axios.post("http://localhost:5000/upload_quiz_pdf", formData);
+        axios.post("http://localhost:5000/generate_quiz");
+
+        console.log("PDF uploaded:", uploadedPdf);
+        setIsUploadModalOpen(false);
+    };
+
     const handleDeleteQuestion = () => {
         if (questionToDelete !== null) {
             setQuestoes((prev) => prev.filter((_, index) => index !== questionToDelete));
@@ -131,7 +155,21 @@ export default function SimuladoQuestao() {
             </h1>
 
 
-            <div className="flex justify-end items-center mb-4">
+            <div className="flex justify-end items-center mb-4 gap-5">
+                <label
+                    htmlFor="uploadPdf"
+                    className="bg-green-500 text-white py-2 px-4 rounded-md flex items-center gap-2 cursor-pointer hover:bg-green-600 duration-150"
+                >
+                    <Upload className="w-4 h-4" />
+                    Upload PDF
+                </label>
+                <input
+                    type="file"
+                    id="uploadPdf"
+                    accept="application/pdf"
+                    onChange={handleUploadPdf}
+                    className="hidden"
+                />
                 <button
                     className="bg-mainBlue text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-blue-700 duration-150"
                     onClick={() => handleOpenQuestionModal()}
@@ -181,6 +219,28 @@ export default function SimuladoQuestao() {
                     </button>
                 </Link>
             </div>
+            {isUploadModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg shadow-lg w-1/3 p-6">
+                        <h3 className="text-xl font-bold mb-4">Confirmar Upload</h3>
+                        <p className="text-gray-700 mb-6">Você deseja mesmo usar este PDF?</p>
+                        <div className="flex justify-end gap-4">
+                            <button
+                                onClick={handleCancelUpload}
+                                className="bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 duration-150"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={handleConfirmUpload}
+                                className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 duration-150"
+                            >
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {isQuestionModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

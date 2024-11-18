@@ -11,7 +11,7 @@ import { usePageTitle } from "../hooks/usePageTitle";
 import { useState, useEffect } from "react";
 import { MessageCircleQuestion, X, SquareChartGantt } from "lucide-react";
 import { useRouter } from "next/navigation";
-import axios from "axios"; // Adicionando axios
+import axios from "axios";
 
 const inter = Inter({ subsets: ["latin"] });
 
