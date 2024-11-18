@@ -3,69 +3,123 @@ import { useParams } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
+import axios from "axios";
+import LoadingFrame from "@/app/ui/components/LoadingFrame";
+
+interface Prova {
+  _id: string;
+  titulo: string;
+  tema: string;
+  questoes: {
+    _id: string;
+    titulo: string;
+    enunciado: string;
+    alternativas: string[];
+    alternativa_correta: string;
+    explicacao: string;
+    radar_de_habilidades: string;
+  }[];
+  qtdQuestoes: number;
+}
 
 export default function Prova() {
-  const prova = useParams().prova[0];
+  const router = useParams();
+  const provaId = router.prova;
+  const simuladoId = router.simulado;
+  const [prova, setProva] = useState<Prova | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!provaId) return;
+
+    const fetchSimulado = async () => {
+      try {
+        const response = await axios.get<Prova>(
+          `http://localhost:5002/simulado/${simuladoId}/${provaId}`
+        );
+        setProva(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar o simulado:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSimulado();
+  }, [provaId]);
+
+  if (isLoading) {
+    return <LoadingFrame />;
+  }
+
+  if (!prova) {
+    return <p>Prova não encontrada.</p>;
+  }
+
   return (
     <section className=" px-[100px] my-[80px] grid grid-cols-3 relative gap-10">
       <div className="col-span-2 gap-16 flex flex-col">
-        <h1 className="text-3xl font-bold">{prova}</h1>
-        <Questão id="1" />
-        <Questão id="2" />
-        <Questão id="3" />
-        <Questão id="4" />
-        <Questão id="5" />
-        <Questão id="6" />
+        <h1 className="text-3xl font-bold">{prova.titulo}</h1>
+        {prova.questoes.map((questao, index) => (
+          <Questao
+            key={index}
+            index={index + 1}
+            enunciado={questao.enunciado}
+            alternativas={questao.alternativas}
+          />
+        ))}
       </div>
-      <Menu prova={prova} />
+      <Menu questoes={prova.questoes} />
     </section>
   );
 }
 
-export function Questão({
-  id = "",
-  imagens = [],
-  enunciado = "Enunciado da questão",
+export function Questao({
+  index,
+  imagens,
+  enunciado,
+  alternativas,
+}: {
+  index: number;
+  imagens?: string[];
+  enunciado: string;
+  alternativas: string[];
 }) {
   return (
-    <div className="flex flex-col gap-5" id={id}>
-      <h2 className="text-xl font-semibold">Questão {id}</h2>
-      <p>"Aparecer imagem se tiver"</p>
+    <div className="flex flex-col gap-5" id={`questao-${index}`}>
+      <h2 className="text-xl font-semibold">Questão {index}</h2>
+      {imagens && <p>"Aparecer imagem se tiver"</p>}
       <p>{enunciado}</p>
-      <Respostas />
+      <Respostas alternativas={alternativas} />
     </div>
   );
 }
 
-export function Respostas() {
+export function Respostas({ alternativas }: { alternativas: string[] }) {
   return (
     <div className="flex flex-col gap-2">
-      <Alternativa />
-      <Alternativa alternativa="B" />
-      <Alternativa alternativa="C" />
-      <Alternativa alternativa="D" />
-      <Alternativa alternativa="E" />
+      {alternativas.map((alternativa, index) => (
+        <Alternativa key={index}>{alternativa}</Alternativa>
+      ))}
     </div>
   );
 }
 
-export function Alternativa({ alternativa = "A", opcao = "10,21cm" }) {
+export function Alternativa({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex gap-5 px-2 py-4 border-2 border-black border-opacity-5 hover:border-opacity-40 cursor-pointer duration-100 rounded-md">
-      <p>{alternativa}</p>
-      <p>{opcao}</p>
+      {children}
     </div>
   );
 }
 
-export function Mapa() {
-  const questoes = [1, 2, 3, 4, 5, 6];
+export function Mapa({ questoes }: { questoes: Prova["questoes"] }) {
   return (
     <div className="grid grid-cols-8 gap-1">
-      {questoes.map((id) => (
-        <QuestaoMapa key={id} id={id.toString()} />
+      {questoes.map((questao, index) => (
+        <QuestaoMapa key={questao._id} id={`questao-${index + 1}`} />
       ))}
     </div>
   );
@@ -86,12 +140,12 @@ export function QuestaoMapa({ id }: { id: string }) {
       href={`#${id}`}
       onClick={handleClick}
     >
-      {id}
+      {id.replace("questao-", "")}
     </a>
   );
 }
 
-export function Menu({ prova }: { prova: string }) {
+export function Menu({ questoes }: { questoes: Prova["questoes"] }) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [maxHeight, setMaxHeight] = useState<string>("0px");
@@ -142,15 +196,17 @@ export function Menu({ prova }: { prova: string }) {
       >
         <div className="flex justify-between items-center *:font-medium *:text-lg">
           <h3>Mapa de questões</h3>
-          <p>0/45</p>
+          <p>{questoes.length}</p>
         </div>
-        <Mapa />
+        <Mapa questoes={questoes} />
         <p className="text-sm text-text-lightSub">
-          Faltam x questões para você finalizar o simulado.
+          Faltam {questoes.length} questões para você finalizar o simulado.
         </p>
         <button
           onClick={() => {
-            router.push(`/simulados/simulado/${prova}/resultado`);
+            console.log(
+              "essa desgraça não redireciona sem fuder com tudo!!!!!!!!!!!!!!"
+            );
           }}
           className="px-10 py-2 text-white font-bold bg-mainBlue hover:text-mainBlue hover:bg-transparent rounded-md duration-100 border-2 border-transparent hover:border-mainBlue"
         >

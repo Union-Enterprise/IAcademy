@@ -65,7 +65,7 @@ export default function Simulado() {
   }
 
   if (!simulado) {
-    return <p>Simulado não encontrado.{simuladoId}</p>;
+    return <p>Simulado não encontrado.</p>;
   }
 
   return (
@@ -150,11 +150,11 @@ export default function Simulado() {
       </section>
       <section className="flex flex-col gap-5">
         <h4 className="text-2xl font-bold mb-5">Provas Disponíveis</h4>
-        {simulado.provas.map((prova) => (
+        {simulado.provas.map((prova, index) => (
           <Prova
             titulo={prova.titulo}
             qtdQuestoes={prova.questoes.length}
-            link={`${simuladoId}/${prova._id}`}
+            link={`${simuladoId}/${index}`}
           />
         ))}
       </section>
