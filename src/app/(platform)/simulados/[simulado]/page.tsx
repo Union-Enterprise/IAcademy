@@ -120,24 +120,21 @@ export default function Simulado() {
             <ArrowLeft />
             <p>Voltar</p>
           </Link>
-          <div className="flex gap-5 bg-mainBlue px-5 py-3 items-center *:text-white rounded-md">
-            <Sparkles size={20} />
-            {simulado.gerado_por_ia && (
-              <>
-                <div>
-                  <p className="mb-1">
-                    Esse simulado é gerado pela Inteligência Artifical da
-                    IAcademy baseado nas áreas em que você possui menos
-                    afinidade.
-                  </p>
-                  <p className="text-xs opacity-80">
-                    A Inteligência Artifical pode cometer erros, então considere
-                    revisar e reportar informações se necessário.
-                  </p>
-                </div>
-              </>
-            )}
-          </div>
+          {simulado.gerado_por_ia && (
+            <div className="flex gap-5 bg-mainBlue px-5 py-3 items-center *:text-white rounded-md">
+              <Sparkles size={20} />
+              <div>
+                <p className="mb-1">
+                  Esse simulado é gerado pela Inteligência Artifical da IAcademy
+                  baseado nas áreas em que você possui menos afinidade.
+                </p>
+                <p className="text-xs opacity-80">
+                  A Inteligência Artifical pode cometer erros, então considere
+                  revisar e reportar informações se necessário.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
         <div className="w-full flex">
           <div className="flex flex-col gap-5 w-full py-10">

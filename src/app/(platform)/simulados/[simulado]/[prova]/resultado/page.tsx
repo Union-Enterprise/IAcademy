@@ -37,7 +37,6 @@ export default function Resultado() {
   const [prova, setProva] = useState<Prova | null>(null);
   const [resultado, setResultado] = useState<ResultadoData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
   const { user } = useUser();
   const router = useParams();
   const provaId = router.prova;

@@ -18,6 +18,7 @@ interface Prova {
     alternativas: string[];
     alternativa_correta: string;
     explicacao: string;
+    imagem: string;
     radar_de_habilidades: string;
   }[];
   qtdQuestoes: number;
@@ -52,6 +53,7 @@ export default function Prova() {
         const response = await axios.get<Prova>(
           `http://localhost:5002/simulado/${simuladoId}/${provaId}`
         );
+        console.log(response.data)
         setProva(response.data);
       } catch (error) {
         console.error("Erro ao carregar o simulado:", error);
@@ -83,6 +85,7 @@ export default function Prova() {
             titulo={questao.titulo}
             alternativas={questao.alternativas}
             alternativaSelecionada={respostas[index]}
+            imagem={questao.imagem}
             onAlternativaSelecionada={handleAlternativaSelecionada}
           />
         ))}
@@ -105,17 +108,24 @@ export function Questao({
   alternativas,
   alternativaSelecionada,
   onAlternativaSelecionada,
+  imagem,
 }: {
   index: number;
   titulo: string;
   enunciado: string;
   alternativas: string[];
   alternativaSelecionada?: string;
+  imagem?: string;
   onAlternativaSelecionada: (
     questaoIndex: number,
     alternativaIndex: number
   ) => void;
 }) {
+  let imageLocal;
+  if(imagem){
+    imageLocal = `http://localhost:5002/files/${imagem}`;
+  }
+
   return (
     <div className="flex flex-col gap-5" id={`questao-${index}`}>
       <div>
@@ -123,6 +133,8 @@ export function Questao({
         <h3 className="text-lg font-medium text-text-lightSub">{titulo}</h3>
       </div>
       <p>{enunciado}</p>
+      
+      <img src={imageLocal} className="w-[60%] rounded-md" />
       <Respostas
         alternativas={alternativas}
         questaoIndex={index}
