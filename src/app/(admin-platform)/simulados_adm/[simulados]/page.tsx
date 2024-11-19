@@ -99,9 +99,11 @@ export default function SimuladoQuestao() {
         handleCloseQuestionModal();
     };
 
-    const handleDeleteQuestion = () => {
+    const handleDeleteQuestion = async () => {
         if (questionToDelete !== null) {
             setProvas((prev) => prev.filter((_, index) => index !== questionToDelete));
+            console.log(questionToDelete)
+            axios.delete(`http://localhost:5002/simulado/${simulados}/${questionToDelete}`)
             setIsDeleteModalOpen(false);
         }
     };

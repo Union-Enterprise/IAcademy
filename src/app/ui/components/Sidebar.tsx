@@ -155,7 +155,7 @@ const Sidebar = ({ isUserLayout = true }) => {
             title="Criar simulados"
             lucideIcon={BookOpenCheck}
             isOpen={isOpen}
-            href="/simuladosAdm"
+            href="/simulados_adm"
             isSelected={selectedItem === "/simuladosAdm"}
             onClick={() => setSelectedItem("/simuladosAdm")}
           />

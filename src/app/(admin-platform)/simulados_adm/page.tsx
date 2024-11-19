@@ -4,6 +4,7 @@ import { Plus, Trash2, Edit, Bot, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface Question {
     id: string;
@@ -12,6 +13,8 @@ interface Question {
 }
 
 export default function SimuladosAdm() {
+    const router = useRouter();
+
     const [questionnaires, setQuestionnaires] = useState<Question[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [titulo, setTitulo] = useState("");
@@ -39,20 +42,6 @@ export default function SimuladosAdm() {
                 console.error(error);
             })
     }
-
-
-    useEffect(() => {
-        const fetchQuestionnaires = async () => {
-            const storedQuestionnaires = await axios.get("http://localhost:5002/simulado");
-            console.log(storedQuestionnaires)
-            setQuestionnaires(storedQuestionnaires.data);
-        }
-        // if (storedQuestionnaires) {
-        // }
-        fetchQuestionnaires();
-
-    }, []);
-
 
     const saveToLocalStorage = (data: Question[]) => {
         localStorage.setItem("questionnaires", JSON.stringify(data));
@@ -110,15 +99,33 @@ export default function SimuladosAdm() {
         handleCloseModal();
     };
 
-    const handleDeleteQuestionnaire = () => {
+    useEffect(() => {
+        const fetchQuestionnaires = async () => {
+            try {
+                const response = await axios.get("http://localhost:5002/simulado");
+                setQuestionnaires(response.data); // Atualiza o estado com a nova lista
+            } catch (error) {
+                console.error("Erro ao buscar os simulados:", error);
+            }
+        };
+    
+        fetchQuestionnaires();
+    }, []);
+    
+    const handleDeleteQuestionnaire = async () => {
         if (deletingId) {
-
-            setQuestionnaires((prev) => {
-                const updatedQuestionnaires = prev.filter((q) => q.id !== deletingId);
-                saveToLocalStorage(updatedQuestionnaires);
-                return updatedQuestionnaires;
-            });
-            setIsDeleteModalOpen(false);
+            try {
+                await axios.delete(`http://localhost:5002/simulado/${deletingId}`);
+                setIsDeleteModalOpen(false);
+                setDeletingId(null);
+    
+                // Recarrega a lista após exclusão
+                const response = await axios.get("http://localhost:5002/simulado");
+                setQuestionnaires(response.data); // Atualiza o estado
+                console.log("Simulado excluído e lista atualizada!");
+            } catch (error) {
+                console.error("Erro ao excluir o simulado:", error);
+            }
         }
     };
 
@@ -246,7 +253,7 @@ export default function SimuladosAdm() {
                                 className="p-2 bg-green-500 rounded-full hover:bg-green-600 transition transform group-hover:scale-100 scale-0 duration-300"
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    handleOpenModal(questionnaire.id);
+                                    handleOpenModal(questionnaire._id);
                                 }}
                             >
                                 <Edit className="w-5 h-5 text-white" />
@@ -255,7 +262,7 @@ export default function SimuladosAdm() {
                                 className="p-2 bg-red-500 rounded-full hover:bg-red-600 transition transform group-hover:scale-100 scale-0 duration-300"
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    handleOpenDeleteModal(questionnaire.id);
+                                    handleOpenDeleteModal(questionnaire._id);
                                 }}
                             >
                                 <Trash2 className="w-5 h-5 text-white" />

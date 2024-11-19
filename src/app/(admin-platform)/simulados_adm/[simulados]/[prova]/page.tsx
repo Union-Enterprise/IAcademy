@@ -33,15 +33,7 @@ export default function SimuladoQuestao() {
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [simuladoTitulo, setSimuladoTitulo] = useState<string | null>(null);
 
-
-
-
-
-
-
-
     const [enunciado, setEnunciado] = useState("");
-
 
     const simulados = decodeURIComponent(params.simulados);
     const prova = decodeURIComponent(params.prova);
@@ -133,9 +125,11 @@ export default function SimuladoQuestao() {
         }
     };
 
-    const handleDeleteQuestion = () => {
+    const handleDeleteQuestion = async () => {
         if (questionToDelete !== null) {
             setProvas((prev) => prev.filter((_, index) => index !== questionToDelete));
+            console.log(questionToDelete)
+            await axios.delete(`http://localhost:5002/simulado/${simulados}/${questionToDelete}/${questionToDelete}`)
             setIsDeleteModalOpen(false);
         }
     };
@@ -351,8 +345,8 @@ export default function SimuladoQuestao() {
             {isDeleteModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg w-1/4 p-6">
-                        <h3 className="text-xl font-bold">Excluir prova</h3>
-                        <p className="pb-5">Você realmente deseja excluir esta prova?</p>
+                        <h3 className="text-xl font-bold">Excluir questão</h3>
+                        <p className="pb-5">Você realmente deseja excluir esta questão?</p>
                         <div className="flex justify-end gap-4">
                             <button
                                 onClick={() => setIsDeleteModalOpen(false)}
