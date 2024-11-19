@@ -27,22 +27,6 @@ export default function SimuladosAdm() {
     const [quantidade, setQuantidade] = useState<number>(1);
     const [tituloIa, setTituloIa] = useState("");
 
-
-    const createSim = () => {
-        axios
-            .post(
-                "http://localhost:5002/simulado", //criar uma variavel do id 
-                { titulo, desc },
-                { withCredentials: true }
-            )
-            .then((response) => {
-                console.log("Simulado cadastrado com sucesso");
-            })
-            .catch((error) => {
-                console.error(error);
-            })
-    }
-
     const saveToLocalStorage = (data: Question[]) => {
         localStorage.setItem("questionnaires", JSON.stringify(data));
     };
@@ -68,6 +52,22 @@ export default function SimuladosAdm() {
         setEditingId(null);
     };
 
+    const createSim = async () => {
+        try {
+            const response = await axios.post(
+                "http://localhost:5002/simulado",
+                { titulo, desc },
+                { withCredentials: true }
+            );
+    
+            console.log("Simulado cadastrado com sucesso:", response.data);
+
+            handleCloseModal();
+        } catch (error) {
+            console.error("Erro ao criar simulado:", error);
+        }
+    };
+    
 
     const handleSaveQuestionnaire = (e: React.FormEvent) => {
         e.preventDefault();

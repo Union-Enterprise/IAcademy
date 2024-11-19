@@ -73,15 +73,16 @@ export default function SimuladoQuestao() {
             setAlternativaCorreta(null);
             setImagem(null);
             setEditingIndex(null);
+
         }
         setIsQuestionModalOpen(true);
     };
-
+    
     const handleCloseQuestionModal = () => {
         setIsQuestionModalOpen(false);
     };
 
-    const handleSaveQuestion = (e: React.FormEvent) => {
+    const handleSaveQuestion = async (e: React.FormEvent) => {
         e.preventDefault();
         const updatedQuestion: Provas = {
             titulo: questaoTitulo,
@@ -91,11 +92,12 @@ export default function SimuladoQuestao() {
         if (editingIndex !== null) {
             setProvas((prev) =>
                 prev.map((q, index) => (index === editingIndex ? updatedQuestion : q))
-            );
+        );
         } else {
+            await axios.post("http://localhost:5002/simulado/"+simulados, { titulo: updatedQuestion.titulo, tema: updatedQuestion.tema })
             setProvas((prev) => [...prev, updatedQuestion]);
         }
-
+        
         handleCloseQuestionModal();
     };
 
@@ -176,7 +178,7 @@ export default function SimuladoQuestao() {
             </div>
 
             <div className="mt-4">
-                <Link href="/simuladosAdm">
+                <Link href="/simulados_adm">
                     <button className="bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 duration-150">
                         Voltar para o Simulado
                     </button>

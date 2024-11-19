@@ -11,6 +11,7 @@ interface Provas {
     alternativas: any;
     titulo: string;
     tema: string;
+    enunciado: string,
 
 
 }
@@ -87,23 +88,42 @@ export default function SimuladoQuestao() {
         setIsQuestionModalOpen(false);
     };
 
-    const handleSaveQuestion = (e: React.FormEvent) => {
+    const handleSaveQuestion = async (e: React.FormEvent) => {
         e.preventDefault();
-        const updatedQuestion: Provas = {
+        console.log(imagem);
+    
+        const updatedQuestion = {
             titulo: questaoTitulo,
+            enunciado,
             tema,
+            alternativas,
+            alternativaCorreta
         };
-
+    
         if (editingIndex !== null) {
             setProvas((prev) =>
                 prev.map((q, index) => (index === editingIndex ? updatedQuestion : q))
             );
         } else {
+            console.log(updatedQuestion)
+            
+            const index = await axios.post(`http://localhost:5002/simulado/${simulados}/${prova}`, { updatedQuestion });
+            const formData = new FormData();
+            if (imagem) {
+                formData.append("file", imagem);
+                await axios.post(`http://localhost:5002/simulado/${simulados}/${prova}/${index.data}/upload`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+            }
+    
             setProvas((prev) => [...prev, updatedQuestion]);
         }
-
+    
         handleCloseQuestionModal();
     };
+
     const handleAlternativeChange = (index: number, value: string) => {
         const updatedAlternativas = [...alternativas];
         updatedAlternativas[index] = value;

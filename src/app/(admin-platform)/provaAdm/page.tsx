@@ -172,7 +172,7 @@ export default function SimuladoQuestao() {
             </div>
 
             <div className="mt-4">
-                <Link href="/simuladosAdm">
+                <Link href="/simulados_adm">
                     <button className="bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 duration-150">
                         Voltar para o Simulado
                     </button>

@@ -156,8 +156,8 @@ const Sidebar = ({ isUserLayout = true }) => {
             lucideIcon={BookOpenCheck}
             isOpen={isOpen}
             href="/simulados_adm"
-            isSelected={selectedItem === "/simuladosAdm"}
-            onClick={() => setSelectedItem("/simuladosAdm")}
+            isSelected={selectedItem === "/simulados_adm"}
+            onClick={() => setSelectedItem("/simulados_adm")}
           />
         </>
       )}
