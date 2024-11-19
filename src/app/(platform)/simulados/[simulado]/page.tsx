@@ -7,6 +7,16 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingFrame from "@/app/ui/components/LoadingFrame";
+import { useUser } from "@/app/context/UserContext";
+
+interface ResultadoData {
+  simulado: string;
+  prova: string;
+  respostas: string[];
+  gabarito: string[];
+  acertos: number;
+  _id: string;
+}
 
 interface Simulado {
   _id: string;
@@ -33,6 +43,10 @@ export default function Simulado() {
   const simuladoId = router.simulado;
   const [simulado, setSimulado] = useState<Simulado | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [resultado, setResultado] = useState<ResultadoData[] | null>(null);
+
+  const { user } = useUser();
+  const userId = user._id;
 
   const getTotalQuestoes = (provas: any[]) => {
     return provas.reduce(
@@ -57,8 +71,23 @@ export default function Simulado() {
       }
     };
 
+    const fetchResultado = async () => {
+      try {
+        const response = await axios.get<ResultadoData[]>(
+          `http://localhost:5002/results/${userId}/${simuladoId}`
+        );
+        setResultado(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar os resultados:", error);
+      }
+    };
+
+    Promise.all([fetchSimulado(), fetchResultado()]).finally(() =>
+      setIsLoading(false)
+    );
+
     fetchSimulado();
-  }, [simuladoId]);
+  }, [userId, simuladoId]);
 
   if (isLoading) {
     return <LoadingFrame />;
@@ -67,6 +96,18 @@ export default function Simulado() {
   if (!simulado) {
     return <p>Simulado não encontrado.</p>;
   }
+
+  const provasConcluidas = simulado.provas.filter((prova) =>
+    resultado?.some((res) => res.prova === prova._id)
+  );
+  const provasPendentes = simulado.provas.filter(
+    (prova) => !resultado?.some((res) => res.prova === prova._id)
+  );
+
+  console.log(simulado);
+
+  console.log("Prova conclu", provasConcluidas);
+  console.log("Prova pend", provasPendentes);
 
   return (
     <div className="flex flex-col px-[100px] my-[80px] gap-16">
@@ -150,8 +191,9 @@ export default function Simulado() {
       </section>
       <section className="flex flex-col gap-5">
         <h4 className="text-2xl font-bold mb-5">Provas Disponíveis</h4>
-        {simulado.provas.map((prova, index) => (
+        {provasPendentes.map((prova, index) => (
           <Prova
+            key={prova._id}
             titulo={prova.titulo}
             qtdQuestoes={prova.questoes.length}
             link={`${simuladoId}/${index}`}
@@ -160,9 +202,19 @@ export default function Simulado() {
       </section>
       <section className="flex flex-col gap-5">
         <h4 className="text-2xl font-bold">Provas Concluídas</h4>
-        <ProvaConcluida />
-        <ProvaConcluida />
-        <ProvaConcluida />
+        {provasConcluidas.map((prova) => {
+          const resultadoProva = resultado?.find(
+            (res) => res.prova === prova._id
+          );
+          return (
+            <ProvaConcluida
+              key={prova._id}
+              titulo={prova.titulo}
+              acertos={resultadoProva?.acertos || 0}
+              totalQuestoes={prova.questoes.length}
+            />
+          );
+        })}
       </section>
     </div>
   );
@@ -198,25 +250,37 @@ function Prova({
   );
 }
 
-function ProvaConcluida() {
+function ProvaConcluida({
+  titulo,
+  acertos,
+  totalQuestoes,
+}: {
+  titulo: string;
+  acertos: number;
+  totalQuestoes: number;
+}) {
+  const porcentagemAcerto = (acertos / totalQuestoes) * 100;
   return (
     <Link
       href={"#"}
       className="shadow-sm rounded-xl p-8 flex flex-col gap-5 border-2 border-borders-light hover:shadow-md duration-100"
     >
       <div className="flex justify-between *:font-semibold *:text-xl items-center">
-        <h5>Trigonometria - A</h5>
+        <h5>{titulo}</h5>
         <div className="flex gap-3 items-center">
-          <h5>7 pontos</h5>
+          <h5>{acertos} pontos</h5>
           <ArrowRight />
         </div>
       </div>
       <div className="bg-gray-100 rounded-full w-full">
-        <div className="bg-mainBlue h-3 w-[7%] rounded-full" />
+        <div
+          className="bg-mainBlue h-3 rounded-full"
+          style={{ width: `${porcentagemAcerto}%` }}
+        />
       </div>
       <div>
         <h5 className="font-medium text-text-lightSub">
-          Você acertou 7/40 questões
+          Você acertou {acertos}/{totalQuestoes} questões
         </h5>
       </div>
     </Link>
