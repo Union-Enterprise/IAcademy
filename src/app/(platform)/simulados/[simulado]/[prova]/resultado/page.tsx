@@ -28,7 +28,7 @@ interface Prova {
     alternativas: string[];
     alternativa_correta: string;
     explicacao: string;
-    radar_de_habilidades: string;
+    imagem?: string;
   }[];
   qtdQuestoes: number;
 }
@@ -156,11 +156,17 @@ function QuestaoRespondida({
     alternativas: string[];
     alternativa_correta: string;
     explicacao: string;
+    imagem?: string;
   };
   resposta: string;
   index: number;
   status: boolean;
 }) {
+  let imageLocal: string | undefined;
+  if (questao.imagem) {
+    imageLocal = `http://localhost:5002/files/${questao.imagem}`;
+  }
+
   return (
     <div className="flex flex-col gap-5" id={`questao-${index}`}>
       <div className="flex items-center justify-between">
@@ -183,9 +189,15 @@ function QuestaoRespondida({
         </span>
       </div>
       <p>{questao.enunciado}</p>
+
+      {imageLocal && (
+        <img src={imageLocal} alt={`Imagem da questão ${index + 1}`} className="w-[60%] rounded-md mt-4" />
+      )}
+
       <div className="flex flex-col gap-2">
         {questao.alternativas.map((alternativa, index) => (
           <Alternativa
+            key={index}
             className={`${
               alternativa[0] === questao.alternativa_correta
                 ? "bg-green-200"
