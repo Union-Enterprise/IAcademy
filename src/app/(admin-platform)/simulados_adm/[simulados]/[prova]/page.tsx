@@ -33,7 +33,7 @@ export default function SimuladoQuestao() {
     const [imagem, setImagem] = useState<File | null>(null);
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [simuladoTitulo, setSimuladoTitulo] = useState<string | null>(null);
-
+    const ALFABETO = ["a", "b", "c", "d", "e"];
     const [enunciado, setEnunciado] = useState("");
 
     const simulados = decodeURIComponent(params.simulados);
@@ -97,7 +97,7 @@ export default function SimuladoQuestao() {
             enunciado,
             tema,
             alternativas,
-            alternativaCorreta
+            alternativa_correta: ALFABETO[alternativaCorreta]
         };
     
         if (editingIndex !== null) {
