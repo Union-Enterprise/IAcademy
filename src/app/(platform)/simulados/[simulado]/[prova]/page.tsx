@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import React from "react";
 import axios from "axios";
 import LoadingFrame from "@/app/ui/components/LoadingFrame";
+import { useRouter } from "next/navigation";
 
 interface Prova {
   _id: string;
@@ -61,7 +62,6 @@ export default function Prova() {
 
     fetchSimulado();
   }, [provaId]);
-
 
   if (isLoading) {
     return <LoadingFrame />;
@@ -166,15 +166,17 @@ export function Alternativa({
   children,
   selecionada,
   onClick,
+  className,
 }: {
   children: React.ReactNode;
   selecionada?: boolean;
-  onClick: () => void;
+  onClick?: () => void;
+  className?: string;
 }) {
   return (
     <div
       onClick={onClick}
-      className={`flex gap-5 px-2 py-4 border-2 ${
+      className={`${className} flex gap-5 px-2 py-4 border-2 ${
         selecionada
           ? "border-mainBlue bg-mainBlue bg-opacity-10"
           : "border-black border-opacity-5"
@@ -198,14 +200,38 @@ export function Menu({
   prova: string | string[];
   qtdQuestoes: number;
 }) {
+  const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
+  const [maxHeight, setMaxHeight] = useState<string>("0px");
+  const [padding, setPadding] = useState<string>("0px");
+  const contentRef = React.useRef<HTMLDivElement>(null);
+
+  const questoesRespondidas = Object.values(respostas).filter(
+    (resposta) => resposta !== undefined
+  ).length;
+
+  const toggle = () => {
+    setIsOpen(!isOpen);
+    if (contentRef.current) {
+      setMaxHeight(
+        !isOpen ? `calc(${contentRef.current.scrollHeight}px + 48px)` : "0"
+      );
+
+      if (isOpen) {
+        setTimeout(() => {
+          setPadding("0");
+        }, 220);
+      } else {
+        setPadding("12px 20px");
+      }
+    }
+  };
+
   let acertos = 0;
   let gabarito: string[] = [];
   let acertadas: string[] = [];
-  let placeholder: string[] = []
-  const toggle = () => {
-    setIsOpen(!isOpen);
-  };
+  let placeholder: string[] = [];
 
   let skills = {
     Raciocinio: 0,
@@ -213,8 +239,8 @@ export function Menu({
     Calculos: 0,
     Conhecimento: 0,
     Texto: 0,
-    Teoria: 0
-  }
+    Teoria: 0,
+  };
 
   let resultados = {
     simulado: simulado,
@@ -222,62 +248,71 @@ export function Menu({
     respostas: placeholder,
     gabarito: placeholder,
     acertos: 0,
-  }
+  };
 
   const sendData = () => {
     axios
-    .put(
-      "http://localhost:5002/finish_test",
-      {
-        skills: skills,
-        resultados: resultados
-      },
-      {withCredentials: true}
-    )
-    .then((response)=>{
-      console.log(response.data);
-    })
-    .catch((error)=>{
-      console.error(error);
-    })
+      .put(
+        "http://localhost:5002/finish_test",
+        {
+          skills: skills,
+          resultados: resultados,
+        },
+        { withCredentials: true }
+      )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     resultados.respostas = [];
     resultados.gabarito = [];
-  }
+  };
 
-  const checkGabarito = (questoes : Record<string, any>) => {
-    for (let i = 0; i<qtdQuestoes; i++){
+  const checkGabarito = (questoes: Record<string, any>) => {
+    for (let i = 0; i < qtdQuestoes; i++) {
       gabarito.push(questoes[i].alternativa_correta);
       resultados.respostas.push(respostas[i]);
-      if(respostas[i]==undefined){
+      if (respostas[i] == undefined) {
         respostas[i] = "none";
       }
-      if(gabarito[i]==respostas[i]){
+      if (gabarito[i] == respostas[i]) {
         acertos += 1;
-        acertadas.push("Questão "+(i+1)+": "+respostas[i]);
+        acertadas.push("Questão " + (i + 1) + ": " + respostas[i]);
         let skill = questoes[i].radar_de_habilidades;
-        if(skill=="Raciocínio lógico"){skills.Raciocinio+=1}
-        if(skill=="Criatividade"){skills.Criatividade+=1}
-        if(skill=="Conhecimento de fórmulas"){skills.Conhecimento+=1}
-        if(skill=="Interpretação de Texto"){skills.Texto+=1}
-        if(skill=="Calculos avançados"){skills.Calculos+=1}
-        if(skill=="Teoria"){skills.Teoria+=1}
+        if (skill == "Raciocínio lógico") {
+          skills.Raciocinio += 1;
+        }
+        if (skill == "Criatividade") {
+          skills.Criatividade += 1;
+        }
+        if (skill == "Conhecimento de fórmulas") {
+          skills.Conhecimento += 1;
+        }
+        if (skill == "Interpretação de Texto") {
+          skills.Texto += 1;
+        }
+        if (skill == "Calculos avançados") {
+          skills.Calculos += 1;
+        }
+        if (skill == "Teoria") {
+          skills.Teoria += 1;
+        }
       }
     }
     resultados.acertos = acertos;
     resultados.gabarito = gabarito;
-    console.log(resultados);
     sendData();
     gabarito = [];
     acertadas = [];
     acertos = 0;
-  }
+  };
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        checkGabarito(questoes);
-        // sendData();
       }}
       className="sticky top-28 h-fit justify-self-center rounded-md w-full border-2 border-black border-opacity-5"
     >
@@ -295,11 +330,113 @@ export function Menu({
           }`}
         />
       </button>
-      <div className="px-5 flex flex-col gap-3">
-        <button className="px-10 py-2 text-white font-bold bg-mainBlue hover:text-mainBlue hover:bg-transparent rounded-md duration-100 border-2 border-transparent hover:border-mainBlue">
+      <div
+        className="px-5 flex flex-col gap-3"
+        ref={contentRef}
+        style={{
+          maxHeight: maxHeight,
+          transition: "max-height 0.3s ease",
+          overflow: "hidden",
+          padding: padding,
+        }}
+      >
+        <div className="flex justify-between items-center *:font-medium *:text-lg">
+          <h3>Mapa de questões</h3>
+          <p>
+            {questoesRespondidas}/{qtdQuestoes}
+          </p>
+        </div>
+        <Mapa questoes={questoes} respostas={respostas} />
+        <p className="text-sm text-text-lightSub">
+          Faltam {qtdQuestoes - questoesRespondidas} questões para você
+          finalizar o simulado.
+        </p>
+        <button
+          onClick={() => {
+            checkGabarito(questoes);
+            router.push(`/simulados/${simulado}/${prova}/resultado`);
+          }}
+          className="px-10 py-2 text-white font-bold bg-mainBlue hover:text-mainBlue hover:bg-transparent rounded-md duration-100 border-2 border-transparent hover:border-mainBlue"
+        >
           Finalizar
         </button>
       </div>
     </form>
+  );
+}
+
+export function Mapa({
+  questoes,
+  respostas,
+  isFromResult = false,
+}: {
+  questoes: Prova["questoes"];
+  respostas: Record<number, string>;
+  isFromResult?: boolean;
+}) {
+  return (
+    <div className="grid grid-cols-8 gap-1">
+      {questoes.map((questao, index) => (
+        <QuestaoMapa
+          questao={questao}
+          key={index}
+          id={index}
+          resposta={respostas[index]}
+          isFromResult={isFromResult}
+        />
+      ))}
+    </div>
+  );
+}
+
+export function QuestaoMapa({
+  id,
+  resposta,
+  questao,
+  isFromResult,
+}: {
+  questao: {
+    _id: string;
+    titulo: string;
+    enunciado: string;
+    alternativas: string[];
+    alternativa_correta: string;
+    explicacao: string;
+    radar_de_habilidades: string;
+  };
+  id: number;
+  resposta?: string;
+  isFromResult?: boolean;
+}) {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const element = document.getElementById(`questao-${id}`);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  let backgroundColor = "";
+  const isRespondida = !!resposta;
+
+  if (isFromResult) {
+    const respostaCorreta = resposta === questao.alternativa_correta;
+    backgroundColor = isRespondida
+      ? respostaCorreta
+        ? "bg-green-500"
+        : "bg-red-400"
+      : "bg-black bg-opacity-10";
+  } else {
+    backgroundColor = isRespondida ? "bg-green-500" : "bg-black bg-opacity-10";
+  }
+
+  return (
+    <a
+      className={`text-lg ${backgroundColor} flex items-center justify-center rounded-md h-8 opacity-70 hover:opacity-100 duration-100 cursor-pointer`}
+      href={`#${id}`}
+      onClick={handleClick}
+    >
+      {id + 1}
+    </a>
   );
 }

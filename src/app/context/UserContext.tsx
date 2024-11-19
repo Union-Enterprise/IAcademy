@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 
 interface User {
-  id?: any;
+  _id?: any;
   email: string;
   name: string;
   nickname?: string;
@@ -53,8 +53,6 @@ const defaultContext: UserContextType = {
 };
 
 const UserContext = createContext<UserContextType>(defaultContext);
-
-
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>(defaultUser);
