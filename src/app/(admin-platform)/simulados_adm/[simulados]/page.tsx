@@ -145,16 +145,16 @@ export default function SimuladoQuestao() {
                 {provas.map((questionnaire, index) => (
                     <div
                         key={index}
-                        className="p-4 mb-4 border rounded-md shadow-md bg-gray-50 hover:bg-mainBlue hover:text-white transition-all duration-300"
+                        className="p-4 mb-4 border rounded-md shadow-md bg-gray-50 hover:bg-mainBlue hover:text-white transition-all group duration-300"
                     >
                         <Link href={simulados + "/"+ index}
                             onClick={() => {
                                 localStorage.setItem("simuladoTema", questionnaire.tema);
                             }}
                         >
-                            <h3 className="text-xl font-semibold pb-4">{questionnaire.titulo}</h3>
-                            <div className="border-b w-80 border-zinc-400" />
-                            <p className="text-gray-700 mt-2">{questionnaire.tema}</p>
+                            <h3 className="text-xl font-semibold pb-4 group-hover:text-white">{questionnaire.titulo}</h3>
+                            <div className="border-b w-full border-zinc-400 group-hover:border-white" />
+                            <p className="text-gray-700 mt-2 group-hover:text-white">{questionnaire.tema}</p>
                         </Link>
                         <div className="flex gap-4 mt-4">
                             <button

@@ -91,7 +91,7 @@ export default function SimuladoQuestao() {
     const handleSaveQuestion = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log(imagem);
-    
+
         const updatedQuestion = {
             titulo: questaoTitulo,
             enunciado,
@@ -99,14 +99,14 @@ export default function SimuladoQuestao() {
             alternativas,
             alternativa_correta: ALFABETO[alternativaCorreta]
         };
-    
+
         if (editingIndex !== null) {
             setProvas((prev) =>
                 prev.map((q, index) => (index === editingIndex ? updatedQuestion : q))
             );
         } else {
             console.log(updatedQuestion)
-            
+
             const index = await axios.post(`http://localhost:5002/simulado/${simulados}/${prova}`, { updatedQuestion });
             const formData = new FormData();
             if (imagem) {
@@ -117,10 +117,10 @@ export default function SimuladoQuestao() {
                     },
                 });
             }
-    
+
             setProvas((prev) => [...prev, updatedQuestion]);
         }
-    
+
         handleCloseQuestionModal();
     };
 
@@ -191,17 +191,20 @@ export default function SimuladoQuestao() {
                 {provas.map((questionnaire, index) => (
                     <div
                         key={index}
-                        className="p-4 mb-4 border rounded-md shadow-md bg-gray-50 hover:bg-mainBlue hover:text-white transition-all duration-300"
+                        className="p-4 mb-4 border rounded-md shadow-md bg-gray-50 hover:bg-mainBlue hover:text-white group transition-all duration-300"
                     >
                         <div className="flex flex-col gap-2">
-                            <h3 className="text-xl font-semibold">{questionnaire.titulo}</h3>
-                            <p className="text-gray-700">{questionnaire.tema}</p>
+                            <h3 className="text-xl font-semibold group-hover:text-white">{questionnaire.titulo}</h3>
+                            <p className="text-gray-700 group-hover:text-white">{questionnaire.tema}</p>
 
+                            <div className="border-b "/>
+                            <p className="text-gray-600 group-hover:text-white mt-2">{questionnaire.enunciado}</p>
+                            <div className="border-b "/>
                             <ul className="mt-2">
                                 {questionnaire.alternativas?.map((alt, altIndex) => (
                                     <li
                                         key={altIndex}
-                                        className="text-gray-600"
+                                        className="text-gray-600 group-hover:text-white"
                                     >
                                         {altIndex === questionnaire.correta ? (
                                             <strong>{alt}</strong>

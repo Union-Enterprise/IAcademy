@@ -243,7 +243,7 @@ export default function SimuladosAdm() {
                                 {questionnaire.titulo}
                             </h3>
 
-                            <div className="border-b w-full" />
+                            <div className="border-b w-full group-hover:border-white" />
                             <p className="text-sm flex  justify-center text-gray-600 mt-6 group-hover:text-white">
                                 {questionnaire.desc}
                             </p>
