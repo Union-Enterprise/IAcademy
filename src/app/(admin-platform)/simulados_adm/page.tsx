@@ -27,18 +27,18 @@ export default function SimuladosAdm() {
 
     const createSim = () => {
         axios
-          .post(
-            "http://localhost:5002/simulado", //criar uma variavel do id 
-            {titulo, desc},
-            { withCredentials: true }
-          )
-          .then((response)=>{
-            console.log("Simulado cadastrado com sucesso");
-          })
-          .catch((error)=>{
-            console.error(error);
-          })
-      }
+            .post(
+                "http://localhost:5002/simulado", //criar uma variavel do id 
+                { titulo, desc },
+                { withCredentials: true }
+            )
+            .then((response) => {
+                console.log("Simulado cadastrado com sucesso");
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+    }
 
 
     useEffect(() => {
@@ -53,12 +53,12 @@ export default function SimuladosAdm() {
 
     }, []);
 
-   
+
     const saveToLocalStorage = (data: Question[]) => {
         localStorage.setItem("questionnaires", JSON.stringify(data));
     };
 
-    
+
     const handleOpenModal = (id?: string) => {
         if (id) {
             const questionnaireToEdit = questionnaires.find((q) => q.id === id);
@@ -71,7 +71,7 @@ export default function SimuladosAdm() {
         setIsModalOpen(true);
     };
 
- 
+
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setTitulo("");
@@ -88,7 +88,7 @@ export default function SimuladosAdm() {
             titulo,
             desc,
         };
-        
+
 
         if (editingId) {
             setQuestionnaires((prev) => {
@@ -101,7 +101,7 @@ export default function SimuladosAdm() {
         } else {
             setQuestionnaires((prev) => {
                 const updatedQuestionnaires = [...prev, newQuestionnaire];
-                saveToLocalStorage(updatedQuestionnaires); 
+                saveToLocalStorage(updatedQuestionnaires);
                 return updatedQuestionnaires;
             });
         }
@@ -109,9 +109,10 @@ export default function SimuladosAdm() {
 
         handleCloseModal();
     };
-   
+
     const handleDeleteQuestionnaire = () => {
         if (deletingId) {
+
             setQuestionnaires((prev) => {
                 const updatedQuestionnaires = prev.filter((q) => q.id !== deletingId);
                 saveToLocalStorage(updatedQuestionnaires);
@@ -123,9 +124,10 @@ export default function SimuladosAdm() {
 
 
     const handleOpenDeleteModal = (id: string) => {
-        setDeletingId(id);
-        setIsDeleteModalOpen(true);
+        setDeletingId(id); 
+        setIsDeleteModalOpen(true); 
     };
+    
 
     const handleOpenIaModal = () => {
         setIsIaModalOpen(true);
@@ -138,7 +140,7 @@ export default function SimuladosAdm() {
     const handleCreateWithIA = async () => {
         console.log("Criar", quantidade, "questões com IA");
         setIsIaModalOpen(false);
-        
+
         const response = await axios.post(
             "http://localhost:5000/gen_simulado_ia",
             { tema: tituloIa, qtd: quantidade }
@@ -202,7 +204,7 @@ export default function SimuladosAdm() {
                                     value={quantidade}
                                     onChange={(e) => setQuantidade(Math.max(1, Number(e.target.value)))}
                                     className="w-full p-2 mt-2 border rounded-md"
-                                   
+
                                     placeholder="Digite a quantidade de questões"
                                 />
                             </div>
@@ -226,24 +228,24 @@ export default function SimuladosAdm() {
                         key={questionnaire.id}
                         className="p-4 bg-white w-full h-80 border rounded-md shadow-md hover:bg-mainBlue hover:text-white transition-all hover:shadow-md group relative"
                     >
-                        <Link href={`simulados_adm/${questionnaire._id}`} className="h-[600px]" 
-                        onClick={() => {
-                            localStorage.setItem("simuladoTitulo", questionnaire.titulo);
-                        }}>
+                        <Link href={`simulados_adm/${questionnaire._id}`} className="h-[600px]"
+                            onClick={() => {
+                                localStorage.setItem("simuladoTitulo", questionnaire.titulo);
+                            }}>
                             <h3 className="text-2xl font-semibold flex justify-center pb-6 group-hover:text-white">
                                 {questionnaire.titulo}
                             </h3>
-                      
-                        <div className="border-b w-full" />
-                        <p className="text-sm flex  justify-center text-gray-600 mt-6 group-hover:text-white">
-                            {questionnaire.desc}
-                        </p>
+
+                            <div className="border-b w-full" />
+                            <p className="text-sm flex  justify-center text-gray-600 mt-6 group-hover:text-white">
+                                {questionnaire.desc}
+                            </p>
                         </Link>
                         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
                             <button
                                 className="p-2 bg-green-500 rounded-full hover:bg-green-600 transition transform group-hover:scale-100 scale-0 duration-300"
                                 onClick={(e) => {
-                                    e.stopPropagation(); 
+                                    e.stopPropagation();
                                     handleOpenModal(questionnaire.id);
                                 }}
                             >
@@ -252,13 +254,14 @@ export default function SimuladosAdm() {
                             <button
                                 className="p-2 bg-red-500 rounded-full hover:bg-red-600 transition transform group-hover:scale-100 scale-0 duration-300"
                                 onClick={(e) => {
-                                    e.stopPropagation(); 
+                                    e.stopPropagation();
                                     handleOpenDeleteModal(questionnaire.id);
                                 }}
                             >
                                 <Trash2 className="w-5 h-5 text-white" />
                             </button>
                         </div>
+
                     </div>
                 ))}
             </div>
@@ -289,7 +292,7 @@ export default function SimuladosAdm() {
                                     />
                                 </div>
                                 <div>
-                                <label className="block font-medium">Descrição</label>
+                                    <label className="block font-medium">Descrição</label>
                                     <input
                                         type="text"
                                         className="w-full mt-2 p-2 border rounded-md"
@@ -298,7 +301,7 @@ export default function SimuladosAdm() {
                                     />
                                 </div>
                                 <div className="flex justify-end gap-4 mt-4">
-                                   
+
                                     <button
                                         type="submit"
                                         className="bg-mainBlue text-white py-2 px-4 rounded-md w-full hover:bg-blue-800 duration-150"
@@ -336,6 +339,7 @@ export default function SimuladosAdm() {
                     </div>
                 </div>
             )}
+
         </div>
     );
 }

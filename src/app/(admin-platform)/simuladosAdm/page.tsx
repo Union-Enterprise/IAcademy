@@ -226,7 +226,7 @@ export default function SimuladosAdm() {
                         key={questionnaire.id}
                         className="p-4 bg-white w-full h-80 border rounded-md shadow-md hover:bg-mainBlue hover:text-white transition-all hover:shadow-md group relative"
                     >
-                        <Link href={`/provaAdm`} className="h-[600px]" 
+                         <Link href={`simulados_adm/${questionnaire._id}`} className="h-[600px]" 
                         onClick={() => {
                             localStorage.setItem("simuladoTitulo", questionnaire.titulo);
                         }}>
