@@ -97,17 +97,27 @@ export default function Simulado() {
     return <p>Simulado não encontrado.</p>;
   }
 
-  const provasConcluidas = simulado.provas.filter((prova) =>
-    resultado?.some((res) => res.prova === prova._id)
-  );
-  const provasPendentes = simulado.provas.filter(
-    (prova) => !resultado?.some((res) => res.prova === prova._id)
-  );
+  if (!resultado) {
+    console.log("Sem resultado");
+  }
 
-  console.log(simulado);
+  const provasConcluidas = resultado
+    ?.map((res) => {
+      const prova = simulado.provas.find(
+        (p, index) => index.toString() === res.prova
+      );
+      return { ...res, ...prova };
+    })
+    .filter((res) => res);
 
-  console.log("Prova conclu", provasConcluidas);
-  console.log("Prova pend", provasPendentes);
+  const provasPendentes = simulado.provas
+    .map((prova, index) => {
+      const correspondente = resultado?.some(
+        (res) => res.prova === index.toString()
+      );
+      return !correspondente ? prova : null;
+    })
+    .filter((prova) => prova);
 
   return (
     <div className="flex flex-col px-[100px] my-[80px] gap-16">
@@ -199,19 +209,15 @@ export default function Simulado() {
       </section>
       <section className="flex flex-col gap-5">
         <h4 className="text-2xl font-bold">Provas Concluídas</h4>
-        {provasConcluidas.map((prova) => {
-          const resultadoProva = resultado?.find(
-            (res) => res.prova === prova._id
-          );
-          return (
-            <ProvaConcluida
-              key={prova._id}
-              titulo={prova.titulo}
-              acertos={resultadoProva?.acertos || 0}
-              totalQuestoes={prova.questoes.length}
-            />
-          );
-        })}
+        {provasConcluidas?.map((res) => (
+          <ProvaConcluida
+            key={res._id}
+            titulo={res.titulo}
+            acertos={res.acertos}
+            totalQuestoes={res.questoes.length}
+            link={`${simuladoId}/${res.prova}/resultado`}
+          />
+        ))}
       </section>
     </div>
   );
@@ -251,15 +257,17 @@ function ProvaConcluida({
   titulo,
   acertos,
   totalQuestoes,
+  link,
 }: {
   titulo: string;
   acertos: number;
   totalQuestoes: number;
+  link: string;
 }) {
   const porcentagemAcerto = (acertos / totalQuestoes) * 100;
   return (
     <Link
-      href={"#"}
+      href={link}
       className="shadow-sm rounded-xl p-8 flex flex-col gap-5 border-2 border-borders-light hover:shadow-md duration-100"
     >
       <div className="flex justify-between *:font-semibold *:text-xl items-center">

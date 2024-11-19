@@ -93,14 +93,6 @@ export default function Resultado() {
           <ArrowLeft />
           <p>Voltar</p>
         </Link>
-        <div className="flex items-center gap-5">
-          <Sparkles size={40} />
-          <h1 className="text-3xl font-bold">
-            {resultado.acertos <= prova.questoes.length - 2
-              ? "Você mandou bem, continue assim!"
-              : "Recomendamos que você estude um pouco mais"}
-          </h1>
-        </div>
       </div>
       <div className="flex gap-36 col-span-3 border-b-2 border-borders-light pb-10">
         <div>

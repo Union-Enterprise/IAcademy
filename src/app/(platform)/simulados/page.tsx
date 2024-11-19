@@ -49,6 +49,14 @@ export default function Simulados() {
     fetchSimulados();
   }, []);
 
+  const simuladosManual = simulados.filter(
+    (simulado) => simulado.gerado_por_ia === undefined
+  );
+
+  const simuladosIa = simulados.filter(
+    (simulado) => simulado.gerado_por_ia === true
+  );
+
   const sendData = async () => {
     try {
       setIsSubmitting(true);
@@ -68,6 +76,8 @@ export default function Simulados() {
       setIsSubmitting(false);
     }
   };
+
+  console.log(simuladosManual);
 
   return (
     <section className="*:px-[100px] flex flex-col gap-10 pb-10">
@@ -138,7 +148,7 @@ export default function Simulados() {
                 <Skeleton className="col-span-1 h-[250px]" />
               </>
             ) : (
-              simulados.map((simulado) => (
+              simuladosIa.map((simulado) => (
                 <SimuladoCard
                   key={simulado._id}
                   id={simulado._id}
@@ -151,7 +161,7 @@ export default function Simulados() {
             )}
           </div>
         </div>
-        <div className="flex flex-col mt-5 gap-5">
+        {/* <div className="flex flex-col mt-5 gap-5">
           <h3 className="text-xl font-semibold">
             Com base nas suas maiores dificuldades
           </h3>
@@ -160,15 +170,26 @@ export default function Simulados() {
             <SimuladoCard geradoPorIA={true} title="Estatística" />
             <SimuladoCard geradoPorIA={true} title="Geometria" />
           </div>
-        </div>
-        <div className="flex flex-col mt-5 gap-5">
-          <h3 className="text-xl font-semibold">Simulados Enem</h3>
-          <div className="grid grid-cols-3 gap-5">
-            <SimuladoCard title="Enem 2022" />
-            <SimuladoCard title="Enem 2021" />
-            <SimuladoCard title="Enem 2020" />
-            <SimuladoCard title="Enem 2019" />
-          </div>
+        </div> */}
+        <div className="grid grid-cols-3 mt-5 gap-5">
+          <h3 className="text-xl font-semibold col-span-3">Simulados Enem</h3>
+          {isLoading ? (
+            <>
+              <Skeleton className="col-span-1 h-[250px]" />
+              <Skeleton className="col-span-1 h-[250px]" />
+            </>
+          ) : (
+            simuladosManual.map((simulado) => (
+              <SimuladoCard
+                key={simulado._id}
+                id={simulado._id}
+                title={simulado.titulo}
+                geradoPorIA={undefined}
+                qtdProvas={simulado.provas.length}
+                qtdQuestoes={getTotalQuestoes(simulado.provas)}
+              />
+            ))
+          )}
         </div>
       </div>
     </section>
