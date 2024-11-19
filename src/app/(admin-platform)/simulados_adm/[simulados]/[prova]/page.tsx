@@ -1,14 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode } from "react";
 import { Plus, Trash2, Edit, Upload, X } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 
 interface Provas {
+    correta: Key | null | undefined;
+    alternativas: any;
     titulo: string;
     tema: string;
+
 
 }
 
@@ -29,6 +32,16 @@ export default function SimuladoQuestao() {
     const [imagem, setImagem] = useState<File | null>(null);
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [simuladoTitulo, setSimuladoTitulo] = useState<string | null>(null);
+
+
+
+
+
+
+
+
+    const [enunciado, setEnunciado] = useState("");
+
 
     const simulados = decodeURIComponent(params.simulados);
     const prova = decodeURIComponent(params.prova);
@@ -99,6 +112,26 @@ export default function SimuladoQuestao() {
 
         handleCloseQuestionModal();
     };
+    const handleAlternativeChange = (index: number, value: string) => {
+        const updatedAlternativas = [...alternativas];
+        updatedAlternativas[index] = value;
+        setAlternativas(updatedAlternativas);
+    };
+
+    const handleAddAlternative = () => {
+        setAlternativas((prev) => [...prev, ""]);
+    };
+
+    const handleDeleteAlternative = (index: number) => {
+        const updatedAlternativas = alternativas.filter((_, i) => i !== index);
+        setAlternativas(updatedAlternativas);
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setImagem(e.target.files[0]);
+        }
+    };
 
     const handleDeleteQuestion = () => {
         if (questionToDelete !== null) {
@@ -120,6 +153,8 @@ export default function SimuladoQuestao() {
 
         setIsIaModalOpen(false);
     };
+
+    const imagePreview = imagem ? URL.createObjectURL(imagem) : "";
 
     return (
         <div className="p-6 bg-white rounded-md shadow-md">
@@ -144,15 +179,26 @@ export default function SimuladoQuestao() {
                         key={index}
                         className="p-4 mb-4 border rounded-md shadow-md bg-gray-50 hover:bg-mainBlue hover:text-white transition-all duration-300"
                     >
-                        <Link href={``}
-                            onClick={() => {
-                                localStorage.setItem("simuladoTema", questionnaire.tema);
-                            }}
-                        >
-                            <h3 className="text-xl font-semibold pb-4">{questionnaire.titulo}</h3>
-                            <div className="border-b w-80 border-zinc-400" />
-                            <p className="text-gray-700 mt-2">{questionnaire.tema}</p>
-                        </Link>
+                        <div className="flex flex-col gap-2">
+                            <h3 className="text-xl font-semibold">{questionnaire.titulo}</h3>
+                            <p className="text-gray-700">{questionnaire.tema}</p>
+
+                            <ul className="mt-2">
+                                {questionnaire.alternativas?.map((alt, altIndex) => (
+                                    <li
+                                        key={altIndex}
+                                        className="text-gray-600"
+                                    >
+                                        {altIndex === questionnaire.correta ? (
+                                            <strong>{alt}</strong>
+                                        ) : (
+                                            alt
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
                         <div className="flex gap-4 mt-4">
                             <button
                                 className="p-2 bg-green-500 text-white rounded-md"
@@ -175,9 +221,9 @@ export default function SimuladoQuestao() {
             </div>
 
             <div className="mt-4">
-                <Link href="/simuladosAdm">
+                <Link href={`/simulados_adm/${simulados}`}>
                     <button className="bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 duration-150">
-                        Voltar para o Simulado
+                        Voltar para  prova
                     </button>
                 </Link>
             </div>
@@ -187,16 +233,16 @@ export default function SimuladoQuestao() {
                     <div className="bg-white rounded-lg shadow-lg w-2/4 max-h-[80vh] overflow-y-auto">
                         <div className="bg-mainBlue text-white p-4 rounded-t-lg flex justify-between items-center">
                             <h2 className="text-xl font-bold">
-                                {editingIndex !== null ? "Editar Prova" : "Criar Prova"}
+                                {editingIndex !== null ? "Editar Questão" : "Criar Questão"}
                             </h2>
                             <button
                                 onClick={handleCloseQuestionModal}
                                 className="text-white hover:text-gray-200"
                             >
-                                <X className="w-5 h-5" />
+                                X
                             </button>
                         </div>
-                        <div className="p-6">
+                        <div className="p-6 max-h-[70vh] overflow-y-auto">
                             <form onSubmit={handleSaveQuestion} className="space-y-4">
                                 <div>
                                     <label className="block font-medium">Título</label>
@@ -207,23 +253,94 @@ export default function SimuladoQuestao() {
                                         onChange={(e) => setQuestaoTitulo(e.target.value)}
                                     />
                                 </div>
-
                                 <div>
-                                    <label className="block font-medium">Tema</label>
-                                    <input
-                                        type="text"
+                                    <label className="block font-medium">Enunciado</label>
+                                    <textarea
                                         className="w-full mt-2 p-2 border rounded-md"
-                                        value={tema}
-                                        onChange={(e) => setTema(e.target.value)}
+                                        rows={4}
+                                        value={enunciado}
+                                        onChange={(e) => setEnunciado(e.target.value)}
                                     />
                                 </div>
+                                <div>
+                                    <label className="block font-medium">Alternativas</label>
+                                    {alternativas.map((alt, index) => (
+                                        <div key={index} className="flex gap-2 items-center">
+                                            <input
+                                                type="text"
+                                                className="w-full p-2 border rounded-md"
+                                                value={alt}
+                                                onChange={(e) =>
+                                                    handleAlternativeChange(index, e.target.value)
+                                                }
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => handleDeleteAlternative(index)}
+                                                className="bg-red-500 text-white p-2 rounded-md"
+                                            >
+                                                Excluir
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <button
+                                        type="button"
+                                        onClick={handleAddAlternative}
+                                        className="mt-4 text-mainBlue"
+                                    >
+                                        Adicionar Alternativa
+                                    </button>
+                                </div>
+                                <div>
+                                    <label className="block font-medium">Correta</label>
+                                    <select
+                                        className="w-full mt-2 p-2 border rounded-md"
+                                        value={alternativaCorreta ?? ""}
+                                        onChange={(e) =>
+                                            setAlternativaCorreta(Number(e.target.value))
+                                        }
+                                    >
+                                        <option value="">Escolha uma alternativa</option>
+                                        {alternativas.map((alt, index) => (
+                                            <option key={index} value={index}>
+                                                {alt}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block font-medium">Imagem </label>
+                                    <div className="mt-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => document.getElementById("fileInput")?.click()}
+                                            className="bg-mainBlue text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-blue-700 duration-150"
+                                        >
+                                            <span>Selecionar Imagem</span>
+                                        </button>
+                                        <input
+                                            id="fileInput"
+                                            type="file"
+                                            className="hidden"
+                                            onChange={handleImageChange}
+                                        />
+                                    </div>
 
-                                <div className="flex justify-end">
+                                    {imagem && (
+                                        <img
+                                            src={imagePreview}
+                                            alt="Pré-visualização"
+                                            className="mt-4 rounded-md w-48 h-32"
+                                        />
+                                    )}
+                                </div>
+                                <div className="flex justify-end gap-4 mt-6">
+
                                     <button
                                         type="submit"
-                                        className="bg-mainBlue text-white py-2 px-6 rounded-md w-full hover:bg-blue-700"
+                                        className="bg-mainBlue text-white p-2 rounded-md w-full"
                                     >
-                                        Salvar
+                                        {questaoTitulo ? "Salvar Alterações" : "Criar Questão"}
                                     </button>
                                 </div>
                             </form>
@@ -231,7 +348,6 @@ export default function SimuladoQuestao() {
                     </div>
                 </div>
             )}
-
             {isDeleteModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg w-1/4 p-6">
@@ -285,7 +401,7 @@ export default function SimuladoQuestao() {
                                     value={quantidade}
                                     onChange={(e) => setQuantidade(Math.max(1, Number(e.target.value)))}
                                     className="w-full p-2 mt-2 border rounded-md"
-                                   
+
                                     placeholder="Digite a quantidade de questões"
                                 />
                             </div>

@@ -141,7 +141,7 @@ export default function SimuladoQuestao() {
                         key={index}
                         className="p-4 mb-4 border rounded-md shadow-md bg-gray-50 hover:bg-mainBlue hover:text-white transition-all duration-300"
                     >
-                        <Link href={"simulados_adm/"+ simulados + "/"+ index}
+                        <Link href={"simuladoQuestao/"+ simulados + "/"+ index}
                             onClick={() => {
                                 localStorage.setItem("simuladoTema", questionnaire.tema);
                             }}
