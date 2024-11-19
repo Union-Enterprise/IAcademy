@@ -1,8 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
 import { ChevronDown } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import React from "react";
 import axios from "axios";
@@ -24,12 +22,26 @@ interface Prova {
   qtdQuestoes: number;
 }
 
+const ALFABETO = ["a", "b", "c", "d", "e"];
+
 export default function Prova() {
   const router = useParams();
   const provaId = router.prova;
   const simuladoId = router.simulado;
   const [prova, setProva] = useState<Prova | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [respostas, setRespostas] = useState<Record<number, string>>({});
+
+  const handleAlternativaSelecionada = (
+    questaoIndex: number,
+    alternativaIndex: number
+  ) => {
+    const letra = ALFABETO[alternativaIndex];
+    setRespostas((prev) => ({
+      ...prev,
+      [questaoIndex]: letra,
+    }));
+  };
 
   useEffect(() => {
     if (!provaId) return;
@@ -50,6 +62,7 @@ export default function Prova() {
     fetchSimulado();
   }, [provaId]);
 
+
   if (isLoading) {
     return <LoadingFrame />;
   }
@@ -59,123 +72,149 @@ export default function Prova() {
   }
 
   return (
-    <section className=" px-[100px] my-[80px] grid grid-cols-3 relative gap-10">
+    <section className="px-[100px] my-[80px] grid grid-cols-3 relative gap-10">
       <div className="col-span-2 gap-16 flex flex-col">
         <h1 className="text-3xl font-bold">{prova.titulo}</h1>
         {prova.questoes.map((questao, index) => (
           <Questao
             key={index}
-            index={index + 1}
+            index={index}
             enunciado={questao.enunciado}
             titulo={questao.titulo}
             alternativas={questao.alternativas}
+            alternativaSelecionada={respostas[index]}
+            onAlternativaSelecionada={handleAlternativaSelecionada}
           />
         ))}
       </div>
-      <Menu questoes={prova.questoes} />
+      <Menu
+        questoes={prova.questoes}
+        respostas={respostas}
+        simulado={simuladoId}
+        prova={provaId}
+        qtdQuestoes={prova.questoes.length}
+      />
     </section>
   );
 }
 
 export function Questao({
   index,
-  imagens,
   titulo,
   enunciado,
   alternativas,
+  alternativaSelecionada,
+  onAlternativaSelecionada,
 }: {
   index: number;
-  imagens?: string[];
   titulo: string;
   enunciado: string;
   alternativas: string[];
+  alternativaSelecionada?: string;
+  onAlternativaSelecionada: (
+    questaoIndex: number,
+    alternativaIndex: number
+  ) => void;
 }) {
   return (
     <div className="flex flex-col gap-5" id={`questao-${index}`}>
       <div>
-        <h2 className="text-xl font-semibold mb-2">Questão {index}</h2>
+        <h2 className="text-xl font-semibold mb-2">Questão {index + 1}</h2>
         <h3 className="text-lg font-medium text-text-lightSub">{titulo}</h3>
       </div>
-      {imagens && <p>"Aparecer imagem se tiver"</p>}
       <p>{enunciado}</p>
-      <Respostas alternativas={alternativas} />
+      <Respostas
+        alternativas={alternativas}
+        questaoIndex={index}
+        alternativaSelecionada={alternativaSelecionada}
+        onAlternativaSelecionada={onAlternativaSelecionada}
+      />
     </div>
   );
 }
 
-export function Respostas({ alternativas }: { alternativas: string[] }) {
+export function Respostas({
+  alternativas,
+  questaoIndex,
+  alternativaSelecionada,
+  onAlternativaSelecionada,
+}: {
+  alternativas: string[];
+  questaoIndex: number;
+  alternativaSelecionada?: string;
+  onAlternativaSelecionada: (
+    questaoIndex: number,
+    alternativaIndex: number
+  ) => void;
+}) {
   return (
     <div className="flex flex-col gap-2">
       {alternativas.map((alternativa, index) => (
-        <Alternativa key={index}>{alternativa}</Alternativa>
+        <Alternativa
+          key={index}
+          selecionada={ALFABETO[index] === alternativaSelecionada}
+          onClick={() => onAlternativaSelecionada(questaoIndex, index)}
+        >
+          {alternativa}
+        </Alternativa>
       ))}
     </div>
   );
 }
 
-export function Alternativa({ children }: { children: React.ReactNode }) {
+export function Alternativa({
+  children,
+  selecionada,
+  onClick,
+}: {
+  children: React.ReactNode;
+  selecionada?: boolean;
+  onClick: () => void;
+}) {
   return (
-    <div className="flex gap-5 px-2 py-4 border-2 border-black border-opacity-5 hover:border-opacity-40 cursor-pointer duration-100 rounded-md">
+    <div
+      onClick={onClick}
+      className={`flex gap-5 px-2 py-4 border-2 ${
+        selecionada
+          ? "border-mainBlue bg-mainBlue bg-opacity-10"
+          : "border-black border-opacity-5"
+      } hover:border-opacity-40 cursor-pointer duration-100 rounded-md`}
+    >
       {children}
     </div>
   );
 }
 
-export function Mapa({ questoes }: { questoes: Prova["questoes"] }) {
-  return (
-    <div className="grid grid-cols-8 gap-1">
-      {questoes.map((questao, index) => (
-        <QuestaoMapa key={questao._id} id={`questao-${index + 1}`} />
-      ))}
-    </div>
-  );
-}
-
-export function QuestaoMapa({ id }: { id: string }) {
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
-
-  return (
-    <a
-      className="text-lg bg-black bg-opacity-10 flex items-center justify-center rounded-md h-8 opacity-70 hover:opacity-100 duration-100 cursor-pointer"
-      href={`#${id}`}
-      onClick={handleClick}
-    >
-      {id.replace("questao-", "")}
-    </a>
-  );
-}
-
-export function Menu({ questoes }: { questoes: Prova["questoes"] }) {
-  const router = useRouter();
+export function Menu({
+  questoes,
+  respostas,
+  simulado,
+  prova,
+  qtdQuestoes,
+}: {
+  questoes: Prova["questoes"];
+  respostas: Record<number, string>;
+  simulado: string | string[];
+  prova: string | string[];
+  qtdQuestoes: number;
+}) {
   const [isOpen, setIsOpen] = useState(false);
-  const [maxHeight, setMaxHeight] = useState<string>("0px");
-  const [padding, setPadding] = useState<string>("0px");
-  const contentRef = React.useRef<HTMLDivElement>(null);
 
   const toggle = () => {
     setIsOpen(!isOpen);
-    if (contentRef.current) {
-      setMaxHeight(
-        !isOpen ? `calc(${contentRef.current.scrollHeight}px + 48px)` : "0"
-      );
-      if (isOpen) {
-        setTimeout(() => {
-          setPadding("0");
-        }, 220);
-      } else {
-        setPadding("12px 20px");
-      }
-    }
   };
 
   return (
-    <div className="sticky top-28 h-fit justify-self-center rounded-md w-full border-2 border-black border-opacity-5">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        console.log("Respostas:", respostas);
+        console.log(simulado, prova);
+        console.log(qtdQuestoes);
+        // sendData();
+      }}
+      className="sticky top-28 h-fit justify-self-center rounded-md w-full border-2 border-black border-opacity-5"
+    >
       <button
         className="flex justify-between w-full items-center pb-3 border-b-2 p-5 hover:bg-bg-lightHover duration-200"
         onClick={toggle}
@@ -190,35 +229,11 @@ export function Menu({ questoes }: { questoes: Prova["questoes"] }) {
           }`}
         />
       </button>
-      <div
-        className="px-5 flex flex-col gap-3"
-        ref={contentRef}
-        style={{
-          maxHeight: maxHeight,
-          transition: "max-height 0.3s ease",
-          overflow: "hidden",
-          padding: padding,
-        }}
-      >
-        <div className="flex justify-between items-center *:font-medium *:text-lg">
-          <h3>Mapa de questões</h3>
-          <p>{questoes.length}</p>
-        </div>
-        <Mapa questoes={questoes} />
-        <p className="text-sm text-text-lightSub">
-          Faltam {questoes.length} questões para você finalizar o simulado.
-        </p>
-        <button
-          onClick={() => {
-            console.log(
-              "essa desgraça não redireciona sem fuder com tudo!!!!!!!!!!!!!!"
-            );
-          }}
-          className="px-10 py-2 text-white font-bold bg-mainBlue hover:text-mainBlue hover:bg-transparent rounded-md duration-100 border-2 border-transparent hover:border-mainBlue"
-        >
+      <div className="px-5 flex flex-col gap-3">
+        <button className="px-10 py-2 text-white font-bold bg-mainBlue hover:text-mainBlue hover:bg-transparent rounded-md duration-100 border-2 border-transparent hover:border-mainBlue">
           Finalizar
         </button>
       </div>
-    </div>
+    </form>
   );
 }

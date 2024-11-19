@@ -29,6 +29,7 @@ export default function Student() {
   const { user, isAuthenticated } = useUser();
   const router = useRouter();
   const now = new Date().getHours();
+  console.log(now);
   const [modulosData, setModulosData] = useState<Record<
     string,
     ModuloProps

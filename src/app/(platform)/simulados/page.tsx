@@ -9,6 +9,12 @@ import axios from "axios";
 import { useToast } from "@/app/context/ToastContext";
 import Skeleton from "@/app/ui/components/Skeleton";
 
+const hours = new Date().getHours;
+const minutes = new Date().getMinutes;
+const seconds = new Date().getSeconds;
+
+console.log(hours, minutes, seconds);
+
 export const getTotalQuestoes = (provas: any[]) => {
   return provas.reduce(
     (total, prova) => total + (prova.questoes?.length || 0),
@@ -42,8 +48,6 @@ export default function Simulados() {
 
     fetchSimulados();
   }, []);
-
-  console.log(simulados);
 
   const sendData = async () => {
     try {
@@ -130,8 +134,8 @@ export default function Simulados() {
           <div className="gap-5 grid grid-cols-2">
             {isLoading ? (
               <>
-                <Skeleton />
-                <Skeleton />
+                <Skeleton className="col-span-1 h-[250px]" />
+                <Skeleton className="col-span-1 h-[250px]" />
               </>
             ) : (
               simulados.map((simulado) => (

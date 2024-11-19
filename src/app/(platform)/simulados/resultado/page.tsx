@@ -1,6 +1,6 @@
 import { ArrowLeft, ChevronDown, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { Mapa, Respostas } from "../page";
+// import { Mapa, Respostas } from "../page";
 
 export default function Resultado() {
   return (
@@ -58,7 +58,7 @@ export default function Resultado() {
             <h3>Mapa de questões</h3>
             <p>0/45</p>
           </div>
-          <Mapa />
+          {/* <Mapa /> */}
           <p className="text-sm text-text-lightSub">
             Faltam x questões para você finalizar o simulado.
           </p>
@@ -87,7 +87,7 @@ function QuestãoRespondida({
       <h2 className="text-xl font-semibold">Questão {id}</h2>
       <p>{enunciado}</p>
       <p>"Aparecer imagem se tiver"</p>
-      <Respostas />
+      {/* <Respostas /> */}
       <div>
         <div className="flex gap-3">
           <Sparkles />

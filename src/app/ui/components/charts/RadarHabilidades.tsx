@@ -12,10 +12,10 @@ import {
 const chartData = [
   { skill: "Raciocínio lógico", desktop: 21 },
   { skill: "Criatividade", desktop: 43 },
-  { skill: "Gestão de tempo", desktop: 23 },
+  { skill: "Conhecimento de Fórmulas", desktop: 23 },
   { skill: "Interpretação de texto", desktop: 72 },
-  { skill: "Aprendizado Contínuo", desktop: 41 },
-  { skill: "Consistência", desktop: 74 },
+  { skill: "Teoria", desktop: 41 },
+  { skill: "Cálculos Avançados", desktop: 74 },
 ];
 
 const chartConfig = {
