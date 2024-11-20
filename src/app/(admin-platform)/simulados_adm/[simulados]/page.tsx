@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Edit, Upload, X } from "lucide-react";
+import { Plus, Trash2, Edit, Upload, X, FileText } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
@@ -33,6 +33,9 @@ export default function SimuladoQuestao() {
     const [imagem, setImagem] = useState<File | null>(null);
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [simuladoTitulo, setSimuladoTitulo] = useState<string | null>(null);
+    const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
+    const [tituloPdf, setTituloPdf] = useState("");
+    const [pdfFile, setPdfFile] = useState<File | null>(null);
 
     useEffect(() => {
         const fetchQuestionnaires = async () => {
@@ -77,7 +80,7 @@ export default function SimuladoQuestao() {
         }
         setIsQuestionModalOpen(true);
     };
-    
+
     const handleCloseQuestionModal = () => {
         setIsQuestionModalOpen(false);
     };
@@ -92,12 +95,12 @@ export default function SimuladoQuestao() {
         if (editingIndex !== null) {
             setProvas((prev) =>
                 prev.map((q, index) => (index === editingIndex ? updatedQuestion : q))
-        );
+            );
         } else {
-            await axios.post("http://localhost:5002/simulado/"+simulados, { titulo: updatedQuestion.titulo, tema: updatedQuestion.tema })
+            await axios.post("http://localhost:5002/simulado/" + simulados, { titulo: updatedQuestion.titulo, tema: updatedQuestion.tema })
             setProvas((prev) => [...prev, updatedQuestion]);
         }
-        
+
         handleCloseQuestionModal();
     };
 
@@ -110,18 +113,33 @@ export default function SimuladoQuestao() {
         }
     };
 
-    const handleOpenIaModal = () => {
-        setIsIaModalOpen(true);
+    const handleOpenPDFModal = () => {
+        setIsPdfModalOpen(true);
+    }
+
+    const handleClosePdfModal = () => {
+        setIsPdfModalOpen(false);
+        setTituloPdf("");
+        setPdfFile(null);
     };
 
-    const handleCloseIaModal = () => {
-        setIsIaModalOpen(false);
-    };
+    const handleUploadPdf = async () => {
+        if (pdfFile) {
+            const formData = new FormData();
+            formData.append("titulo", tituloPdf);
+            formData.append("pdf", pdfFile);
 
-    const handleCreateWithIA = () => {
-        console.log("Criar", quantidade, "questões com IA");
+            try {
+                await axios.post(`http://localhost:5002/simulado/${simulados}/upload`, formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
 
-        setIsIaModalOpen(false);
+                setProvas((prev) => [...prev, { titulo: tituloPdf, tema: "PDF Importado" }]);
+                handleClosePdfModal();
+            } catch (error) {
+                console.error("Erro ao fazer upload do PDF:", error);
+            }
+        }
     };
 
     return (
@@ -138,6 +156,13 @@ export default function SimuladoQuestao() {
                     <Plus className="w-4 h-4" />
                     Criar Prova
                 </button>
+                <button
+                    className="bg-green-500 text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-green-600 duration-150"
+                    onClick={() => handleOpenPDFModal()}
+                >
+                    <FileText className="w-4 h-4" />
+                    Criar com PDF
+                </button>
 
             </div>
 
@@ -147,7 +172,7 @@ export default function SimuladoQuestao() {
                         key={index}
                         className="p-4 mb-4 border rounded-md shadow-md bg-gray-50 hover:bg-mainBlue hover:text-white transition-all group duration-300"
                     >
-                        <Link href={simulados + "/"+ index}
+                        <Link href={simulados + "/" + index}
                             onClick={() => {
                                 localStorage.setItem("simuladoTema", questionnaire.tema);
                             }}
@@ -205,7 +230,7 @@ export default function SimuladoQuestao() {
                                     <label className="block font-medium">Título</label>
                                     <input
                                         type="text"
-                                        className="w-full mt-2 p-2 border rounded-md"
+                                        className="w-full mt-2 p-2 border rounded-md  focus:outline-none focus:border-mainBlue"
                                         value={questaoTitulo}
                                         onChange={(e) => setQuestaoTitulo(e.target.value)}
                                     />
@@ -215,7 +240,7 @@ export default function SimuladoQuestao() {
                                     <label className="block font-medium">Tema</label>
                                     <input
                                         type="text"
-                                        className="w-full mt-2 p-2 border rounded-md"
+                                        className="w-full mt-2 p-2 border rounded-md  focus:outline-none focus:border-mainBlue"
                                         value={tema}
                                         onChange={(e) => setTema(e.target.value)}
                                     />
@@ -226,7 +251,7 @@ export default function SimuladoQuestao() {
                                         type="submit"
                                         className="bg-mainBlue text-white py-2 px-6 rounded-md w-full hover:bg-blue-700"
                                     >
-                                        Salvar
+                                        {editingIndex !== null ? "Editar Prova" : "Criar Prova"}
                                     </button>
                                 </div>
                             </form>
@@ -258,53 +283,65 @@ export default function SimuladoQuestao() {
                 </div>
             )}
 
-            {isIaModalOpen && (
+            {isPdfModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg w-2/4 max-h-[80vh] overflow-y-auto">
-                        <div className="bg-purple-500 text-white p-4 rounded-t-lg flex justify-between items-center">
-                            <h2 className="text-xl font-bold">Criar com IA</h2>
+                        <div className="bg-green-500 text-white p-4 rounded-t-lg flex justify-between items-center">
+                            <h2 className="text-xl font-bold">Criar Prova com PDF</h2>
                             <button
-                                onClick={handleCloseIaModal}
+                                onClick={handleClosePdfModal}
                                 className="text-white hover:text-gray-200"
                             >
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
-                        <div className="p-6 space-y-6">
-                            <div>
-                                <label className="block font-medium">Título da Prova</label>
-                                <input
-                                    type="text"
-                                    value={tituloIa}
-                                    onChange={(e) => setTituloIa(e.target.value)}
-                                    className="w-full p-2 mt-2 border rounded-md"
-                                    placeholder="Digite o título da prova"
-                                />
-                            </div>
-                            <div>
-                                <label className="block font-medium">Quantidade de Questões</label>
-                                <input
-                                    type="number"
-                                    value={quantidade}
-                                    onChange={(e) => setQuantidade(Math.max(1, Number(e.target.value)))}
-                                    className="w-full p-2 mt-2 border rounded-md"
-                                   
-                                    placeholder="Digite a quantidade de questões"
-                                />
-                            </div>
-                            <div className="flex justify-end gap-4">
-                                <button
-                                    onClick={handleCreateWithIA}
-                                    className="bg-purple-500 text-white py-2 px-6 rounded-md w-full hover:bg-purple-600"
-                                >
-                                    Criar
-                                </button>
+                        <div className="p-6">
+                            <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+                                <div>
+                                    <label className="block font-medium">Título</label>
+                                    <input
+                                        type="text"
+                                        className="w-full mt-2 p-2 border rounded-md focus:outline-none focus:border-green-500"
+                                        value={tituloPdf}
+                                        onChange={(e) => setTituloPdf(e.target.value)}
+                                    />
+                                </div>
 
-                            </div>
+                                <div>
+                                <label className="block font-medium">PDF </label>
+                                    <div className="mt-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => document.getElementById("fileInput")?.click()}
+                                            className="bg-green-500 text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-green-600 duration-150"
+                                        >
+                                            <span>Selecionar um PDF</span>
+                                        </button>
+                                        <input
+                                            id="fileInput"
+                                            type="file"
+                                            className="hidden"
+                                            onChange={handleUploadPdf}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={handleUploadPdf}
+                                        className="bg-green-500 text-white py-2 px-6 rounded-md w-full hover:bg-green-600"
+                                    >
+                                        Fazer Upload
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             )}
         </div>
+
+
     );
 }

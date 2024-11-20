@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Trash2, Edit, Bot, X } from "lucide-react";
+import { Plus, Trash2, Bot, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
@@ -249,15 +249,7 @@ export default function SimuladosAdm() {
                             </p>
                         </Link>
                         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                            <button
-                                className="p-2 bg-green-500 rounded-full hover:bg-green-600 transition transform group-hover:scale-100 scale-0 duration-300"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleOpenModal(questionnaire._id);
-                                }}
-                            >
-                                <Edit className="w-5 h-5 text-white" />
-                            </button>
+                          
                             <button
                                 className="p-2 bg-red-500 rounded-full hover:bg-red-600 transition transform group-hover:scale-100 scale-0 duration-300"
                                 onClick={(e) => {
