@@ -89,11 +89,14 @@ export default function Simulados() {
           Alunos que realizam e treinam com simulados têm maiores chances de
           aprovação.
         </p>
-        <button className="bg-white w-fit px-10 py-3 rounded-lg border-2 border-transparent hover:text-white hover:bg-transparent hover:border-white duration-100">
+        <Link
+          href={"#simulados"}
+          className="bg-white w-fit px-10 py-3 rounded-lg border-2 border-transparent hover:text-white hover:bg-transparent hover:border-white duration-100"
+        >
           Começar Simulado
-        </button>
+        </Link>
       </div>
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8" id="simulados">
         <div>
           <h2 className="text-2xl font-bold mb-2">
             Escolha um dos nossos Simulados disponíveis ou{" "}
@@ -229,9 +232,9 @@ function SimuladoCard({
         <p className="text-sm font-semibold group-hover:text-white">
           {qtdProvas} provas, {qtdQuestoes} questões
         </p>
-        <p className="text-xs group-hover:text-white">
+        {/* <p className="text-xs group-hover:text-white">
           Duração máxima de x horas por prova
-        </p>
+        </p> */}
       </div>
     </Link>
   );

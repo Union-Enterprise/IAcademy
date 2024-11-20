@@ -190,12 +190,11 @@ export default function Student() {
           </div>
           <div className="py-5 flex flex-col gap-3">
             <AccordionItem
-              title="Gestão de Tempo"
+              title="Teoria"
               priority="Importante"
-              description="No vestibular, saber distribuir o tempo de forma eficaz é
-                crucial para responder todas as questões."
+              description="No vestibular, saber sobre as teorias da matemática são extremamente importante para realizar questões de maneira mais fácil e ágil."
               hints={[
-                "Tente cronometrar seus simulados, dividindo o tempo por questão.",
+                "Tente revisar sobre os fundamentos dos temas da matemática.",
                 "Avalie o tempo gasto em cada tipo de pergunta e priorize as mais rápidas.",
               ]}
             >
@@ -207,28 +206,20 @@ export default function Student() {
               </Link>
             </AccordionItem>
             <AccordionItem
-              title="Aprendizado Contínuo"
+              title="Interpretação de texto"
               priority="Secundário"
-              description="Procure revisar e treinar mais o que você já sabe"
+              description="Procure revisar e treinar os padrões de questões de vestibulares"
               hints={[
-                "Utilize métodos como resumos e mapas mentais para reforçar seu aprendizado.",
-                "Priorize revisar conteúdos antes de dormir para melhor retenção.",
+                "Como dica, tente entender primeiramente o que a questão pede, e assim entender como chegar ao resultado.",
               ]}
-            >
-              <Link
-                href={"#"}
-                className="text-mainBlue hover:underline duration-100"
-              >
-                Como fazer mapas mentais
-              </Link>
-            </AccordionItem>
+            ></AccordionItem>
             <AccordionItem
-              title="Revisar conceitos básicos"
+              title="Raciocínio Lógico"
               priority="Opcional"
-              description="Você está com uma consistência muito boa, ou seja, consegue responder questões semelhantes com facilidade."
+              description="Você está com uma consistência muito boa em raciocínio, ou seja, consegue interpretar e resolver questões com facilidade."
               hints={[
-                "Experimente técnicas como mindfulness para manter o foco durante os estudos.",
-                "Priorize revisar conteúdos antes de dormir para melhor retenção.",
+                "Procure estudar conceitos básicos de matemática e lógica.",
+                "Tente identificar seus pontos fracos, como interpretação do enunciado, cálculos errados, entre outros.",
               ]}
             />
           </div>

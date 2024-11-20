@@ -43,9 +43,9 @@ export default function Home() {
         <div className="flex gap-[40px]">
           <div className="flex flex-col gap-[40px] w-full col-span-2">
             <ContentList title="Conteúdos em destaque" />
-            <ContentList title="Tópicos mais estudados" />
+            {/* <ContentList title="Tópicos mais estudados" /> */}
           </div>
-          <FilterSection />
+          {/* <FilterSection /> */}
         </div>
       </div>
     </div>

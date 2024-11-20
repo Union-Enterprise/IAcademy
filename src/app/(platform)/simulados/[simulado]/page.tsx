@@ -119,6 +119,13 @@ export default function Simulado() {
     })
     .filter((prova) => prova);
 
+  const totalRespostasUsuario = resultado
+    ? resultado.reduce(
+        (total, res) => total + res.respostas.filter((r) => r).length,
+        0
+      )
+    : 0;
+
   return (
     <div className="flex flex-col px-[100px] my-[80px] gap-16">
       <div className="flex flex-col w-full gap-5">
@@ -162,7 +169,7 @@ export default function Simulado() {
           <div className="border-l-2 border-borders-lightB px-4 py-10 w-[300px]">
             <p className="text-lg uppercase font-medium">Feitas até agora:</p>
             <h3 className="text-5xl font-black mt-1">
-              0/{getTotalQuestoes(simulado.provas)}
+              {totalRespostasUsuario}/{getTotalQuestoes(simulado.provas)}
             </h3>
           </div>
         </div>
@@ -203,7 +210,7 @@ export default function Simulado() {
             key={prova._id}
             titulo={prova.titulo}
             qtdQuestoes={prova.questoes.length}
-            link={`${simuladoId}/${index}`}
+            link={`${simuladoId}/${index + provasConcluidas?.length}`}
           />
         ))}
       </section>

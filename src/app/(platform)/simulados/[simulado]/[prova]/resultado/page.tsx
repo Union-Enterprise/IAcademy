@@ -87,7 +87,7 @@ export default function Resultado() {
     <section className="px-[100px] my-[80px] grid grid-cols-3 relative gap-10">
       <div className="flex flex-col gap-5 col-span-3">
         <Link
-          href={"/simulados"}
+          href={`/simulados/${simuladoId}`}
           className="flex w-fit gap-3 opacity-80 hover:opacity-100 duration-100"
         >
           <ArrowLeft />
