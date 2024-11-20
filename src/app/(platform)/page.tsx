@@ -24,9 +24,14 @@ import {
   Brain,
   Percent,
 } from "lucide-react";
+import LoadingFrame from "../ui/components/LoadingFrame";
 
 export default function Home() {
   const { user, isAuthenticated } = useUser();
+
+  if (!isAuthenticated) {
+    return <LoadingFrame />;
+  }
 
   return (
     <div className="p-8">

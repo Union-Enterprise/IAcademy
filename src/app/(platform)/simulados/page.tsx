@@ -8,6 +8,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useToast } from "@/app/context/ToastContext";
 import Skeleton from "@/app/ui/components/Skeleton";
+import { useUser } from "@/app/context/UserContext";
+import LoadingFrame from "@/app/ui/components/LoadingFrame";
 
 const hours = new Date().getHours;
 const minutes = new Date().getMinutes;
@@ -29,6 +31,7 @@ export default function Simulados() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [simulados, setSimulados] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { isAuthenticated } = useUser();
 
   useEffect(() => {
     const fetchSimulados = async () => {
@@ -77,7 +80,9 @@ export default function Simulados() {
     }
   };
 
-  console.log(simuladosManual);
+  if (!isAuthenticated) {
+    return <LoadingFrame />;
+  }
 
   return (
     <section className="*:px-[100px] flex flex-col gap-10 pb-10">

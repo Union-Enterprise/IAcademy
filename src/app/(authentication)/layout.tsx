@@ -83,7 +83,7 @@ export default function RootLayout({
                 @IAcademy 2024 - Todos os direitos reservados.
               </p>
             </div>
-            <main className="xl:min-w-[560px] bg-bg-light p-7 xl:p-20 xl:py-14 flex flex-col h-full overflow-auto">
+            <main className="xl:min-w-[560px] xl:w-[1000px] bg-bg-light p-7 xl:p-20 xl:py-14 flex flex-col h-full overflow-auto">
               <img width={200} src="./bluelogo.svg" alt="IAcademy Logo" />
               <div
                 className={`${

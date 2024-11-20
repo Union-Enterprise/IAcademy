@@ -1,18 +1,18 @@
-import { Item } from "../../ui/components/ContentList";
-import {
-  Box,
-  CircleAlert,
-  Cone,
-  Cuboid,
-  Diameter,
-  TriangleRight,
-  Brain,
-  Percent,
-} from "lucide-react";
+"use client";
+
+import { Cone } from "lucide-react";
 
 import Trilha from "@/app/ui/components/trilhas/Trilha";
+import { useUser } from "@/app/context/UserContext";
+import LoadingFrame from "@/app/ui/components/LoadingFrame";
 
 export default function Trilhas() {
+  const { isAuthenticated } = useUser();
+
+  if (!isAuthenticated) {
+    return <LoadingFrame />;
+  }
+
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-5">Trilhas de Aprendizado</h1>
