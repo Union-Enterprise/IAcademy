@@ -13,12 +13,15 @@ interface ModuloProps {
   unidades: {
     title: string;
     description: string;
-    topicos: { title: string; description: string }[]; 
+    topicos: { title: string; description: string }[];
   }[];
 }
 
 export default function Modulos() {
-  const [modulosData, setModulosData] = useState<Record<string, ModuloProps> | null>(null);
+  const [modulosData, setModulosData] = useState<Record<
+    string,
+    ModuloProps
+  > | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,17 +65,13 @@ export default function Modulos() {
 function Modulo({ title, index, unidades, link }: ModuloProps) {
   return (
     <div className="flex flex-col gap-3">
-     
-    
       {unidades.map((unidade, unidadeIdx) => (
         <div key={unidadeIdx} className="flex flex-col gap-1">
-      
-
           {unidade.topicos.map((topico, topicoIdx) => (
             <ContentsSection
               key={topicoIdx}
               title={topico.title}
-              href={`/trilhas/quiz`}  
+              href={`/trilhas/quiz`}
             >
               <p>{topico.description}</p>
             </ContentsSection>

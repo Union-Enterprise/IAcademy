@@ -42,7 +42,7 @@ const ProfileSidebar = () => {
   };
 
   return (
-    <section className="border-border-light border-2 rounded-xl">
+    <section className="border-border-light border-2 rounded-xl overflow-hidden">
       <Item
         title="Visão Geral"
         href="/profile"
@@ -116,7 +116,7 @@ function Item({
       className={`${classname} ${
         isSelected &&
         "opacity-100 border-l-mainBlue *:text-mainBlue *:font-semibold bg-background-lightA"
-      } text-text-lightSub items-center px-5 h-[60px] flex border-l-4 border-transparent justify-between hover:bg-background-lightA duration-200`}
+      } text-text-lightSub items-center px-5 h-[60px] flex border-l-4 border-transparent justify-between hover:bg-bg-lightA duration-200`}
     >
       <div className="flex gap-5">
         {iconsList[iconId]}

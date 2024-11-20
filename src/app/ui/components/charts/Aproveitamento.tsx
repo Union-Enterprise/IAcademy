@@ -19,11 +19,8 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 const chartData = [
-  { componente: "topicos", conteudos: 10, fill: "#1865F2" },
-  { componente: "modulos", conteudos: 1, fill: "#3B1F2B" },
-  { componente: "quizzes", conteudos: 4, fill: "#D8973C" },
-  { componente: "simulados", conteudos: 1, fill: "#C7CEDB" },
-  { componente: "unidades", conteudos: 3, fill: "#04F06A" },
+  { componente: "topicos", conteudos: 15, fill: "#1865F2" },
+  { componente: "simulados", conteudos: 2, fill: "#C7CEDB" },
 ];
 
 const chartConfig = {
@@ -37,10 +34,6 @@ const chartConfig = {
   modulos: {
     label: "Módulos",
     color: "hsl(var(--chart-2))",
-  },
-  quizzes: {
-    label: "Quizzes",
-    color: "hsl(var(--chart-3))",
   },
   simulados: {
     label: "Simulados",

@@ -242,7 +242,7 @@ function Prova({
   return (
     <Link
       href={link}
-      className="shadow-sm rounded-xl p-8 flex justify-between items-center gap-5 border-2 border-borders-light hover:shadow-md duration-100"
+      className="group shadow-sm rounded-xl p-8 flex justify-between items-center gap-5 border-2 border-borders-light hover:shadow-md duration-100"
     >
       <div className="flex flex-col gap-3">
         <h5 className="font-semibold text-xl">{titulo}</h5>
@@ -253,7 +253,7 @@ function Prova({
           <p>Duração Máxima de 2h35m</p>
         </div>
       </div>
-      <div className="px-10 py-2 text-white h-fit bg-mainBlue rounded-md border-2 border-transparent hover:bg-transparent hover:text-mainBlue hover:border-mainBlue duration-100">
+      <div className=" group-hover:bg-transparent group-hover:text-mainBlue group-hover:border-mainBlue px-10 py-2 text-white h-fit bg-mainBlue rounded-md border-2 border-transparent duration-100">
         Começar
       </div>
     </Link>

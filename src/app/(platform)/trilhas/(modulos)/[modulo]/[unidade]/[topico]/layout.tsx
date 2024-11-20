@@ -4,9 +4,9 @@ import { useParams } from "next/navigation";
 import { getModulosData } from "@/app/ui/components/modulos/data";
 import normalizeString from "@/app/ui/components/modulos/normalizeString";
 import Link from "next/link";
-import { ArrowUpFromDot } from "lucide-react";
+import { ArrowLeft, ArrowUpFromDot, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import { useUser } from "@/app/context/UserContext";
 
 const botProfilePicUrl = "/blueIcon.svg";
@@ -14,7 +14,7 @@ const botProfilePicUrl = "/blueIcon.svg";
 type ModuloKey = string;
 
 interface ChatMessage {
-  sender: 'user' | 'bot';
+  sender: "user" | "bot";
   content: string;
 }
 
@@ -31,13 +31,14 @@ export default function TopicoLayout({
   const topicoKey = decodeURIComponent(params.topico);
 
   const { user } = useUser();
-  console.log(user.img);
 
-  const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
+  const [modulosData, setModulosData] = useState<Record<string, any> | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatVisible, setChatVisible] = useState(true);
   const [isBotTyping, setIsBotTyping] = useState(false);
@@ -65,19 +66,22 @@ export default function TopicoLayout({
 
   const handleSend = async () => {
     if (message) {
-      const userMessage: ChatMessage = { sender: 'user', content: message };
+      const userMessage: ChatMessage = { sender: "user", content: message };
       setChatMessages((prevMessages) => [...prevMessages, userMessage]);
-      setMessage('');
+      setMessage("");
 
       setIsBotTyping(true);
       setBotTypingContent("");
 
       try {
-        const response = await axios.post("http://localhost:5000/answer_user_questions", {
-          content: `${moduloKey} - ${unidadeKey} - ${topicoKey}`,
-          chat: chatMessages,
-          prompt: message,
-        });
+        const response = await axios.post(
+          "http://localhost:5000/answer_user_questions",
+          {
+            content: `${moduloKey} - ${unidadeKey} - ${topicoKey}`,
+            chat: chatMessages,
+            prompt: message,
+          }
+        );
 
         animateTyping(response.data.response);
       } catch (error) {
@@ -91,13 +95,15 @@ export default function TopicoLayout({
     let currentIndex = 0;
     const typingInterval = setInterval(() => {
       if (currentIndex < fullMessage.length) {
-        setBotTypingContent((prevContent) => prevContent + fullMessage[currentIndex]);
+        setBotTypingContent(
+          (prevContent) => prevContent + fullMessage[currentIndex]
+        );
         currentIndex += 1;
       } else {
         clearInterval(typingInterval);
         setChatMessages((prevMessages) => [
           ...prevMessages,
-          { sender: 'bot', content: fullMessage }
+          { sender: "bot", content: fullMessage },
         ]);
         setIsBotTyping(false);
         setBotTypingContent("");
@@ -109,10 +115,9 @@ export default function TopicoLayout({
     setChatVisible(!chatVisible);
   };
 
-  
   const getInitials = (name: string) => {
-    const firstName = name.split(' ')[0]; 
-    const initials = firstName.charAt(0).toUpperCase(); 
+    const firstName = name.split(" ")[0];
+    const initials = firstName.charAt(0).toUpperCase();
     return initials;
   };
 
@@ -146,94 +151,102 @@ export default function TopicoLayout({
   }
 
   return (
-    <section className="grid grid-cols-3 gap-5 h-full overflow-x-hidden">
-      <div className="col-span-2 w-full m-10 overflow-auto pr-5 flex flex-col gap-5">
+    <section className="grid grid-cols-3 h-full overflow-x-hidden">
+      <div className="col-span-2 w-full m-10 overflow-auto pr-20 flex flex-col gap-5">
         <Link
           href={`/trilhas/${moduloKey}/${unidadeKey}`}
           className="text-mainBlue opacity-60 hover:opacity-100 flex gap-2 items-center duration-100 w-fit mb-3"
         >
+          <ArrowLeft />
           Voltar
         </Link>
         {children}
       </div>
-      <div className={`col-span-1 bg-bg-lightA border-2 border-borders-lightA rounded-lg p-10 flex flex-col relative transition-transform duration-300 ${chatVisible ? 'translate-x-0' : 'translate-x-full'}`}>
-        {chatVisible && (
-          <>
-            <p className="text-2xl text-gray-500">IAcademy bot</p>
-            <div className="flex flex-col gap-3 h-96 flex-grow overflow-y-auto overflow-hidden mb-4">
-              {chatMessages.map((msg, index) => (
+      <div
+        className={
+          "bg-bg-lightA border-2 border-borders-lightA rounded-lg p-10 flex flex-col relative transition-transform duration-300"
+        }
+      >
+        <p className="text-2xl text-gray-500">IAcademy bot</p>
+        <div className="flex flex-col gap-3 h-96 flex-grow overflow-y-auto overflow-hidden mb-4">
+          {chatMessages.map((msg, index) => (
+            <div
+              key={index}
+              className={`flex ${
+                msg.sender === "user" ? "justify-end mt-7" : "justify-start"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                {msg.sender === "bot" && (
+                  <img
+                    src={botProfilePicUrl}
+                    alt="Bot profile"
+                    className="w-10 h-16 rounded-full"
+                  />
+                )}
                 <div
-                  key={index}
-                  className={`flex ${msg.sender === 'user' ? 'justify-end mt-7' : 'justify-start'}`}
+                  className={`p-3 rounded-lg ${
+                    msg.sender === "user"
+                      ? "bg-mainBlue text-white"
+                      : "text-black"
+                  } max-w-xs`}
                 >
-                  <div className="flex items-center gap-3">
-                    {msg.sender === 'bot' && (
-                      <img
-                        src={botProfilePicUrl}
-                        alt="Bot profile"
-                        className="w-14 h-20 rounded-full"
-                      />
-                    )}
-                    <div
-                      className={`p-3 rounded-lg ${msg.sender === 'user' ? 'bg-mainBlue text-white' : 'bg-gray-300 text-black'} max-w-xs`}
-                    >
-                      {msg.content}
+                  {msg.content}
+                </div>
+                {msg.sender === "user" &&
+                  (user.img ? (
+                    <img
+                      src={user.img}
+                      alt="User profile"
+                      className="w-12 h-12 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center">
+                      {getInitials(user.name)}
                     </div>
-                    {msg.sender === 'user' && (
-                      user.img ? (
-                        <img
-                          src={user.img} 
-                          alt="User profile"
-                          className="w-14 h-14 rounded-full"
-                        />
-                      ) : (
-                        <div className="w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center">
-                          {getInitials(user.name)}
-                        </div>
-                      )
-                    )}
-                  </div>
-                </div>
-              ))}
-              {isBotTyping && (
-                <div className="flex justify-start mt-7">
-                  <div className="flex">
-                    <div className="typing-ball"></div>
-                    <div className="typing-ball"></div>
-                    <div className="typing-ball"></div>
-                  </div>
-                </div>
-              )}
+                  ))}
+              </div>
             </div>
-            <div className="mt-auto relative">
-              <textarea
-                placeholder="Mensagem IAcademy"
-                value={message}
-                onChange={handleTextareaChange}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSend();
-                  }
-                }}
-                className="w-full p-4 border border-gray-300 rounded-xl pr-16 focus:outline-none focus:ring-2 focus:ring-mainBlue resize-none"
-                rows={1}
-              />
-              <button
-                onClick={handleSend}
-                disabled={!message}
-                className={`absolute right-1 top-1/3 mt-2 transform -translate-y-1/2 bg-mainBlue text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-mainBlue/90 ${!message ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <ArrowUpFromDot />
-              </button>
+          ))}
+          {isBotTyping && (
+            <div className="flex justify-start mt-7">
+              <div className="flex">
+                <div className="typing-ball"></div>
+                <div className="typing-ball"></div>
+                <div className="typing-ball"></div>
+              </div>
             </div>
-            <p className="mt-2 text-sm text-gray-500 flex justify-center">
-              A IAcademy pode cometer erros. Considere verificar informações importantes.
-            </p>
-          </>
-        )}
+          )}
+        </div>
+        <div className="mt-auto relative">
+          <textarea
+            placeholder="Mensagem IAcademy"
+            value={message}
+            onChange={handleTextareaChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
+            className="w-full p-4 border border-gray-300 rounded-xl pr-16 focus:outline-none focus:ring-2 focus:ring-mainBlue resize-none"
+            rows={1}
+          />
+          <button
+            onClick={handleSend}
+            disabled={!message}
+            className={`absolute right-4 top-1/3 mt-2 transform -translate-y-1/2 bg-mainBlue text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-mainBlue/90 ${
+              !message ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            <ArrowUpFromDot />
+          </button>
+        </div>
+        <p className="mt-2 text-xs text-gray-500 flex justify-center">
+          A IAcademy pode cometer erros. Considere verificar informações
+          importantes.
+        </p>
       </div>
-    
     </section>
   );
 }

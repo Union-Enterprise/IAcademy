@@ -52,9 +52,9 @@ export default function TrilhaMenu() {
           <p>Conteúdos</p>
         </Link>
         <Link
-          href={"/trilhas/contentQuizzes"}
+          href={"/trilhas/quizzes"}
           className={`${
-            pathname.includes("/contentQuizzes")
+            pathname.includes("/quizzes")
               ? "border-b-mainBlue font-semibold"
               : "opacity-50 hover:opacity-100 hover:border-opacity-75 hover:border-b-mainBlue"
           } *:text-text-light border-b-2 p-2 duration-100`}

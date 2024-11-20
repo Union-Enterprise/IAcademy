@@ -17,9 +17,6 @@ export default function Header({
 }: HeaderProps) {
   const pathname = usePathname();
 
-  console.log(pathname);
-  console.log(hrefs);
-
   return (
     <div className="h-fit flex flex-col justify-between px-[200px] pt-[60px] bg-bg-lightA gap-5">
       <div className="flex flex-col gap-3">

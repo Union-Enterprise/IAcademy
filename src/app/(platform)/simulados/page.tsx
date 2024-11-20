@@ -225,7 +225,7 @@ function SimuladoCard({
           />
         )}
         <h4 className="text-3xl font-semibold group-hover:text-white">
-          {title}
+          Simulado de {title.replace("para o ENEM", "")}
         </h4>
       </div>
       <div className="border-t-borders-lightB border-t-2 pt-4">

@@ -1,20 +1,22 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { getModulosData } from "@/app/ui/components/modulos/data"; 
+import { getModulosData } from "@/app/ui/components/modulos/data";
 import { ContentsSection } from "@/app/ui/trilha/ContentsSection";
 import normalizeString from "@/app/ui/components/modulos/normalizeString";
 import { usePageTitle } from "@/app/hooks/usePageTitle";
 import Header from "@/app/ui/components/trilhas/Header";
 import { useEffect, useState } from "react";
 
-type ModuloKey = string; 
+type ModuloKey = string;
 export default function Unidades() {
   usePageTitle();
   const params = useParams();
   const modulo = decodeURIComponent(params.modulo);
 
-  const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
+  const [modulosData, setModulosData] = useState<Record<string, any> | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -65,6 +67,7 @@ export default function Unidades() {
           <ContentsSection
             key={idx}
             title={unidade.title}
+            className="h-fit"
             href={`/trilhas/${modulo}/${normalizeString(unidade.title)}`}
           >
             <p>{unidade.description}</p>
