@@ -101,17 +101,6 @@ export default function Dashboard() {
         </h3>
         <LineChart />
       </div>
-      <div className="flex flex-col bg-bg-light col-span-2 rounded-lg gap-5">
-        <div className="p-6 pb-3 border-b-2 border-border-lightA border-opacity-30">
-          <h3 className="text-title-light font-bold">Notificações recentes</h3>
-          <p className="text-text-lightSub text-sm mt-1">
-            Últimas notificações recebidas.
-          </p>
-        </div>
-        <div className="flex flex-col px-6 gap-[32px]">
-          <p>Nenhuma nova mensagem por enquanto.</p>
-        </div>
-      </div>
     </div>
   );
 }
