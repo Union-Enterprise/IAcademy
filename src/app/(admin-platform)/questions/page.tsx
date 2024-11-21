@@ -106,7 +106,7 @@ export default function Questionnaires() {
       formData.append("file", selectedPdf);
 
       await axios.post("http://localhost:5000/upload_quiz_pdf", formData);
-      await axios.post("http://localhost:5000/generate_quiz");
+      await axios.post("http://localhost:5000/generate_quiz/673df8bff2d221652b6e499a/titulocu/temacu");
 
       setIsPdfModalOpen(false);
       setSelectedPdf(null);

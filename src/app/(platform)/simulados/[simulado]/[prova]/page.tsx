@@ -123,7 +123,11 @@ export function Questao({
 }) {
   let imageLocal;
   if(imagem){
-    imageLocal = `http://localhost:5002/files/${imagem}`;
+    if(imagem.includes("/") || imagem.includes("\\")){
+      imageLocal = `http://localhost:5000/${imagem}`;
+    }else{
+      imageLocal = `http://localhost:5002/files/${imagem}`;
+    }
   }
 
   return (

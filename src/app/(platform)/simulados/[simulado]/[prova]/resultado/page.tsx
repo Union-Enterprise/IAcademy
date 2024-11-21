@@ -155,8 +155,12 @@ function QuestaoRespondida({
   status: boolean;
 }) {
   let imageLocal: string | undefined;
-  if (questao.imagem) {
-    imageLocal = `http://localhost:5002/files/${questao.imagem}`;
+  if(questao.imagem){
+    if(questao.imagem.includes("/") || questao.imagem.includes("\\")){
+      imageLocal = `http://localhost:5000/${questao.imagem}`;
+    }else{
+      imageLocal = `http://localhost:5002/files/${questao.imagem}`;
+    }
   }
 
   return (
@@ -203,13 +207,18 @@ function QuestaoRespondida({
           </Alternativa>
         ))}
       </div>
-      <div>
-        <p className="text-mainBlue text-lg font-medium flex gap-2">
-          <Sparkles />
-          Explicação:
-        </p>
-        <p className="text-text-lightSub">{questao.explicacao}</p>
-      </div>
+      {questao.explicacao && (
+        <div>
+          <p className="text-mainBlue text-lg font-medium flex gap-2">
+            <Sparkles />
+            Explicação:
+          </p>
+          <p 
+            className="text-text-lightSub" 
+            dangerouslySetInnerHTML={{ __html: questao.explicacao.replaceAll("\\n", "<br>") }}>
+          </p>
+        </div>
+      )}
     </div>
   );
 }

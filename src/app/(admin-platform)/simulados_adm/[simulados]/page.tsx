@@ -35,12 +35,12 @@ export default function SimuladoQuestao() {
     const [simuladoTitulo, setSimuladoTitulo] = useState<string | null>(null);
     const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
     const [tituloPdf, setTituloPdf] = useState("");
+    const [temaPdf, setTemaPdf] = useState("");
     const [pdfFile, setPdfFile] = useState<File | null>(null);
 
     useEffect(() => {
         const fetchQuestionnaires = async () => {
             const storedQuestionnaires = await axios.get(`http://localhost:5002/simulado/${simulados}`);// criar uma variavel para o id(cod praticamente igual ao arquivo [simulados] )
-            console.log(storedQuestionnaires)
             setProvas(storedQuestionnaires.data.provas);
         }
         // if (storedQuestionnaires) {
@@ -124,23 +124,24 @@ export default function SimuladoQuestao() {
     };
 
     const handleUploadPdf = async () => {
-        if (pdfFile) {
+        if (!pdfFile) {
+            console.error("Nenhum arquivo selecionado!");
+            return;
+        }
+        try {
             const formData = new FormData();
-            formData.append("titulo", tituloPdf);
-            formData.append("pdf", pdfFile);
-
-            try {
-                await axios.post(`http://localhost:5002/simulado/${simulados}/upload`, formData, {
-                    headers: { "Content-Type": "multipart/form-data" },
-                });
-
-                setProvas((prev) => [...prev, { titulo: tituloPdf, tema: "PDF Importado" }]);
-                handleClosePdfModal();
-            } catch (error) {
-                console.error("Erro ao fazer upload do PDF:", error);
-            }
+            formData.append("file", pdfFile); 
+    
+            await axios.post("http://localhost:5000/upload_quiz_pdf", formData);
+            await axios.post(`http://localhost:5000/generate_quiz/${simulados}/${tituloPdf}/${temaPdf}`);
+    
+            setIsPdfModalOpen(false);
+            setPdfFile(null);
+        } catch (error) {
+            console.error("Erro ao fazer upload e gerar quiz:", error);
         }
     };
+    
 
     return (
         <div className="p-6 bg-white rounded-md shadow-md">
@@ -306,6 +307,15 @@ export default function SimuladoQuestao() {
                                         onChange={(e) => setTituloPdf(e.target.value)}
                                     />
                                 </div>
+                                <div>
+                                    <label className="block font-medium">Tema</label>
+                                    <input
+                                        type="text"
+                                        className="w-full mt-2 p-2 border rounded-md focus:outline-none focus:border-green-500"
+                                        value={temaPdf}
+                                        onChange={(e) => setTemaPdf(e.target.value)}
+                                    />
+                                </div>
 
                                 <div>
                                 <label className="block font-medium">PDF </label>
@@ -321,7 +331,12 @@ export default function SimuladoQuestao() {
                                             id="fileInput"
                                             type="file"
                                             className="hidden"
-                                            onChange={handleUploadPdf}
+                                            accept="application/pdf" 
+                                            onChange={(e) => {
+                                                if (e.target.files && e.target.files.length > 0) {
+                                                    setPdfFile(e.target.files[0]);
+                                                }
+                                            }}
                                         />
                                     </div>
                                 </div>
