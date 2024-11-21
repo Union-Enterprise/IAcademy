@@ -74,11 +74,14 @@ function Modulo({ title, index, unidades, link }: ModuloProps) {
         </h2>
       </Link>
       {unidades.map((unidade, unidadeIdx) => (
-        <div key={unidadeIdx} className="flex flex-col gap-1">
+        <div key={unidadeIdx} className="grid grid-cols-3 gap-1">
           <Link
             href={`/trilhas/${link}/${normalizeString(unidade.title)}`}
-            className="group my-3 ml-3"
+            className="group my-3 ml-3 col-span-3 h-fit"
           >
+            <span className="text-text-lightSub group-hover:text-mainBlue">
+              Unidadade {unidadeIdx + 1}
+            </span>
             <h3 className="text-xl font-semibold group-hover:text-mainBlue duration-100">
               {unidade.title}
             </h3>

@@ -80,7 +80,7 @@ export default function ProfileLayout({
       </div>
       {modalType && (
         <Modal
-          title="foto de perfil"
+          title="Altere sua foto de perfil"
           onClose={handleModalClose}
           visible={visible}
           setVisible={setVisible}

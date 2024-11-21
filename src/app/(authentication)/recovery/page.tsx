@@ -140,17 +140,6 @@ export default function Recovery() {
       <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
         {isEmailValid ? (
           <>
-            <h2 className="text-title-light text-xl font-bold">
-              Verifique seu endereço de email
-            </h2>
-            <p className="text-text-lightSub">
-              Nós enviamos um email para
-              <span className="mx-1 font-semibold text-text-light">
-                {email}
-              </span>
-              contendo um código de 6 dígitos. Digite o código abaixo para
-              prosseguir com a recuperação da sua senha.
-            </p>
             {isCodeValid ? (
               <>
                 <div>
@@ -184,6 +173,17 @@ export default function Recovery() {
               </>
             ) : (
               <>
+                <h2 className="text-title-light text-xl font-bold">
+                  Verifique seu endereço de email
+                </h2>
+                <p className="text-text-lightSub">
+                  Nós enviamos um email para
+                  <span className="mx-1 font-semibold text-text-light">
+                    {email}
+                  </span>
+                  contendo um código de 6 dígitos. Digite o código abaixo para
+                  prosseguir com a recuperação da sua senha.
+                </p>
                 <div className="grid grid-cols-6 *:col-span-1 gap-3 h-[80px]">
                   <CodeInput setCode={setCode} />
                   <CodeInput setCode={setCode} />

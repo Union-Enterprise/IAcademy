@@ -53,7 +53,7 @@ const Navbar = () => {
           />
         </Link>
       </div>
-      <Searchbar setShowSearchView={setShowSearchView} />
+      {/* <Searchbar setShowSearchView={setShowSearchView} /> */}
       <div className="flex gap-2 lg:gap-3 items-center justify-end">
         <SearchIcon setShowSearchView={setShowSearchView} />
         {isAuthenticated ? (

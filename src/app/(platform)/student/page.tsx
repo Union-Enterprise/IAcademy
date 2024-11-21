@@ -29,7 +29,6 @@ export default function Student() {
   const { user, isAuthenticated } = useUser();
   const router = useRouter();
   const now = new Date().getHours();
-  console.log(now);
   const [modulosData, setModulosData] = useState<Record<
     string,
     ModuloProps
@@ -80,7 +79,6 @@ export default function Student() {
         const count = getTotalTopicsCount(data);
         setTotalTopicsCount(count);
         updateStreak();
-        console.log(user.skills);
       } catch (err) {
         setError("Erro ao carregar os dados dos módulos.");
         console.error(err);
@@ -120,11 +118,11 @@ export default function Student() {
             </h3>
             <div className="grid grid-cols-3 gap-2">
               <div className="p-5 flex flex-col gap-1 rounded-xl border-2 border-borders-light">
-                <h4 className="text-3xl font-black">00/{totalTopicsCount}</h4>
+                <h4 className="text-3xl font-black">118</h4>
                 <p>Tópicos Estudados</p>
               </div>
               <div className="p-5 flex flex-col gap-1 rounded-xl border-2 border-borders-light">
-                <h4 className="text-3xl font-black">0</h4>
+                <h4 className="text-3xl font-black">2</h4>
                 <p>Avaliações realizadas</p>
               </div>
               <div className="p-5 flex flex-col gap-1 rounded-xl border-2 border-borders-light">
@@ -133,15 +131,33 @@ export default function Student() {
               </div>
               <div className="col-span-3 flex flex-col rounded-xl shadow-sm border-2 border-borders-light">
                 <p className="font-medium mx-5 pt-5 pb-3 border-b-2 border-gray-300">
-                  Continue de onde você parou
+                  Recomendações de estudo
                 </p>
                 <Link
                   href={"#"}
-                  className="px-5 py-4 flex flex-col gap-1 hover:bg-bg-lightA duration-100"
+                  className="px-5 py-4 pb-0 flex flex-col gap-1 hover:bg-bg-lightA duration-100"
                 >
-                  <h5 className="text-xl font-bold">Tópico</h5>
-                  <p className="text-text-lightSub">
-                    Descriçaõ Descriçaõ Descriçaõ Descriçaõ
+                  <div>
+                    <h4 className="text-text-lightSub text-lg">Unidade</h4>
+                    <h5 className="text-xl font-bold">Introdução às Funções</h5>
+                  </div>
+                  <p className="text-text-lightSub border-b-2 border-borders-light pb-4">
+                    Definição, representação gráfica e domínio/imagem de
+                    funções.
+                  </p>
+                </Link>
+                <Link
+                  href={"#"}
+                  className="px-5 py-4 pb-0 flex flex-col gap-1 hover:bg-bg-lightA duration-100"
+                >
+                  <div>
+                    <h4 className="text-text-lightSub text-lg">Tópico</h4>
+                    <h5 className="text-xl font-bold">Permutações</h5>
+                  </div>
+                  <p className="text-text-lightSub border-b-2 border-borders-light pb-4">
+                    Compreenda o conceito de permutações, como calcular o número
+                    de permutações e suas aplicações em problemas de
+                    probabilidade e estatística.
                   </p>
                 </Link>
               </div>

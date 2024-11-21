@@ -1,45 +1,24 @@
 import Link from "next/link";
-import {
-  Box,
-  CircleAlert,
-  Cone,
-  Cuboid,
-  Diameter,
-  TriangleRight,
-  Brain,
-  Percent,
-} from "lucide-react";
+import React from "react";
 
-export default function ContentList({ title = "" }: { title: string }) {
+export default function ContentList({
+  title = "",
+  cols,
+  children,
+}: {
+  title: string;
+  cols?: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <section className="flex flex-col gap-2">
-      <div className="flex justify-between items-center">
-        <h5 className="text-xl font-bold text-title-light">{title}</h5>
-        <button className="cursor-pointer text-blue-400 hover:text-mainBlue duration-100">
-          Ver todos &gt;
-        </button>
-      </div>
-      <div className="grid grid-cols-3 gap-5">
-        <Item
-          title="Geometria Plana"
-          href="/trilhas/overview"
-          lucideIcon={Cone}
-          description="Geometria Plana explora figuras bidimensionais."
-        />
-
-        <Item
-          title="Fatorial"
-          href="/trilhas/overview"
-          lucideIcon={CircleAlert}
-          description="O fatorial é amplamente utilizado em combinatória, probabilidade e em várias áreas."
-        />
-
-        <Item
-          title="Raciocínio Lógico"
-          href="/trilhas/overview"
-          lucideIcon={Brain}
-          description="Raciocínio lógico é a habilidade de pensar de forma clara e resolver problemas."
-        />
+      <h5 className="text-xl font-bold text-title-light">{title}</h5>
+      <div
+        className={`${
+          cols ? "grid-cols-4" : "grid-cols-3"
+        } grid gap-5 *:col-span-1`}
+      >
+        {children}
       </div>
     </section>
   );
@@ -59,16 +38,22 @@ export function Item({
   return (
     <Link
       href={href}
-      className="rounded-xl border-2 border-border-lightC shadow-md hover:border-mainBlue hover:text-mainBlue flex flex-col justify-between p-5 w-full min-h-[250px] duration-100 gap-4"
+      className="group rounded-xl border-2 border-borders-light shadow-sm hover:shadow-md hover:border-mainBlue flex flex-col justify-between p-5 w-full h-[200px] duration-100 gap-4"
     >
       <div>
         <div className="flex gap-2">
-          {LucideIcon && <LucideIcon size={25} className="flex-shrink-0" />}
-          <h6 className="font-bold text-lg text-text-light flex">{title}</h6>
+          {LucideIcon && (
+            <LucideIcon
+              size={25}
+              className="flex-shrink-0 group group-hover:text-mainBlue"
+            />
+          )}
+          <h6 className="font-bold text-lg text-text-light flex group group-hover:text-mainBlue">
+            {title}
+          </h6>
         </div>
-        <p className="text-sm text-text-lightSub">00/00 tópicos estudados</p>
       </div>
-      <p className="text-sm text-text-lightSub leading-6 justify-items-end flex h-[75px] overflow-hidden">
+      <p className="group group-hover:text-mainBlue text-sm text-text-lightSub leading-6 justify-items-end flex h-[75px] overflow-hidden">
         {description}
       </p>
       <div className="flex gap-2 *:text-sm overflow-hidden">

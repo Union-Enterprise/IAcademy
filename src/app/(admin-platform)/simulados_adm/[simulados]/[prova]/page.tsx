@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode } from "react";
-import { Plus, Trash2, Edit, Upload, X } from "lucide-react";
+import { Plus, Trash2, Upload, X } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
@@ -76,7 +76,7 @@ export default function SimuladoQuestao() {
         } else {
             setQuestaoTitulo("");
             setTema("");
-            setAlternativas(["", "", "", ""]);
+            setAlternativas(["", "", "", "", ""]);
             setAlternativaCorreta(null);
             setImagem(null);
             setEditingIndex(null);
@@ -197,9 +197,9 @@ export default function SimuladoQuestao() {
                             <h3 className="text-xl font-semibold group-hover:text-white">{questionnaire.titulo}</h3>
                             <p className="text-gray-700 group-hover:text-white">{questionnaire.tema}</p>
 
-                            <div className="border-b "/>
+                            <div className="border-b " />
                             <p className="text-gray-600 group-hover:text-white mt-2">{questionnaire.enunciado}</p>
-                            <div className="border-b "/>
+                            <div className="border-b " />
                             <ul className="mt-2">
                                 {questionnaire.alternativas?.map((alt, altIndex) => (
                                     <li
@@ -217,12 +217,7 @@ export default function SimuladoQuestao() {
                         </div>
 
                         <div className="flex gap-4 mt-4">
-                            <button
-                                className="p-2 bg-green-500 text-white rounded-md"
-                                onClick={() => handleOpenQuestionModal(index)}
-                            >
-                                <Edit className="w-4 h-4" />
-                            </button>
+                           
                             <button
                                 className="p-2 bg-red-500 text-white rounded-md"
                                 onClick={() => {
@@ -265,7 +260,7 @@ export default function SimuladoQuestao() {
                                     <label className="block font-medium">Título</label>
                                     <input
                                         type="text"
-                                        className="w-full mt-2 p-2 border rounded-md"
+                                        className="w-full mt-2 p-2 border rounded-md focus:outline-none focus:border-mainBlue"
                                         value={questaoTitulo}
                                         onChange={(e) => setQuestaoTitulo(e.target.value)}
                                     />
@@ -273,7 +268,7 @@ export default function SimuladoQuestao() {
                                 <div>
                                     <label className="block font-medium">Enunciado</label>
                                     <textarea
-                                        className="w-full mt-2 p-2 border rounded-md"
+                                        className="w-full mt-2 p-2 border rounded-md focus:outline-none focus:border-mainBlue"
                                         rows={4}
                                         value={enunciado}
                                         onChange={(e) => setEnunciado(e.target.value)}
@@ -282,32 +277,19 @@ export default function SimuladoQuestao() {
                                 <div>
                                     <label className="block font-medium">Alternativas</label>
                                     {alternativas.map((alt, index) => (
-                                        <div key={index} className="flex gap-2 items-center">
+                                        <div key={index} className="flex gap-2 items-center mb-4">
                                             <input
                                                 type="text"
-                                                className="w-full p-2 border rounded-md"
+                                                className="w-full p-2 border rounded-md focus:outline-none focus:border-mainBlue"
                                                 value={alt}
                                                 onChange={(e) =>
                                                     handleAlternativeChange(index, e.target.value)
                                                 }
                                             />
-                                            <button
-                                                type="button"
-                                                onClick={() => handleDeleteAlternative(index)}
-                                                className="bg-red-500 text-white p-2 rounded-md"
-                                            >
-                                                Excluir
-                                            </button>
                                         </div>
                                     ))}
-                                    <button
-                                        type="button"
-                                        onClick={handleAddAlternative}
-                                        className="mt-4 text-mainBlue"
-                                    >
-                                        Adicionar Alternativa
-                                    </button>
                                 </div>
+
                                 <div>
                                     <label className="block font-medium">Correta</label>
                                     <select
@@ -338,7 +320,7 @@ export default function SimuladoQuestao() {
                                         <input
                                             id="fileInput"
                                             type="file"
-                                            className="hidden"
+                                            className="hidden focus:outline-none focus:border-mainBlue"
                                             onChange={handleImageChange}
                                         />
                                     </div>

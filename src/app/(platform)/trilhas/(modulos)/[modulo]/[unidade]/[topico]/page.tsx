@@ -10,11 +10,11 @@ import "katex/dist/katex.min.css";
 import { useUser } from "@/app/context/UserContext";
 import axios from "axios";
 
-
-
 export default function Topico() {
   const [showOtherFeedback, setShowOtherFeedback] = useState(false);
-  const [modulosData, setModulosData] = useState<Record<string, any> | null>(null);
+  const [modulosData, setModulosData] = useState<Record<string, any> | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useUser();
@@ -47,20 +47,20 @@ export default function Topico() {
   });
 
   const sendReport = () => {
-    const {sender, topic, complaint, message} = reportData;
+    const { sender, topic, complaint, message } = reportData;
     axios
       .post(
         "http://localhost:5002/report",
-        {sender, topic, complaint, message},
+        { sender, topic, complaint, message },
         { withCredentials: true }
       )
-      .then((response)=>{
+      .then((response) => {
         console.log("Denuncia recebida com sucesso");
       })
-      .catch((error)=>{
+      .catch((error) => {
         console.error(error);
-      })
-  }
+      });
+  };
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -90,48 +90,53 @@ export default function Topico() {
   const handleOtherFeedbackSubmit = () => {
     console.log("Feedback enviado:", reportData);
     sendReport();
-    setReportData({...reportData, message:""});
+    setReportData({ ...reportData, message: "" });
     setShowOtherFeedback(false);
   };
 
   const openFeedback = (chosen: string) => {
     setShowOtherFeedback(true);
-    setReportData({...reportData, complaint: chosen})
+    setReportData({ ...reportData, complaint: chosen });
   };
 
-
   let index;
-  for (let topicos in unidade['topicos']) {
-    if (normalizeString(unidade['topicos'][topicos].title) == topicoKey) {
+  for (let topicos in unidade["topicos"]) {
+    if (normalizeString(unidade["topicos"][topicos].title) == topicoKey) {
       index = topicos;
       break;
     }
   }
 
-  const data = unidade['topicos'][index];
-  
+  const data = unidade["topicos"][index];
+
   return (
     <div>
-      <article aria-live="polite">
-        <h1 className="text-5xl font-bold mb-4" tabIndex={0}>
-          {data.title}
-        </h1>
-        <p className="mb-4" tabIndex={0}>
-          {data.description}
-        </p>
+      <article aria-live="polite" className="flex flex-col gap-3">
+        <div>
+          <h1 className="text-6xl font-bold mb-1" tabIndex={0}>
+            {data.title}
+          </h1>
+          <p className="mb-4 text-text-lightSub" tabIndex={0}>
+            {data.description}
+          </p>
+        </div>
 
         {Object.keys(data.content).map((key) => {
           if (key !== "images_google_search") {
             return (
               <section key={key} aria-labelledby={key}>
-                <h2 id={key} className="text-xl font-semibold mb-2" tabIndex={0}>
+                <h2
+                  id={key}
+                  className="text-2xl font-semibold mb-1"
+                  tabIndex={0}
+                >
                   {key}
                 </h2>
                 <p
-                  className="mb-4"
+                  className="mb-4 text-text-lightSub"
                   tabIndex={0}
                   dangerouslySetInnerHTML={{
-                    __html: renderContent(data.content[key])
+                    __html: renderContent(data.content[key]),
                   }}
                 ></p>
               </section>
@@ -141,7 +146,9 @@ export default function Topico() {
 
         <div className="flex justify-center mb-10 pt-10">
           <img
-            src={data.content.images_google_search.replace('<img href="', '').replace('">', '')}
+            src={data.content.images_google_search
+              .replace('<img href="', "")
+              .replace('">', "")}
             alt={`Imagem relacionada a ${data.title}`}
             tabIndex={0}
           />
@@ -153,11 +160,26 @@ export default function Topico() {
           Conte-nos o motivo:
         </h2>
         <div className="flex flex-wrap w-full h-fit justify-center gap-2">
-          <FeedbackButton text="Não gostei do estilo" onClick={() => openFeedback("Estilo")} />
-          <FeedbackButton text="Conteúdo incoerente"  onClick={() => openFeedback("Conteúdo incoerente")} />
-          <FeedbackButton text="Não correspondeu às expectativas"  onClick={() => openFeedback("Decepcionante")} />
-          <FeedbackButton text="Confuso"  onClick={() => openFeedback("Confuso")} />
-          <FeedbackButton text="Entediante"  onClick={() => openFeedback("Entediante")} />
+          <FeedbackButton
+            text="Não gostei do estilo"
+            onClick={() => openFeedback("Estilo")}
+          />
+          <FeedbackButton
+            text="Conteúdo incoerente"
+            onClick={() => openFeedback("Conteúdo incoerente")}
+          />
+          <FeedbackButton
+            text="Não correspondeu às expectativas"
+            onClick={() => openFeedback("Decepcionante")}
+          />
+          <FeedbackButton
+            text="Confuso"
+            onClick={() => openFeedback("Confuso")}
+          />
+          <FeedbackButton
+            text="Entediante"
+            onClick={() => openFeedback("Entediante")}
+          />
           <FeedbackButton text="Outro" onClick={() => openFeedback("Outro")} />
         </div>
 
@@ -165,7 +187,9 @@ export default function Topico() {
           <div className="mt-4">
             <textarea
               value={reportData.message}
-              onChange={(e) => setReportData({...reportData, message:e.target.value})}
+              onChange={(e) =>
+                setReportData({ ...reportData, message: e.target.value })
+              }
               placeholder="Seu feedback aqui"
               className="border border-gray-300 rounded-md p-2 w-full focus:border-mainBlue focus:shadow-md focus:outline-none hover:border-mainBlue hover:shadow-md"
               rows={2}
@@ -183,18 +207,27 @@ export default function Topico() {
   );
 }
 function renderContent(content: string) {
-
   const markdownHtml = marked(content);
 
- 
-  const blockLatexRenderedHtml = markdownHtml.replace(/\$\$(.+?)\$\$/g, (match, expr) => {
-    return katex.renderToString(expr, { throwOnError: false, displayMode: true });
-  });
+  const blockLatexRenderedHtml = markdownHtml.replace(
+    /\$\$(.+?)\$\$/g,
+    (match, expr) => {
+      return katex.renderToString(expr, {
+        throwOnError: false,
+        displayMode: true,
+      });
+    }
+  );
 
-
-  const inlineLatexRenderedHtml = blockLatexRenderedHtml.replace(/\$(.+?)\$/g, (match, expr) => {
-    return katex.renderToString(expr, { throwOnError: false, displayMode: false });
-  });
+  const inlineLatexRenderedHtml = blockLatexRenderedHtml.replace(
+    /\$(.+?)\$/g,
+    (match, expr) => {
+      return katex.renderToString(expr, {
+        throwOnError: false,
+        displayMode: false,
+      });
+    }
+  );
 
   return inlineLatexRenderedHtml;
 }

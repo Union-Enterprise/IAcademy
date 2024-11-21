@@ -32,7 +32,7 @@ export default function Login() {
           setErrorMessage("");
           setAuth(true, response.data);
 
-          router.push("/student");
+          router.push("/");
         }
       })
       .catch((error) => {
