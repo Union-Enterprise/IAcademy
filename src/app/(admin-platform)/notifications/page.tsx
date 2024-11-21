@@ -16,66 +16,157 @@ import {
   CheckCheck,
   MessageSquareWarning,
   MessageSquareDot,
+  MessageSquareX,
 } from "lucide-react";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import UserItem from "@/app/ui/components/adminUtils/UserItem";
+import ReportItem from "@/app/ui/components/adminUtils/ReportItem";
 
 export default function Admins() {
-  const [users, setUsers] = useState([]);
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [totalPremiumUsers, setTotalPremiumUsers] = useState(0);
-  const [totalBannedUsers, setTotalBannedUsers] = useState(0);
-  const [totalNotBannedUsers, setTotalNotBannedUsers] = useState(0);
+  const [reports, setReports] = useState([]);
+  const [totalProblems, setTotalProblems] = useState(0);
+  const [totalSuggestions, setTotalSuggestions] = useState(0);
+  const [totalSolved, setTotalSolved] = useState(0);
+  const [totalUnsolved, setTotalUnsolved] = useState(0);
 
-  const [category, setCategory] = useState("");
-  const [plan, setPlan] = useState("");
+  const [sender, setSender] = useState("");
+  const [type, setType] = useState("");
   const [status, setStatus] = useState("");
 
-  const fetchUsers = async () => {
+  const handleSolve = async (id: string) =>{
+    try{
+      await axios.put(
+        "http://localhost:5002/solve",
+        {
+          id
+        },
+        {
+          withCredentials: true
+        }
+      )
+      console.log("Resolvido com sucesso");
+      setReports((prevReports) =>
+        prevReports.map((report) =>
+          report._id === id ? { ...report, solved: true } : report
+        )
+      );
+      console.log(reports);
+
+    }catch(error){
+      console.log("Erro ao resolver", error);
+    }
+  };
+
+  const handleUnsolve = async (id: string) =>{
+    try{
+      await axios.put(
+        "http://localhost:5002/unsolve",
+        {
+          id
+        },
+        {
+          withCredentials: true
+        }
+      )
+      console.log("Colocado em análise");
+      setReports((prevReports) =>
+        prevReports.map((report) =>
+          report._id === id ? { ...report, solved: false } : report
+        )
+      );
+      console.log(reports);
+
+
+    }catch(error){
+      console.log("Erro ao resolver", error);
+    }
+  };
+
+  // const handleDeleteUser = async (email: string) => {
+  //   try {
+  //     await axios.delete(`http://localhost:5002/delete_user`, {
+  //       data: { email },
+  //       withCredentials: true,
+  //     });
+
+  //     console.log("Usuário excluído com sucesso:", email);
+
+  //     setReports((prevReports) =>
+  //       prevReports.map((report) =>
+  //         report.id === id ? { ...report, solved: true } : report
+  //       )
+  //     );
+  //   } catch (error) {
+  //     console.error("Erro ao excluir o usuário:", error);
+  //   }
+  // };
+
+  // const handleRestoreUser = async (email: string) => {
+  //   try {
+  //     await axios.post(`http://localhost:5002/restore_user`, {
+  //       email
+  //     }, {
+  //       withCredentials: true,
+  //     });
+
+  //     console.log("Usuário restaurado com sucesso:", email);
+
+  //     setReports((prevReports) =>
+  //       prevReports.map((report) =>
+  //         user.email === email ? { ...user, is_banned: false } : user
+  //       )
+  //     );
+  //   } catch (error) {
+  //     console.error("Erro ao restaurar o usuário:", error);
+  //   }
+  // };
+
+  const fetchReports = async () => {
     try {
-      const response = await axios.get("http://localhost:5002/users", {
+      const response = await axios.get("http://localhost:5002/reports", {
         params: {
-          category,
-          plan,
+          sender,
+          type,
           status,
         },
         withCredentials: true,
       });
-      setUsers(response.data);
+      setReports(response.data);
+      console.log(response.data);
     } catch (error) {
-      console.log("Erro ao buscar usuários", error);
+      console.log("Erro ao buscar denúncias", error);
     }
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, [category, plan, status]);
+    fetchReports();
+  }, [sender, type, status]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5002/users", {
+        const response = await axios.get("http://localhost:5002/reports", {
           withCredentials: true,
         });
 
-        setUsers(response.data);
+        setReports(response.data);
       } catch (error) {
-        console.log("Erro ao buscar usuários", error);
+        console.log("Erro ao buscar denúncias", error);
       }
 
       try {
-        const response = await axios.get("http://localhost:5002/users_total", {
+        const response = await axios.get("http://localhost:5002/total_reports", {
           withCredentials: true,
         });
+        console.log(response.data);
 
-        setTotalUsers(response.data.totalUsers);
-        setTotalPremiumUsers(response.data.premiumUsers);
-        setTotalBannedUsers(response.data.bannedUsers);
-        setTotalNotBannedUsers(response.data.notBannedUsers);
+        setTotalSuggestions(response.data.totalSuggestions);
+        setTotalProblems(response.data.totalMessages);
+        setTotalSolved(response.data.solved);
+        setTotalUnsolved(response.data.unsolved);
       } catch (error) {
-        console.log("Erro ao buscar usuários", error);
+        console.log("Erro ao buscar denúncias", error);
       }
     };
 
@@ -87,14 +178,16 @@ export default function Admins() {
       <h1 className="text-3xl font-bold text-title-light">Notificações</h1>
       <section className="grid grid-cols-4 gap-5">
         <StatResume
-          title="Mensagens"
-          value={`0`}
-          lucideIcon={MessagesSquare}
-          description="Chamados"
+          title="Problemas"
+          value={`${totalProblems ? totalProblems: 0}`}
+          lucideIcon={MessageSquareX}
+          description="Problemas de conteúdo"
+          iconColor="text-red-500"
+          iconBg="bg-red-100"
         />
         <StatResume
           title="Sugestões"
-          value={`0`}
+          value={`${totalSuggestions ? totalSuggestions: 0}`}
           lucideIcon={MessageSquareDot}
           description="Feedbacks dos usuários"
           iconColor="text-mainBlue"
@@ -102,7 +195,7 @@ export default function Admins() {
         />
         <StatResume
           title="Resolvidos"
-          value={`0`}
+          value={`${totalSolved ? totalSolved: 0}`}
           lucideIcon={CheckCheck}
           description="Chamados atendidos"
           iconColor="text-green-500"
@@ -110,7 +203,7 @@ export default function Admins() {
         />
         <StatResume
           title="Em análise"
-          value={`0`}
+          value={`${totalUnsolved ? totalUnsolved: 0}`}
           lucideIcon={MessageSquareWarning}
           description="Chamados em aberto"
           iconColor="text-yellow-500"
@@ -124,34 +217,17 @@ export default function Admins() {
           </h2>
           <div className="group/select">
             <select
-              id="category"
-              className="w-full px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-bg-light group-hover/select:border-mainBlue"
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option key="" value="">
-                Selecione uma Categoria
-              </option>
-              <option key="user" value="user">
-                Usuário
-              </option>
-              <option key="admin" value="admin">
-                Administrador
-              </option>
-            </select>
-          </div>
-          <div className="group/select">
-            <select
               id="plan"
               className="w-full px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-bg-light group-hover/select:border-mainBlue"
-              onChange={(e) => setPlan(e.target.value)}
+              onChange={(e) => setType(e.target.value)}
             >
               <option key="" value="">
                 Selecione um Tipo
               </option>
-              <option key="basic" value="basic">
-                Feedback
+              <option key="basic" value="Outro">
+                Sugestão
               </option>
-              <option key="premium" value="premium">
+              <option key="premium" value="Problema">
                 Problema
               </option>
             </select>
@@ -165,40 +241,19 @@ export default function Admins() {
               <option key="" value="">
                 Selecione um Status
               </option>
-              <option key="active" value="active">
+              <option key="active" value="solved">
                 Resolvido
               </option>
-              <option key="sus" value="sus">
+              <option key="sus" value="unsolved">
                 Em análise
               </option>
             </select>
           </div>
+          <div>
+            <Input className="h-10" placeholder="Procurar mensagem" 
+            onChange={(e) => setSender(e.target.value)}/>
+          </div>
         </form>
-        <div className="border-t-2 border-border-light flex justify-between">
-          <div className="group/select w-fit">
-            <select
-              id="amount"
-              className="px-4 h-[40px] border-2 border-border-light text-zinc-500 rounded-md outline-none duration-100 bg-bg-light group-hover/select:border-mainBlue"
-            >
-              <option key="10" value="10">
-                10
-              </option>
-              <option key="25" value="25">
-                25
-              </option>
-              <option key="50" value="50">
-                50
-              </option>
-              <option key="100" value="100">
-                100
-              </option>
-            </select>
-          </div>
-          <div className="flex items-center gap-3">
-            <Input className="h-10" placeholder="Procurar mensagem" />
-            <ExportButton />
-          </div>
-        </div>
         <table>
           <thead className="border-y-2 border-border-light">
             <tr className="text-left w-full *:py-4 flex items-center justify-between px-6">
@@ -215,6 +270,9 @@ export default function Admins() {
                 Tipo
               </th>
               <th className="text-text-lightSub font-semibold w-full pl-3">
+                Tópico
+              </th>
+              <th className="text-text-lightSub font-semibold w-full pl-3">
                 Status
               </th>
               <th className="text-text-lightSub font-semibold w-full pl-3">
@@ -223,13 +281,28 @@ export default function Admins() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <p className="text-center py-5 text-text-lightSub">
-                  Nenhuma mensagem encontrada.
-                </p>
-              </td>
-            </tr>
+          {reports.length > 0 ? (
+              reports.map((report: any, index: number) => (
+                <ReportItem
+                  key={index}
+                  id={`${index}`}
+                  sender={report.sender}
+                  topic={String(report.topic).charAt(0).toUpperCase()+String(report.topic).slice(1)}
+                  complaint={report.complaint}
+                  solved={report.solved ? "Resolvido" : "Em análise"}
+                  message={report.message}
+                  reportId={report._id}
+                  onSolve={(id) =>handleSolve(id)}
+                  onUnsolve={(id) =>handleUnsolve(id)}
+                />
+              ))
+            ) : (
+              <tr>
+                <td className="text-center py-5 text-text-lightSub">
+                  Nenhum usuário encontrado.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </section>
