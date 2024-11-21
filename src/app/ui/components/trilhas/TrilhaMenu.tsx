@@ -51,7 +51,7 @@ export default function TrilhaMenu() {
         >
           <p>Conteúdos</p>
         </Link>
-        <Link
+        {/* <Link
           href={"/trilhas/quizzes"}
           className={`${
             pathname.includes("/quizzes")
@@ -60,7 +60,7 @@ export default function TrilhaMenu() {
           } *:text-text-light border-b-2 p-2 duration-100`}
         >
           <p>Quizzes</p>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

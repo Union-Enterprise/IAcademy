@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 import React from "react";
 import axios from "axios";
@@ -53,7 +53,7 @@ export default function Prova() {
         const response = await axios.get<Prova>(
           `http://localhost:5002/simulado/${simuladoId}/${provaId}`
         );
-        console.log(response.data)
+        console.log(response.data);
         setProva(response.data);
       } catch (error) {
         console.error("Erro ao carregar o simulado:", error);
@@ -122,10 +122,10 @@ export function Questao({
   ) => void;
 }) {
   let imageLocal;
-  if(imagem){
-    if(imagem.includes("/") || imagem.includes("\\")){
+  if (imagem) {
+    if (imagem.includes("/") || imagem.includes("\\")) {
       imageLocal = `http://localhost:5000/${imagem}`;
-    }else{
+    } else {
       imageLocal = `http://localhost:5002/files/${imagem}`;
     }
   }
@@ -137,7 +137,7 @@ export function Questao({
         <h3 className="text-lg font-medium text-text-lightSub">{titulo}</h3>
       </div>
       <p>{enunciado}</p>
-      
+
       <img src={imageLocal} className="w-[60%] rounded-md" />
       <Respostas
         alternativas={alternativas}
@@ -218,7 +218,7 @@ export function Menu({
 }) {
   const router = useRouter();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [maxHeight, setMaxHeight] = useState<string>("0px");
   const [padding, setPadding] = useState<string>("0px");
   const contentRef = React.useRef<HTMLDivElement>(null);
@@ -336,10 +336,7 @@ export function Menu({
         className="flex justify-between w-full items-center pb-3 border-b-2 p-5 hover:bg-bg-lightHover duration-200"
         onClick={toggle}
       >
-        <div>
-          <h3 className="text-lg font-semibold">Tempo restante</h3>
-          <p className="w-fit">{isOpen ? "00h 00min 00s" : "-- : -- : --"}</p>
-        </div>
+          <p className="w-fit font-semibold">Clique aqui para visualizar suas questões</p>
         <ChevronDown
           className={`transform transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
